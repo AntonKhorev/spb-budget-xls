@@ -5,6 +5,8 @@ import re
 filename='pr03-2013-15.txt'
 
 class Entry:
+	def __init__(self):
+		self.number=self.article=self.section=self.type=None
 	def print(self):
 		print(self.number,'\t',self.name,'\t',self.article,'\t',self.section,'\t',self.type,'\t',self.amount)
 
@@ -28,11 +30,20 @@ for line in open(filename,encoding='utf8'):
 			entry.name=name_type.strip()
 			entry.type=None
 		continue
-	if re.match('\d\d-...-2012',line):
+	if re.match('\d\d-...-2012',line): # new page
 		if entry:
 			entry.print()
 		entry=None
-	else:
+		continue
+	m=re.match('([0-9 ]+\.\d)(Итого):',line)
+	if m: # total
+		if entry:
+			entry.print()
+		entry=Entry()
+		entry.name=m.group(2)
+		entry.amount=m.group(1)
+		continue
+	else: # next line of name
 		if entry:
 			if entry.name[-1]!='-':
 				entry.name+=' '
