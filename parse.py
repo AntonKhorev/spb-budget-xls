@@ -10,5 +10,12 @@ for line in open(filename,encoding='utf8'):
 		article=m.group(2)
 		section=m.group(3)
 		amount=m.group(4)
-		name=m.group(5)
-		print(number,'\t',article,'\t',section,'\t',amount,'\t',name)
+		name_type=m.group(5)
+		mm=re.match('(.*)\s(\d\d\d)',name_type)
+		if mm:
+			name=mm.group(1)
+			type=mm.group(2)
+		else:
+			name=name_type
+			type=None
+		print(number,'\t',name,'\t',article,'\t',section,'\t',type,'\t',amount)
