@@ -84,6 +84,11 @@ for line in open(inputFilename,encoding='utf8'):
 	if re.match('\d\d-...-2012',line): # new page
 		entry=None
 		continue
+	m=re.match('^\d\d\d$',line) # type on separate line
+	if m:
+		if entry:
+			entry.type=m.group(0)
+		continue
 	m=re.match('([0-9 ]+\.\d)(Итого):',line)
 	if m: # total
 		spreadsheet.root.name=m.group(2)
