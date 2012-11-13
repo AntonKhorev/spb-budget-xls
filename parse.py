@@ -1,8 +1,10 @@
 # java -jar pdfbox-app-1.7.1.jar ExtractText -encoding UTF-8 pr-bd-2013-15/pr03-2013-15.pdf
 
 import re
+import csv
 
-filename='pr03-2013-15.txt'
+inputFilename='pr03-2013-15.txt'
+outputFilename='pr03-2013-15.csv'
 
 class Entry:
 	def __init__(self,row):
@@ -25,7 +27,7 @@ class Entry:
 	def formatAmount(self,amount):
 		a=str(amount)
 		return a[:-1]+'.'+a[-1]
-	def print(self):
+	def write(self,writer):
 		checkFailed=False
 		if self.children:
 			sumAmount=sum(child.amount for child in self.children.values())
@@ -37,9 +39,10 @@ class Entry:
 				# diff.name='???'
 				# diff.amount=self.amount-sumAmount
 				# self.children[n]=diff
-		print(self.number,'\t',self.name,'\t',self.article,'\t',self.section,'\t',self.type,'\t',self.formatAmount(self.amount),'\t','!='+self.formatAmount(sumAmount) if checkFailed else '')
+		# print(self.number,'\t',self.name,'\t',self.article,'\t',self.section,'\t',self.type,'\t',self.formatAmount(self.amount),'\t','!='+self.formatAmount(sumAmount) if checkFailed else '')
+		writer.writerow([self.number,self.name,self.article,self.section,self.type,self.formatAmount(self.amount)])
 		for n,entry in sorted(self.children.items()):
-			entry.print()
+			entry.write(writer)
 
 class Spreadsheet:
 	def __init__(self):
@@ -52,12 +55,13 @@ class Spreadsheet:
 		number=[int(n) for n in number.split('.') if n!='']
 		self.root.addLeaf(entry,number)
 		return entry
-	def print(self):
-		self.root.print()
+	def write(self,filename):
+		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'))
+		self.root.write(writer)
 
 spreadsheet=Spreadsheet()
 entry=None
-for line in open(filename,encoding='utf8'):
+for line in open(inputFilename,encoding='utf8'):
 	m=re.match('((?:\d+\.)+)\s+(?:(\d{6}[0-9а-я])(\d{4})\s+)?([0-9 ]+\.\d)(.*)',line)
 	if m:
 		number=m.group(1)
@@ -88,4 +92,4 @@ for line in open(filename,encoding='utf8'):
 				entry.name+=' '
 			entry.name+=line.strip()
 
-spreadsheet.print()
+spreadsheet.write(outputFilename)
