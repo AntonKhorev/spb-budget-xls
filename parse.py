@@ -22,6 +22,9 @@ class Entry:
 			if n not in self.children:
 				raise Exception('child not found')
 			self.children[n].addLeaf(entry,number)
+	def formatAmount(self,amount):
+		a=str(amount)
+		return a[:-1]+'.'+a[-1]
 	def print(self):
 		checkFailed=False
 		if self.children:
@@ -29,7 +32,12 @@ class Entry:
 			if sumAmount!=self.amount:
 				# raise Exception('sum(children)!=amount: '+str(sumAmount)+' != '+str(self.amount))
 				checkFailed=True
-		print(self.number,'\t',self.name,'\t',self.article,'\t',self.section,'\t',self.type,'\t',self.amount,'\t','!='+str(sumAmount) if checkFailed else '')
+				n=max(int(n) for n in self.children)+1
+				diff=Entry(-1)
+				diff.name='???'
+				diff.amount=self.amount-sumAmount
+				self.children[n]=diff
+		print(self.number,'\t',self.name,'\t',self.article,'\t',self.section,'\t',self.type,'\t',self.formatAmount(self.amount),'\t','!='+self.formatAmount(sumAmount) if checkFailed else '')
 		for n,entry in sorted(self.children.items()):
 			entry.print()
 
