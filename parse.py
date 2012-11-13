@@ -26,7 +26,7 @@ class Entry:
 			self.children[n].addLeaf(entry,number)
 	def formatAmount(self,amount):
 		a=str(amount)
-		return a[:-1]+'.'+a[-1]
+		return a[:-1]+','+a[-1]
 	def write(self,writer):
 		checkFailed=False
 		if self.children:
@@ -39,8 +39,11 @@ class Entry:
 				# diff.name='???'
 				# diff.amount=self.amount-sumAmount
 				# self.children[n]=diff
+			am='='+'+'.join('F'+str(entry.row) for n,entry in sorted(self.children.items()))
+		else:
+			am=self.formatAmount(self.amount)
 		# print(self.number,'\t',self.name,'\t',self.article,'\t',self.section,'\t',self.type,'\t',self.formatAmount(self.amount),'\t','!='+self.formatAmount(sumAmount) if checkFailed else '')
-		writer.writerow([self.number,self.name,self.article,self.section,self.type,self.formatAmount(self.amount)])
+		writer.writerow([self.number,self.name,self.article,self.section,self.type,am])
 		for n,entry in sorted(self.children.items()):
 			entry.write(writer)
 
@@ -56,7 +59,7 @@ class Spreadsheet:
 		self.root.addLeaf(entry,number)
 		return entry
 	def write(self,filename):
-		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'))
+		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
 		self.root.write(writer)
 
 spreadsheet=Spreadsheet()
