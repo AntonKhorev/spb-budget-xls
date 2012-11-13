@@ -5,6 +5,7 @@ import csv
 
 inputFilename='pr03-2013-15.txt'
 outputFilename='pr03-2013-15.csv'
+depthLimit=3
 
 class Entry:
 	def __init__(self,row):
@@ -27,8 +28,7 @@ class Entry:
 	def formatAmount(self,amount):
 		a=str(amount)
 		return a[:-1]+','+a[-1]
-	def write(self,writer):
-		checkFailed=False
+	def write(self,writer,depth=0):
 		if self.children:
 			sumAmount=sum(child.amount for child in self.children.values())
 			if sumAmount!=self.amount:
@@ -39,30 +39,33 @@ class Entry:
 				# diff.name='???'
 				# diff.amount=self.amount-sumAmount
 				# self.children[n]=diff
-			am='='+'+'.join('F'+str(entry.row) for n,entry in sorted(self.children.items()))
+			am='='+'+'.join(chr(ord('F')+depth+1)+str(entry.row) for n,entry in sorted(self.children.items()))
 		else:
 			am=self.formatAmount(self.amount)
 		# print(self.number,'\t',self.name,'\t',self.article,'\t',self.section,'\t',self.type,'\t',self.formatAmount(self.amount),'\t','!='+self.formatAmount(sumAmount) if checkFailed else '')
-		writer.writerow([self.number,self.name,self.article,self.section,self.type,am])
+		writer.writerow([self.number,self.name,self.article,self.section,self.type]+[None]*depth+[am])
 		for n,entry in sorted(self.children.items()):
-			entry.write(writer)
+			entry.write(writer,depth+1)
 
 class Spreadsheet:
-	def __init__(self):
+	def __init__(self,depthLimit):
 		self.row=1
+		self.depthLimit=depthLimit
 		self.root=Entry(self.row)
-	def makeEntry(self,number):
+	def makeEntry(self,numberStr):
+		number=[int(n) for n in numberStr.split('.') if n!='']
+		if len(number)>=self.depthLimit:
+			return Entry(-1) # throwaway entry
 		self.row+=1
 		entry=Entry(self.row)
-		entry.number=number
-		number=[int(n) for n in number.split('.') if n!='']
+		entry.number=numberStr
 		self.root.addLeaf(entry,number)
 		return entry
 	def write(self,filename):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
 		self.root.write(writer)
 
-spreadsheet=Spreadsheet()
+spreadsheet=Spreadsheet(depthLimit)
 entry=None
 for line in open(inputFilename,encoding='utf8'):
 	m=re.match('((?:\d+\.)+)\s+(?:(\d{6}[0-9а-я])(\d{4})\s+)?([0-9 ]+\.\d)(.*)',line)
