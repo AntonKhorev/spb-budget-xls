@@ -30,13 +30,13 @@ class Entry:
 		if self.children:
 			sumAmount=sum(child.amount for child in self.children.values())
 			if sumAmount!=self.amount:
-				# raise Exception('sum(children)!=amount: '+str(sumAmount)+' != '+str(self.amount))
-				checkFailed=True
-				n=max(int(n) for n in self.children)+1
-				diff=Entry(-1)
-				diff.name='???'
-				diff.amount=self.amount-sumAmount
-				self.children[n]=diff
+				raise Exception('sum(children)!=amount: '+str(sumAmount)+' != '+str(self.amount))
+				# checkFailed=True
+				# n=max(int(n) for n in self.children)+1
+				# diff=Entry(-1)
+				# diff.name='???'
+				# diff.amount=self.amount-sumAmount
+				# self.children[n]=diff
 		print(self.number,'\t',self.name,'\t',self.article,'\t',self.section,'\t',self.type,'\t',self.formatAmount(self.amount),'\t','!='+self.formatAmount(sumAmount) if checkFailed else '')
 		for n,entry in sorted(self.children.items()):
 			entry.print()
@@ -58,7 +58,7 @@ class Spreadsheet:
 spreadsheet=Spreadsheet()
 entry=None
 for line in open(filename,encoding='utf8'):
-	m=re.match('((?:\d+\.)+)\s+(?:(\d{7})(\d{4})\s+)?([0-9 ]+\.\d)(.*)',line)
+	m=re.match('((?:\d+\.)+)\s+(?:(\d{6}[0-9а-я])(\d{4})\s+)?([0-9 ]+\.\d)(.*)',line)
 	if m:
 		number=m.group(1)
 		entry=spreadsheet.makeEntry(number)
