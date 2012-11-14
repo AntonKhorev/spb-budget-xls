@@ -49,7 +49,7 @@ class Entry:
 
 class Spreadsheet:
 	def __init__(self,depthLimit):
-		self.row=1
+		self.row=2 # row 1 for header
 		self.depthLimit=depthLimit
 		self.root=Entry(self.row)
 	def makeEntry(self,numberStr):
@@ -63,6 +63,7 @@ class Spreadsheet:
 		return entry
 	def write(self,filename):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
+		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов','Сумма (тыс. руб.)'])
 		self.root.write(writer)
 
 spreadsheet=Spreadsheet(depthLimit)
