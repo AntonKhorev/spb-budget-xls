@@ -24,6 +24,27 @@ class Entry:
 	def formatAmount(self,amount):
 		a=str(amount)
 		return a[:-1]+','+a[-1]
+	def scanRows(self):
+		if not self.children:
+			self.rowSpan=(self.row,self.row+1)
+			return
+		rows=[]
+		for child in self.children.values():
+			child.scanRows()
+			if child.rowSpan is None:
+				self.rowSpan=None
+				return
+			rows.append(child.rowSpan)
+		rows.sort()
+		if self.row+1!=rows[0][0]:
+			self.rowSpan=None
+			return
+		for i in range(1,len(rows)):
+			if rows[i-1][1]!=rows[i][0]:
+				self.rowSpan=None
+				return
+		self.rowSpan=(rows[0][0]-1,rows[-1][1])
+
 	def write(self,writer,useSums,depth=0):
 		if useSums and self.children:
 			sumAmount=sum(child.amount for child in self.children.values())
@@ -35,7 +56,11 @@ class Entry:
 				# diff.name='???'
 				# diff.amount=self.amount-sumAmount
 				# self.children[n]=diff
-			am='='+'+'.join(chr(ord('F')+depth+1)+str(entry.row) for n,entry in sorted(self.children.items()))
+			columnLetter=chr(ord('F')+depth+1)
+			if self.rowSpan is None:
+				am='='+'+'.join(columnLetter+str(entry.row) for n,entry in sorted(self.children.items()))
+			else:
+				am='=SUM('+columnLetter+str(self.rowSpan[0]+1)+':'+columnLetter+str(self.rowSpan[1]-1)+')'
 		else:
 			am=self.formatAmount(self.amount)
 		if useSums:
@@ -98,6 +123,7 @@ class Spreadsheet:
 					if entry.name[-1]!='-':
 						entry.name+=' '
 					entry.name+=line.strip()
+		self.root.scanRows()
 	def write(self,filename):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
 		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов','Сумма (тыс. руб.)'])
