@@ -3,10 +3,6 @@
 import re
 import csv
 
-inputFilename='pr03-2013-15.txt'
-outputFilename='pr03-2013-15.csv'
-depthLimit=3
-
 class Entry:
 	def __init__(self,row):
 		self.row=row
@@ -54,54 +50,60 @@ class Spreadsheet:
 		self.root=Entry(self.row)
 	def makeEntry(self,numberStr):
 		number=[int(n) for n in numberStr.split('.') if n!='']
-		if len(number)>=self.depthLimit:
+		if len(number)>self.depthLimit:
 			return Entry(-1) # throwaway entry
 		self.row+=1
 		entry=Entry(self.row)
 		entry.number=numberStr
 		self.root.addLeaf(entry,number)
 		return entry
+	def read(self,filename):
+		entry=None
+		for line in open(filename,encoding='utf8'):
+			m=re.match('((?:\d+\.)+)\s+(?:(\d{6}[0-9а-я])(\d{4})\s+)?([0-9 ]+\.\d)(.*)',line)
+			if m:
+				number=m.group(1)
+				entry=spreadsheet.makeEntry(number)
+				entry.article=m.group(2)
+				entry.section=m.group(3)
+				entry.parseAmount(m.group(4))
+				name_type=m.group(5)
+				mm=re.match('(.*)\s(\d\d\d)',name_type)
+				if mm:
+					entry.name=mm.group(1).strip()
+					entry.type=mm.group(2)
+				else:
+					entry.name=name_type.strip()
+					entry.type=None
+				continue
+			if re.match('\d\d-...-2012',line): # new page
+				entry=None
+				continue
+			m=re.match('^\d\d\d$',line) # type on separate line
+			if m:
+				if entry:
+					entry.type=m.group(0)
+				continue
+			m=re.match('([0-9 ]+\.\d)(Итого):',line)
+			if m: # total
+				spreadsheet.root.name=m.group(2)
+				spreadsheet.root.parseAmount(m.group(1))
+				continue
+			else: # next line of name
+				if entry:
+					if entry.name[-1]!='-':
+						entry.name+=' '
+					entry.name+=line.strip()
 	def write(self,filename):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
 		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов','Сумма (тыс. руб.)'])
 		self.root.write(writer)
 
-spreadsheet=Spreadsheet(depthLimit)
-entry=None
-for line in open(inputFilename,encoding='utf8'):
-	m=re.match('((?:\d+\.)+)\s+(?:(\d{6}[0-9а-я])(\d{4})\s+)?([0-9 ]+\.\d)(.*)',line)
-	if m:
-		number=m.group(1)
-		entry=spreadsheet.makeEntry(number)
-		entry.article=m.group(2)
-		entry.section=m.group(3)
-		entry.parseAmount(m.group(4))
-		name_type=m.group(5)
-		mm=re.match('(.*)\s(\d\d\d)',name_type)
-		if mm:
-			entry.name=mm.group(1).strip()
-			entry.type=mm.group(2)
-		else:
-			entry.name=name_type.strip()
-			entry.type=None
-		continue
-	if re.match('\d\d-...-2012',line): # new page
-		entry=None
-		continue
-	m=re.match('^\d\d\d$',line) # type on separate line
-	if m:
-		if entry:
-			entry.type=m.group(0)
-		continue
-	m=re.match('([0-9 ]+\.\d)(Итого):',line)
-	if m: # total
-		spreadsheet.root.name=m.group(2)
-		spreadsheet.root.parseAmount(m.group(1))
-		continue
-	else: # next line of name
-		if entry:
-			if entry.name[-1]!='-':
-				entry.name+=' '
-			entry.name+=line.strip()
-
-spreadsheet.write(outputFilename)
+for depth,inputFilename,outputFilename in [
+	(1,'pr03-2013-15.txt','pr03-2013-15(1).csv'),
+	(2,'pr03-2013-15.txt','pr03-2013-15(2).csv'),
+	(3,'pr03-2013-15.txt','pr03-2013-15(3).csv'),
+]:
+	spreadsheet=Spreadsheet(depth)
+	spreadsheet.read(inputFilename)
+	spreadsheet.write(outputFilename)
