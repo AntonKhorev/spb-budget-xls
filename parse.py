@@ -24,8 +24,8 @@ class Entry:
 	def formatAmount(self,amount):
 		a=str(amount)
 		return a[:-1]+','+a[-1]
-	def write(self,writer,depth=0):
-		if self.children:
+	def write(self,writer,useSums,depth=0):
+		if useSums and self.children:
 			sumAmount=sum(child.amount for child in self.children.values())
 			if sumAmount!=self.amount:
 				raise Exception('sum(children)!=amount: '+str(sumAmount)+' != '+str(self.amount))
@@ -38,15 +38,19 @@ class Entry:
 			am='='+'+'.join(chr(ord('F')+depth+1)+str(entry.row) for n,entry in sorted(self.children.items()))
 		else:
 			am=self.formatAmount(self.amount)
-		# print(self.number,'\t',self.name,'\t',self.article,'\t',self.section,'\t',self.type,'\t',self.formatAmount(self.amount),'\t','!='+self.formatAmount(sumAmount) if checkFailed else '')
-		writer.writerow([self.number,self.name,self.article,self.section,self.type]+[None]*depth+[am])
+		if useSums:
+			amList=[None]*depth+[am]
+		else:
+			amList=[am]
+		writer.writerow([self.number,self.name,self.article,self.section,self.type]+amList)
 		for n,entry in sorted(self.children.items()):
-			entry.write(writer,depth+1)
+			entry.write(writer,useSums,depth+1)
 
 class Spreadsheet:
-	def __init__(self,depthLimit):
+	def __init__(self,depthLimit=10,useSums=True):
 		self.row=2 # row 1 for header
 		self.depthLimit=depthLimit
+		self.useSums=useSums
 		self.root=Entry(self.row)
 	def makeEntry(self,numberStr):
 		number=[int(n) for n in numberStr.split('.') if n!='']
@@ -97,13 +101,16 @@ class Spreadsheet:
 	def write(self,filename):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
 		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов','Сумма (тыс. руб.)'])
-		self.root.write(writer)
+		self.root.write(writer,self.useSums)
 
-for depth,inputFilename,outputFilename in [
-	(1,'pr03-2013-15.txt','pr03-2013-15(1).csv'),
-	(2,'pr03-2013-15.txt','pr03-2013-15(2).csv'),
-	(3,'pr03-2013-15.txt','pr03-2013-15(3).csv'),
+for depth,sums,inputFilename,outputFilename in [
+	(1,False,'pr03-2013-15.txt','pr03-2013-15(1).csv'),
+	(2,False,'pr03-2013-15.txt','pr03-2013-15(2).csv'),
+	(3,False,'pr03-2013-15.txt','pr03-2013-15(3).csv'),
+	(1,True ,'pr03-2013-15.txt','pr03-2013-15(1,sums).csv'),
+	(2,True ,'pr03-2013-15.txt','pr03-2013-15(2,sums).csv'),
+	(3,True ,'pr03-2013-15.txt','pr03-2013-15(3,sums).csv'),
 ]:
-	spreadsheet=Spreadsheet(depth)
+	spreadsheet=Spreadsheet(depth,sums)
 	spreadsheet.read(inputFilename)
 	spreadsheet.write(outputFilename)
