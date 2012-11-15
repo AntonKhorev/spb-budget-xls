@@ -107,7 +107,7 @@ class Spreadsheet:
 			m=re.match('((?:\d+\.)+)\s+(?:(\d{6}[0-9а-я])(\d{4})\s+)?([0-9 ]+\.\d)(.*)',line)
 			if m:
 				number=m.group(1)
-				entry=spreadsheet.makeEntry(number)
+				entry=self.makeEntry(number)
 				entry.article=m.group(2)
 				entry.section=m.group(3)
 				entry.parseAmount(m.group(4))
@@ -130,16 +130,16 @@ class Spreadsheet:
 				continue
 			m=re.match('([0-9 ]+\.\d)(Итого):',line)
 			if m: # total
-				spreadsheet.root.name=m.group(2)
-				spreadsheet.root.parseAmount(m.group(1))
+				self.root.name=m.group(2)
+				self.root.parseAmount(m.group(1))
 				continue
 			else: # next line of name
 				if entry:
 					entry.appendName(line)
 		self.root.scanRows()
-	def read2(self,filename): # for pr04-2013-15.txt, no sorting
+	def read2(self,filename,nCols=1): # for pr04-2013-15.txt, no sorting
 		entry=None
-		amPattern='\s([0-9 ]+\.\d)\s([0-9 ]+\.\d)$'
+		amPattern='\s([0-9 ]+\.\d)'*nCols+'$'
 		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])'
 		for line in open(filename,encoding='utf8'):
 			m=re.match('^((?:\d+\.)+)\s+(.*)$',line)
@@ -150,39 +150,39 @@ class Spreadsheet:
 				if nc==1:
 					m=re.match('^(.*?)'+amPattern,rest)
 					if m:
-						entry=spreadsheet.makeEntry(number)
+						entry=self.makeEntry(number)
 						entry.appendName(m.group(1))
-						entry.parseAmount(m.group(2),0)
-						entry.parseAmount(m.group(3),1)
+						for i in range(nCols):
+							entry.parseAmount(m.group(i+2),i)
 						continue
 				elif nc==2:
 					m=re.match('^(.*?)'+arPattern+amPattern,rest)
 					if m:
-						entry=spreadsheet.makeEntry(number)
+						entry=self.makeEntry(number)
 						entry.appendName(m.group(1))
 						entry.section=m.group(2)
 						entry.article=m.group(3)
-						entry.parseAmount(m.group(4),0)
-						entry.parseAmount(m.group(5),1)
+						for i in range(nCols):
+							entry.parseAmount(m.group(i+4),i)
 						continue
 				elif nc==3:
 					m=re.match('^(.*?)'+arPattern+'\s(\d{3})'+amPattern,rest)
 					if m:
-						entry=spreadsheet.makeEntry(number)
+						entry=self.makeEntry(number)
 						entry.appendName(m.group(1))
 						entry.section=m.group(2)
 						entry.article=m.group(3)
 						entry.type=m.group(4)
-						entry.parseAmount(m.group(5),0)
-						entry.parseAmount(m.group(6),1)
+						for i in range(nCols):
+							entry.parseAmount(m.group(i+5),i)
 						continue
 				else:
 					raise Exception('unsupported number')
 			m=re.match('^(Итого):'+amPattern,line)
 			if m: # total
-				spreadsheet.root.name=m.group(1)
-				spreadsheet.root.parseAmount(m.group(2),0)
-				spreadsheet.root.parseAmount(m.group(3),1)
+				self.root.name=m.group(1)
+				for i in range(nCols):
+					self.root.parseAmount(m.group(i+2),i)
 				continue
 			if re.match('^\d+\s+Приложение',line): # new page
 				entry=None
@@ -197,27 +197,37 @@ class Spreadsheet:
 		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов']+self.amountHeader)
 		self.root.write(writer,self.useSums,self.depthLimit)
 
-for depth,sums,inputFilename,outputFilename in [
-	(1,False,'pr03-2013-15.txt','pr03-2013-15(1).csv'),
-	(2,False,'pr03-2013-15.txt','pr03-2013-15(2).csv'),
-	(3,False,'pr03-2013-15.txt','pr03-2013-15(3).csv'),
-	(1,True ,'pr03-2013-15.txt','pr03-2013-15(1,sums).csv'),
-	(2,True ,'pr03-2013-15.txt','pr03-2013-15(2,sums).csv'),
-	(3,True ,'pr03-2013-15.txt','pr03-2013-15(3,sums).csv'),
-]:
-	spreadsheet=Spreadsheet(depth,sums)
-	spreadsheet.read1(inputFilename)
-	spreadsheet.write(outputFilename)
+def writeVersions(inputFilename,nCols):
+	for sums in (False,True):
+		for depth in range(1,4):
+			outputFilename=inputFilename[:-4]+'('+str(depth)+(',sums' if sums else '')+').csv'
+			spreadsheet=Spreadsheet(depth,sums)
+			spreadsheet.read2(inputFilename,nCols)
+			spreadsheet.write(outputFilename)
 
-for depth,sums,inputFilename,outputFilename in [
-	(1,False,'pr04-2013-15.txt','pr04-2013-15(1).csv'),
-	(2,False,'pr04-2013-15.txt','pr04-2013-15(2).csv'),
-	(3,False,'pr04-2013-15.txt','pr04-2013-15(3).csv'),
-	(1,True ,'pr04-2013-15.txt','pr04-2013-15(1,sums).csv'),
-	(2,True ,'pr04-2013-15.txt','pr04-2013-15(2,sums).csv'),
-	(3,True ,'pr04-2013-15.txt','pr04-2013-15(3,sums).csv'),
-]:
-	spreadsheet=Spreadsheet(depth,sums)
-	spreadsheet.read2(inputFilename)
-	spreadsheet.setAmountHeader({0:'Плановый период 2014 г. (тыс. руб.)',1:'Плановый период 2015 г. (тыс. руб.)'})
-	spreadsheet.write(outputFilename)
+# for depth,sums,inputFilename,outputFilename in [
+	# (1,False,'pr03-2013-15.txt','pr03-2013-15(1).csv'),
+	# (2,False,'pr03-2013-15.txt','pr03-2013-15(2).csv'),
+	# (3,False,'pr03-2013-15.txt','pr03-2013-15(3).csv'),
+	# (1,True ,'pr03-2013-15.txt','pr03-2013-15(1,sums).csv'),
+	# (2,True ,'pr03-2013-15.txt','pr03-2013-15(2,sums).csv'),
+	# (3,True ,'pr03-2013-15.txt','pr03-2013-15(3,sums).csv'),
+# ]:
+	# spreadsheet=Spreadsheet(depth,sums)
+	# spreadsheet.read1(inputFilename)
+	# spreadsheet.write(outputFilename)
+
+# for depth,sums,inputFilename,outputFilename in [
+	# (1,False,'pr04-2013-15.txt','pr04-2013-15(1).csv'),
+	# (2,False,'pr04-2013-15.txt','pr04-2013-15(2).csv'),
+	# (3,False,'pr04-2013-15.txt','pr04-2013-15(3).csv'),
+	# (1,True ,'pr04-2013-15.txt','pr04-2013-15(1,sums).csv'),
+	# (2,True ,'pr04-2013-15.txt','pr04-2013-15(2,sums).csv'),
+	# (3,True ,'pr04-2013-15.txt','pr04-2013-15(3,sums).csv'),
+# ]:
+	# spreadsheet=Spreadsheet(depth,sums)
+	# spreadsheet.read2(inputFilename,2)
+	# spreadsheet.setAmountHeader({0:'Плановый период 2014 г. (тыс. руб.)',1:'Плановый период 2015 г. (тыс. руб.)'})
+	# spreadsheet.write(outputFilename)
+
+writeVersions('pril_02-12-14-1izm.txt',1)
