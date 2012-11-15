@@ -68,7 +68,7 @@ class Entry:
 			# amounts to write
 			ams=[]
 			for i,(k,v) in enumerate(sorted(self.amounts.items())):
-				columnLetter=chr(ord('F')+depth+1+i*depthLimit)
+				columnLetter=chr(ord('F')+depth+1+i*(depthLimit+1))
 				if self.rowSpan is None:
 					ams.append('='+'+'.join(columnLetter+str(entry.row) for n,entry in sorted(self.children.items())))
 				else:
@@ -206,6 +206,10 @@ class Spreadsheet:
 	# spreadsheet.read1(inputFilename)
 	# spreadsheet.write(outputFilename)
 
-spreadsheet=Spreadsheet(2,False)
-spreadsheet.read2('pr04-2013-15.txt')
-spreadsheet.write('pr04-2013-15(2).csv')
+for depth,sums,inputFilename,outputFilename in [
+	(2,False,'pr04-2013-15.txt','pr04-2013-15(2).csv'),
+	(2,True ,'pr04-2013-15.txt','pr04-2013-15(2,sums).csv'),
+]:
+	spreadsheet=Spreadsheet(depth,sums)
+	spreadsheet.read2(inputFilename)
+	spreadsheet.write(outputFilename)
