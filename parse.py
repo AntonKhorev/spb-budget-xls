@@ -15,7 +15,7 @@ class Entry:
 		if self.name is None:
 			self.name=name.strip()
 		else:
-			if self.name[-1]!='-':
+			if self.name[-1]!='-' or self.name[-2]==' ':
 				self.name+=' '
 			self.name+=name.strip()
 	def parseAmount(self,amountText,key=0):
