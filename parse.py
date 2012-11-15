@@ -11,6 +11,13 @@ class Entry:
 		self.children={}
 		self.number=self.name=self.article=self.section=self.type=None
 		self.amounts={}
+	def appendName(self,name):
+		if self.name is None:
+			self.name=name.strip()
+		else:
+			if self.name[-1]!='-':
+				self.name+=' '
+			self.name+=name.strip()
 	def parseAmount(self,amountText,key=0):
 		amount=re.sub('\s|\.','',amountText)
 		self.amounts[key]=int(amount)
@@ -76,7 +83,7 @@ class Entry:
 		for n,entry in sorted(self.children.items()):
 			entry.write(writer,useSums,depthLimit,depth+1)
 	def __str__(self):
-		return 'number:'+self.number+'; name:'+self.name+'; amounts:'+str(self.amounts)
+		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
 
 class Spreadsheet:
 	def __init__(self,depthLimit=3,useSums=True):
@@ -106,10 +113,10 @@ class Spreadsheet:
 				name_type=m.group(5)
 				mm=re.match('(.*)\s(\d\d\d)',name_type)
 				if mm:
-					entry.name=mm.group(1).strip()
+					entry.appendName(mm.group(1))
 					entry.type=mm.group(2)
 				else:
-					entry.name=name_type.strip()
+					entry.appendName(name_type)
 					entry.type=None
 				continue
 			if re.match('\d\d-...-2012',line): # new page
@@ -127,9 +134,7 @@ class Spreadsheet:
 				continue
 			else: # next line of name
 				if entry:
-					if entry.name[-1]!='-':
-						entry.name+=' '
-					entry.name+=line.strip()
+					entry.appendName(line)
 		self.root.scanRows()
 	def read2(self,filename): # for pr04-2013-15.txt, no sorting
 		entry=None
@@ -139,14 +144,47 @@ class Spreadsheet:
 				number=m.group(1)
 				rest=m.group(2)
 				nc=number.count('.')
+				amPattern='\s([0-9 ]+\.\d)\s([0-9 ]+\.\d)$'
+				arPattern='\s(\d{4})\s(\d{6}[0-9а-я])'
 				if nc==1:
-					m=re.match('^(.*?)\s([0-9 ]+\.\d)\s([0-9 ]+\.\d)$',rest)
+					m=re.match('^(.*?)'+amPattern,rest)
 					if m:
 						entry=spreadsheet.makeEntry(number)
-						entry.name=m.group(1)
+						entry.appendName(m.group(1))
 						entry.parseAmount(m.group(2),0)
 						entry.parseAmount(m.group(3),1)
 						print(entry)
+						continue
+				elif nc==2:
+					m=re.match('^(.*?)'+arPattern+amPattern,rest)
+					if m:
+						entry=spreadsheet.makeEntry(number)
+						entry.appendName(m.group(1))
+						entry.section=m.group(2)
+						entry.article=m.group(3)
+						entry.parseAmount(m.group(4),0)
+						entry.parseAmount(m.group(5),1)
+						print(entry)
+						continue
+				elif nc==3:
+					m=re.match('^(.*?)'+arPattern+'\s(\d{3})'+amPattern,rest)
+					if m:
+						entry=spreadsheet.makeEntry(number)
+						entry.appendName(m.group(1))
+						entry.section=m.group(2)
+						entry.article=m.group(3)
+						entry.type=m.group(4)
+						entry.parseAmount(m.group(5),0)
+						entry.parseAmount(m.group(6),1)
+						print(entry)
+						continue
+				else:
+					raise Exception('unsupported number')
+			if re.match('^\d+\s+Приложение',line): # new page
+				entry=None
+				continue
+			if entry: # next line of name
+				entry.appendName(line)
 		self.root.scanRows()
 	def write(self,filename):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
