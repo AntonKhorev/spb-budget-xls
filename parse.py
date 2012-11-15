@@ -138,14 +138,14 @@ class Spreadsheet:
 		self.root.scanRows()
 	def read2(self,filename): # for pr04-2013-15.txt, no sorting
 		entry=None
+		amPattern='\s([0-9 ]+\.\d)\s([0-9 ]+\.\d)$'
+		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])'
 		for line in open(filename,encoding='utf8'):
 			m=re.match('^((?:\d+\.)+)\s+(.*)$',line)
 			if m:
 				number=m.group(1)
 				rest=m.group(2)
 				nc=number.count('.')
-				amPattern='\s([0-9 ]+\.\d)\s([0-9 ]+\.\d)$'
-				arPattern='\s(\d{4})\s(\d{6}[0-9а-я])'
 				if nc==1:
 					m=re.match('^(.*?)'+amPattern,rest)
 					if m:
@@ -153,7 +153,6 @@ class Spreadsheet:
 						entry.appendName(m.group(1))
 						entry.parseAmount(m.group(2),0)
 						entry.parseAmount(m.group(3),1)
-						print(entry)
 						continue
 				elif nc==2:
 					m=re.match('^(.*?)'+arPattern+amPattern,rest)
@@ -164,7 +163,6 @@ class Spreadsheet:
 						entry.article=m.group(3)
 						entry.parseAmount(m.group(4),0)
 						entry.parseAmount(m.group(5),1)
-						print(entry)
 						continue
 				elif nc==3:
 					m=re.match('^(.*?)'+arPattern+'\s(\d{3})'+amPattern,rest)
@@ -176,10 +174,15 @@ class Spreadsheet:
 						entry.type=m.group(4)
 						entry.parseAmount(m.group(5),0)
 						entry.parseAmount(m.group(6),1)
-						print(entry)
 						continue
 				else:
 					raise Exception('unsupported number')
+			m=re.match('^(Итого):'+amPattern,line)
+			if m: # total
+				spreadsheet.root.name=m.group(1)
+				spreadsheet.root.parseAmount(m.group(2),0)
+				spreadsheet.root.parseAmount(m.group(3),1)
+				continue
 			if re.match('^\d+\s+Приложение',line): # new page
 				entry=None
 				continue
@@ -203,6 +206,6 @@ class Spreadsheet:
 	# spreadsheet.read1(inputFilename)
 	# spreadsheet.write(outputFilename)
 
-spreadsheet=Spreadsheet(1,False)
+spreadsheet=Spreadsheet(2,False)
 spreadsheet.read2('pr04-2013-15.txt')
-spreadsheet.write('pr04-2013-15(1).csv')
+spreadsheet.write('pr04-2013-15(2).csv')
