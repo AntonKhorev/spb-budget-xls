@@ -91,6 +91,7 @@ class Spreadsheet:
 		self.depthLimit=depthLimit
 		self.useSums=useSums
 		self.root=Entry(self.row)
+		self.amountHeader=['Сумма (тыс. руб.)']
 	def makeEntry(self,numberStr):
 		number=[int(n) for n in numberStr.split('.') if n!='']
 		if len(number)>self.depthLimit:
@@ -189,9 +190,11 @@ class Spreadsheet:
 			if entry: # next line of name
 				entry.appendName(line)
 		self.root.scanRows()
+	def setAmountHeader(self,header):
+		self.amountHeader=list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for k,v in sorted(header.items())))
 	def write(self,filename):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
-		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов','Сумма (тыс. руб.)'])
+		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов']+self.amountHeader)
 		self.root.write(writer,self.useSums,self.depthLimit)
 
 for depth,sums,inputFilename,outputFilename in [
@@ -216,4 +219,5 @@ for depth,sums,inputFilename,outputFilename in [
 ]:
 	spreadsheet=Spreadsheet(depth,sums)
 	spreadsheet.read2(inputFilename)
+	spreadsheet.setAmountHeader({0:'Плановый период 2014 г. (тыс. руб.)',1:'Плановый период 2015 г. (тыс. руб.)'})
 	spreadsheet.write(outputFilename)
