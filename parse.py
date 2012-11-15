@@ -194,21 +194,25 @@ class Spreadsheet:
 		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов','Сумма (тыс. руб.)'])
 		self.root.write(writer,self.useSums,self.depthLimit)
 
-# for depth,sums,inputFilename,outputFilename in [
-	# (1,False,'pr03-2013-15.txt','pr03-2013-15(1).csv'),
-	# (2,False,'pr03-2013-15.txt','pr03-2013-15(2).csv'),
-	# (3,False,'pr03-2013-15.txt','pr03-2013-15(3).csv'),
-	# (1,True ,'pr03-2013-15.txt','pr03-2013-15(1,sums).csv'),
-	# (2,True ,'pr03-2013-15.txt','pr03-2013-15(2,sums).csv'),
-	# (3,True ,'pr03-2013-15.txt','pr03-2013-15(3,sums).csv'),
-# ]:
-	# spreadsheet=Spreadsheet(depth,sums)
-	# spreadsheet.read1(inputFilename)
-	# spreadsheet.write(outputFilename)
+for depth,sums,inputFilename,outputFilename in [
+	(1,False,'pr03-2013-15.txt','pr03-2013-15(1).csv'),
+	(2,False,'pr03-2013-15.txt','pr03-2013-15(2).csv'),
+	(3,False,'pr03-2013-15.txt','pr03-2013-15(3).csv'),
+	(1,True ,'pr03-2013-15.txt','pr03-2013-15(1,sums).csv'),
+	(2,True ,'pr03-2013-15.txt','pr03-2013-15(2,sums).csv'),
+	(3,True ,'pr03-2013-15.txt','pr03-2013-15(3,sums).csv'),
+]:
+	spreadsheet=Spreadsheet(depth,sums)
+	spreadsheet.read1(inputFilename)
+	spreadsheet.write(outputFilename)
 
 for depth,sums,inputFilename,outputFilename in [
+	(1,False,'pr04-2013-15.txt','pr04-2013-15(1).csv'),
 	(2,False,'pr04-2013-15.txt','pr04-2013-15(2).csv'),
+	(3,False,'pr04-2013-15.txt','pr04-2013-15(3).csv'),
+	(1,True ,'pr04-2013-15.txt','pr04-2013-15(1,sums).csv'),
 	(2,True ,'pr04-2013-15.txt','pr04-2013-15(2,sums).csv'),
+	(3,True ,'pr04-2013-15.txt','pr04-2013-15(3,sums).csv'),
 ]:
 	spreadsheet=Spreadsheet(depth,sums)
 	spreadsheet.read2(inputFilename)
