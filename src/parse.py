@@ -1,8 +1,8 @@
 # java -jar pdfbox-app-1.7.1.jar ExtractText -encoding UTF-8 pr-bd-2013-15/pr03-2013-15.pdf
 # java -jar pdfbox-app-1.7.1.jar ExtractText -encoding UTF-8 -sort pr-bd-2013-15/pr04-2013-15.pdf
 
-import re
-import csv
+import os.path, glob
+import re, csv
 import itertools
 
 class Entry:
@@ -137,7 +137,7 @@ class Spreadsheet:
 				if entry:
 					entry.appendName(line)
 		self.root.scanRows()
-	def read2(self,filename,nCols=1): # for pr04-2013-15.txt, no sorting
+	def read2(self,filename,nCols=1): # for pr04-2013-15.txt, no sorting - FIXME why no sorting? read1 was for no sorting; read2 was for sorting?
 		entry=None
 		amPattern='\s([0-9 ]+\.\d)'*nCols+'$'
 		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])'
@@ -197,37 +197,21 @@ class Spreadsheet:
 		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов']+self.amountHeader)
 		self.root.write(writer,self.useSums,self.depthLimit)
 
-def writeVersions(inputFilename,nCols):
+def writeVersions(outputDirectory,inputFilename,nCols):
 	for sums in (False,True):
 		for depth in range(1,4):
-			outputFilename=inputFilename[:-4]+'('+str(depth)+(',sums' if sums else '')+').csv'
+			outputFilename=outputDirectory+'/'+os.path.basename(inputFilename[:-4])+'('+str(depth)+(',sums' if sums else '')+').csv'
 			spreadsheet=Spreadsheet(depth,sums)
-			spreadsheet.read2('../txt/'+inputFilename,nCols)
-			spreadsheet.write('../csv/'+outputFilename)
+			spreadsheet.read2(inputFilename,nCols)
+			# TODO add column headers
+			# example for pr04-2013-15.txt:
+			# spreadsheet.setAmountHeader({0:'Плановый период 2014 г. (тыс. руб.)',1:'Плановый период 2015 г. (тыс. руб.)'})
+			# TODO add document name somewhere
+			spreadsheet.write(outputFilename)
 
-# for depth,sums,inputFilename,outputFilename in [
-	# (1,False,'pr03-2013-15.txt','pr03-2013-15(1).csv'),
-	# (2,False,'pr03-2013-15.txt','pr03-2013-15(2).csv'),
-	# (3,False,'pr03-2013-15.txt','pr03-2013-15(3).csv'),
-	# (1,True ,'pr03-2013-15.txt','pr03-2013-15(1,sums).csv'),
-	# (2,True ,'pr03-2013-15.txt','pr03-2013-15(2,sums).csv'),
-	# (3,True ,'pr03-2013-15.txt','pr03-2013-15(3,sums).csv'),
-# ]:
-	# spreadsheet=Spreadsheet(depth,sums)
-	# spreadsheet.read1(inputFilename)
-	# spreadsheet.write(outputFilename)
-
-# for depth,sums,inputFilename,outputFilename in [
-	# (1,False,'pr04-2013-15.txt','pr04-2013-15(1).csv'),
-	# (2,False,'pr04-2013-15.txt','pr04-2013-15(2).csv'),
-	# (3,False,'pr04-2013-15.txt','pr04-2013-15(3).csv'),
-	# (1,True ,'pr04-2013-15.txt','pr04-2013-15(1,sums).csv'),
-	# (2,True ,'pr04-2013-15.txt','pr04-2013-15(2,sums).csv'),
-	# (3,True ,'pr04-2013-15.txt','pr04-2013-15(3,sums).csv'),
-# ]:
-	# spreadsheet=Spreadsheet(depth,sums)
-	# spreadsheet.read2(inputFilename,2)
-	# spreadsheet.setAmountHeader({0:'Плановый период 2014 г. (тыс. руб.)',1:'Плановый период 2015 г. (тыс. руб.)'})
-	# spreadsheet.write(outputFilename)
-
-writeVersions('pril_02-12-14-1izm.txt',1)
+root=os.path.realpath(
+	os.path.dirname(os.path.realpath(__file__))+'/..'
+)
+for filename in glob.glob(root+'/txt/*.txt'):
+	nCols=1 # TODO detect # of cols
+	writeVersions(root+'/csv',filename,nCols)
