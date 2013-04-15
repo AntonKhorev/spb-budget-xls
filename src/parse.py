@@ -202,8 +202,8 @@ def writeVersions(inputFilename,nCols):
 		for depth in range(1,4):
 			outputFilename=inputFilename[:-4]+'('+str(depth)+(',sums' if sums else '')+').csv'
 			spreadsheet=Spreadsheet(depth,sums)
-			spreadsheet.read2(inputFilename,nCols)
-			spreadsheet.write(outputFilename)
+			spreadsheet.read2('../txt/'+inputFilename,nCols)
+			spreadsheet.write('../csv/'+outputFilename)
 
 # for depth,sums,inputFilename,outputFilename in [
 	# (1,False,'pr03-2013-15.txt','pr03-2013-15(1).csv'),
