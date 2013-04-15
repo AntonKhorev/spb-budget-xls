@@ -1,6 +1,3 @@
-# java -jar pdfbox-app-1.7.1.jar ExtractText -encoding UTF-8 pr-bd-2013-15/pr03-2013-15.pdf
-# java -jar pdfbox-app-1.7.1.jar ExtractText -encoding UTF-8 -sort pr-bd-2013-15/pr04-2013-15.pdf
-
 import os.path, glob
 import re, csv
 import itertools
