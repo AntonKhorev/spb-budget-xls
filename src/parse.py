@@ -98,7 +98,7 @@ class Spreadsheet:
 		entry.number=numberStr
 		self.root.addLeaf(entry,number)
 		return entry
-	def read1(self,filename): # for pr03-2013-15.txt, no sorting
+	def read1(self,filename): # for pr03-2013-15.txt, no sorting - TODO obsolete - remove it
 		entry=None
 		for line in open(filename,encoding='utf8'):
 			m=re.match('((?:\d+\.)+)\s+(?:(\d{6}[0-9а-я])(\d{4})\s+)?([0-9 ]+\.\d)(.*)',line)
@@ -193,22 +193,3 @@ class Spreadsheet:
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
 		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов']+self.amountHeader)
 		self.root.write(writer,self.useSums,self.depthLimit)
-
-def writeVersions(outputDirectory,inputFilename,nCols):
-	for sums in (False,True):
-		for depth in range(1,4):
-			outputFilename=outputDirectory+'/'+os.path.basename(inputFilename[:-4])+'('+str(depth)+(',sums' if sums else '')+').csv'
-			spreadsheet=Spreadsheet(depth,sums)
-			spreadsheet.read2(inputFilename,nCols)
-			# TODO add column headers
-			# example for pr04-2013-15.txt:
-			# spreadsheet.setAmountHeader({0:'Плановый период 2014 г. (тыс. руб.)',1:'Плановый период 2015 г. (тыс. руб.)'})
-			# TODO add document name somewhere
-			spreadsheet.write(outputFilename)
-
-root=os.path.realpath(
-	os.path.dirname(os.path.realpath(__file__))+'/..'
-)
-for filename in glob.glob(root+'/txt/*.txt'):
-	nCols=1 # TODO detect # of cols
-	writeVersions(root+'/csv',filename,nCols)

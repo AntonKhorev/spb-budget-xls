@@ -6,7 +6,7 @@ import io
 import zipfile
 import subprocess
 
-import data
+import data,parse
 
 # приложения, которые парсим
 class Document:
@@ -38,6 +38,27 @@ class Document:
 		status=subprocess.call(['java','-jar',self.law.environment.pdfboxFilename,'ExtractText','-encoding','UTF-8','-sort',self.pdfFilename,self.txtFilename])
 		if status!=0:
 			raise Exception('external command failure')
+	def getCsvAttrs(self):
+		for sums in (False,True):
+			for depth in range(1,4):
+				filename=self.law.environment.rootPath+'/csv/'+self.law.code+'('+str(depth)+(',sums' if sums else '')+').csv'
+				yield sums,depth,filename
+	def hasCsvs(self):
+		for _,_,csvFilename in self.getCsvAttrs():
+			if not os.path.isfile(csvFilename):
+				return False
+		return True
+	def writeCsvs(self):
+		for sums,depth,csvFilename in self.getCsvAttrs():
+			nCols=1
+			spreadsheet=parse.Spreadsheet(depth,sums)
+			spreadsheet.read2(self.txtFilename,nCols)
+			# TODO check total
+			# TODO add column headers
+			# example for pr04-2013-15.txt:
+			# spreadsheet.setAmountHeader({0:'Плановый период 2014 г. (тыс. руб.)',1:'Плановый период 2015 г. (тыс. руб.)'})
+			# TODO add document name somewhere
+			spreadsheet.write(csvFilename)
 
 # закон или законопроект, в к-рый входит несколько приложений - с ними отдельно разбираться
 class Law:
@@ -81,3 +102,7 @@ for law in e.laws:
 			document.writePdf()
 		if not document.hasTxt():
 			document.writeTxt()
+		if law.code!='2013.0.p':
+			continue # debug
+		if not document.hasCsvs():
+			document.writeCsvs()
