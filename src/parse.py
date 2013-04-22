@@ -18,9 +18,15 @@ class Entry:
 			if self.name[-1]!='-' or self.name[-2]==' ':
 				self.name+=' '
 			self.name+=name
-	def parseAmount(self,amountText,key=0):
+	def parseAmount(self,amountText):
 		amount=re.sub('\s|\.','',amountText)
-		self.amounts[key]=int(amount)
+		return int(amount)
+	def addAmount(self,amountText,key=0):
+		self.amounts[key]=self.parseAmount(amountText)
+	def checkAmount(self,amountText,key=0):
+		amount=self.parseAmount(amountText)
+		if amount!=self.amounts[key]:
+			raise Exception("amount doesn't match")
 	def addLeaf(self,entry,number):
 		n=number.pop(0)
 		if len(number)==0:
@@ -110,14 +116,14 @@ class Spreadsheet:
 			if m:
 				number=m.group(1)
 				rest=m.group(2)
-				nc=number.count('.')
+				nc=number.count('.') # depth: 1 = x. ; 2 = x.y. ; 3 = x.y.z.
 				if nc==1:
 					m=re.match('^(.*?)'+amPattern,rest)
 					if m:
 						entry=self.makeEntry(number)
 						entry.appendName(m.group(1))
 						for i in range(nCols):
-							entry.parseAmount(m.group(i+2),i)
+							entry.addAmount(m.group(i+2),i)
 						continue
 				elif nc==2:
 					m=re.match('^(.*?)'+arPattern+amPattern,rest)
@@ -127,7 +133,7 @@ class Spreadsheet:
 						entry.section=m.group(2)
 						entry.article=m.group(3)
 						for i in range(nCols):
-							entry.parseAmount(m.group(i+4),i)
+							entry.addAmount(m.group(i+4),i)
 						continue
 				elif nc==3:
 					m=re.match('^(.*?)'+arPattern+'\s(\d{3})'+amPattern,rest)
@@ -138,7 +144,7 @@ class Spreadsheet:
 						entry.article=m.group(3)
 						entry.type=m.group(4)
 						for i in range(nCols):
-							entry.parseAmount(m.group(i+5),i)
+							entry.addAmount(m.group(i+5),i)
 						continue
 				else:
 					raise Exception('unsupported number')
@@ -146,7 +152,7 @@ class Spreadsheet:
 			if m: # total
 				self.root.name=m.group(1)
 				for i in range(nCols):
-					self.root.parseAmount(m.group(i+2),i)
+					self.root.addAmount(m.group(i+2),i)
 				continue
 			if re.match('^\d+\s+Приложение',line): # new page
 				entry=None
@@ -154,6 +160,9 @@ class Spreadsheet:
 			if entry: # next line of name
 				entry.appendName(line)
 		self.root.scanRows()
+	def checkTotal(self,amountText):
+		# TODO multi-column amount check
+		self.root.checkAmount(amountText)
 	def setAmountHeader(self,header):
 		self.amountHeader=list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for k,v in sorted(header.items())))
 	def write(self,filename):

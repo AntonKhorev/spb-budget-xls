@@ -16,6 +16,7 @@ class Document:
 		self.pdfFilename=self.law.environment.rootPath+'/pdf/'+self.law.code+'.pdf'
 		self.txtFilename=self.law.environment.rootPath+'/txt/'+self.law.code+'.txt'
 		self.zipContents=data['zipContents']
+		self.total=data['total']
 	def hasPdf(self):
 		return os.path.isfile(self.pdfFilename)
 	def writePdf(self):
@@ -53,7 +54,7 @@ class Document:
 			nCols=1
 			spreadsheet=parse.Spreadsheet(depth,sums)
 			spreadsheet.read(self.txtFilename,nCols)
-			# TODO check total
+			spreadsheet.checkTotal(self.total)
 			# TODO add column headers
 			# example for pr04-2013-15.txt:
 			# spreadsheet.setAmountHeader({0:'Плановый период 2014 г. (тыс. руб.)',1:'Плановый период 2015 г. (тыс. руб.)'})
