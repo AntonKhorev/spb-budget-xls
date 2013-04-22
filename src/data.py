@@ -13,6 +13,7 @@
 
 data={
 	'rootUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/',
+	'pdfboxJar':'pdfbox-app-1.8.1.jar',
 	'laws':[
 		# TODO 2010 and earlier
 		{

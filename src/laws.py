@@ -4,6 +4,7 @@
 import os.path
 import io
 import zipfile
+import subprocess
 
 import data
 
@@ -13,6 +14,7 @@ class Document:
 		# path = путь внутри архива
 		self.law=law
 		self.pdfFilename=self.law.environment.rootPath+'/pdf/'+self.law.code+'.pdf'
+		self.txtFilename=self.law.environment.rootPath+'/txt/'+self.law.code+'.txt'
 		self.zipContents=data['zipContents']
 	def hasPdf(self):
 		return os.path.isfile(self.pdfFilename)
@@ -30,6 +32,12 @@ class Document:
 		pdfFile=open(self.pdfFilename,'wb')
 		pdfFile.write(bytes)
 		pdfFile.close()
+	def hasTxt(self):
+		return os.path.isfile(self.txtFilename)
+	def writeTxt(self):
+		status=subprocess.call(['java','-jar',self.law.environment.pdfboxFilename,'ExtractText','-encoding','UTF-8','-sort',self.pdfFilename,self.txtFilename])
+		if status!=0:
+			raise Exception('external command failure')
 
 # закон или законопроект, в к-рый входит несколько приложений - с ними отдельно разбираться
 class Law:
@@ -61,6 +69,7 @@ class Environment:
 			os.path.dirname(os.path.realpath(__file__))+'/..'
 		)
 		self.rootUrl=data['rootUrl']
+		self.pdfboxFilename=self.rootPath+'/bin/'+data['pdfboxJar']
 		self.laws=(Law(self,lawData) for lawData in data['laws'])
 
 e=Environment(data.data)
@@ -70,3 +79,5 @@ for law in e.laws:
 	for document in law.documents:
 		if not document.hasPdf():
 			document.writePdf()
+		if not document.hasTxt():
+			document.writeTxt()
