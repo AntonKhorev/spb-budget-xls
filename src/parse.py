@@ -111,14 +111,20 @@ class Spreadsheet:
 		entry=None
 		amPattern='\s([0-9 ]+[.,]\d)'*nCols+'$' # amount pattern
 		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])' # article (code) pattern
+		reLeadNumberLine=re.compile('^((?:\d+\.)+)\s+(.*)$')
+		reLineEndingDepth1=re.compile('^(.*?)'+amPattern)
+		reLineEndingDepth2=re.compile('^(.*?)'+arPattern+amPattern)
+		reLineEndingDepth3=re.compile('^(.*?)'+arPattern+'\s(\d{3})'+amPattern)
+		reTotalLine=re.compile('^(Итого):'+amPattern)
+		reNewPageLine=re.compile('^\d+\s+Приложение')
 		for line in open(filename,encoding='utf8'):
-			m=re.match('^((?:\d+\.)+)\s+(.*)$',line)
+			m=reLeadNumberLine.match(line)
 			if m:
 				number=m.group(1)
 				rest=m.group(2)
 				nc=number.count('.') # depth: 1 = x. ; 2 = x.y. ; 3 = x.y.z.
 				if nc==1:
-					m=re.match('^(.*?)'+amPattern,rest)
+					m=reLineEndingDepth1.match(rest)
 					if m:
 						entry=self.makeEntry(number)
 						entry.appendName(m.group(1))
@@ -126,7 +132,7 @@ class Spreadsheet:
 							entry.addAmount(m.group(i+2),i)
 						continue
 				elif nc==2:
-					m=re.match('^(.*?)'+arPattern+amPattern,rest)
+					m=reLineEndingDepth2.match(rest)
 					if m:
 						entry=self.makeEntry(number)
 						entry.appendName(m.group(1))
@@ -136,7 +142,7 @@ class Spreadsheet:
 							entry.addAmount(m.group(i+4),i)
 						continue
 				elif nc==3:
-					m=re.match('^(.*?)'+arPattern+'\s(\d{3})'+amPattern,rest)
+					m=reLineEndingDepth3.match(rest)
 					if m:
 						entry=self.makeEntry(number)
 						entry.appendName(m.group(1))
@@ -148,13 +154,13 @@ class Spreadsheet:
 						continue
 				else:
 					raise Exception('unsupported number')
-			m=re.match('^(Итого):'+amPattern,line)
+			m=reTotalLine.match(line)
 			if m: # total
 				self.root.name=m.group(1)
 				for i in range(nCols):
 					self.root.addAmount(m.group(i+2),i)
 				continue
-			if re.match('^\d+\s+Приложение',line): # new page
+			if reNewPageLine.match(line): # new page
 				entry=None
 				continue
 			if entry: # next line of name
