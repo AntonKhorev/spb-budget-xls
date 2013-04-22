@@ -85,7 +85,7 @@ class Entry:
 			amList=list(itertools.chain.from_iterable([None]*depth+[am]+[None]*(depthLimit-depth) for am in ams))
 		else:
 			amList=ams
-		writer.writerow([self.number,self.name,self.article,self.section,self.type]+amList)
+		writer.writerow([self.number,self.name,self.section,self.article,self.type]+amList)
 		for n,entry in sorted(self.children.items()):
 			entry.write(writer,useSums,depthLimit,depth+1)
 	def __str__(self):
