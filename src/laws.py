@@ -15,14 +15,19 @@ class Document:
 		if isinstance(data['forYear'],(str,int)):
 			data['forYear']=(data['forYear'],)
 		data['forYear']=tuple(str(y) for y in data['forYear'])
+		if isinstance(data['total'],(str,int)):
+			data['total']=(data['total'],)
 		# init
 		self.law=law
 		self.forYears=data['forYear']
-		basename=self.law.code+'-'+','.join(self.forYears)
-		self.pdfFilename=self.law.environment.rootPath+'/pdf/'+basename+'.pdf'
-		self.txtFilename=self.law.environment.rootPath+'/txt/'+basename+'.txt'
+		self.code=self.law.code+'-'+','.join(self.forYears)
+		self.pdfFilename=self.law.environment.rootPath+'/pdf/'+self.code+'.pdf'
+		self.txtFilename=self.law.environment.rootPath+'/txt/'+self.code+'.txt'
 		self.zipContents=data['zipContents']
-		self.total=data['total']
+		self.totals=data['total']
+		if len(self.forYears)!=len(self.totals):
+			raise Exception('invalid number of columns')
+		self.nCols=len(self.totals)
 	def hasPdf(self):
 		return os.path.isfile(self.pdfFilename)
 	def writePdf(self):
@@ -48,7 +53,7 @@ class Document:
 	def getCsvAttrs(self):
 		for sums in (False,True):
 			for depth in range(1,4):
-				filename=self.law.environment.rootPath+'/csv/'+self.law.code+'('+str(depth)+(',sums' if sums else '')+').csv'
+				filename=self.law.environment.rootPath+'/csv/'+self.code+'('+str(depth)+(',sums' if sums else '')+').csv'
 				yield sums,depth,filename
 	def hasCsvs(self):
 		for _,_,csvFilename in self.getCsvAttrs():
@@ -57,10 +62,9 @@ class Document:
 		return True
 	def writeCsvs(self):
 		for sums,depth,csvFilename in self.getCsvAttrs():
-			nCols=1
 			spreadsheet=parse.Spreadsheet(depth,sums)
-			spreadsheet.read(self.txtFilename,nCols)
-			spreadsheet.checkTotal(self.total)
+			spreadsheet.read(self.txtFilename,self.nCols)
+			spreadsheet.checkTotals(self.totals)
 			# TODO add column headers
 			# example for pr04-2013-15.txt:
 			# spreadsheet.setAmountHeader({0:'Плановый период 2014 г. (тыс. руб.)',1:'Плановый период 2015 г. (тыс. руб.)'})

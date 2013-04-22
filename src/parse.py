@@ -166,9 +166,9 @@ class Spreadsheet:
 			if entry: # next line of name
 				entry.appendName(line)
 		self.root.scanRows()
-	def checkTotal(self,amountText):
-		# TODO multi-column amount check
-		self.root.checkAmount(amountText)
+	def checkTotals(self,amountTexts):
+		for i,amountText in enumerate(amountTexts):
+			self.root.checkAmount(amountText,i)
 	def setAmountHeader(self,header):
 		self.amountHeader=list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for k,v in sorted(header.items())))
 	def write(self,filename):
