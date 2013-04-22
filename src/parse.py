@@ -9,12 +9,14 @@ class Entry:
 		self.number=self.name=self.article=self.section=self.type=None
 		self.amounts={}
 	def appendName(self,name):
+		name=name.strip()
+		name=re.sub(r'" ([А-Я])',r'"\1',name) # " Дирекция -> "Дирекция
 		if self.name is None:
-			self.name=name.strip()
+			self.name=name
 		else:
 			if self.name[-1]!='-' or self.name[-2]==' ':
 				self.name+=' '
-			self.name+=name.strip()
+			self.name+=name
 	def parseAmount(self,amountText,key=0):
 		amount=re.sub('\s|\.','',amountText)
 		self.amounts[key]=int(amount)
