@@ -52,7 +52,7 @@ class Document:
 		for sums,depth,csvFilename in self.getCsvAttrs():
 			nCols=1
 			spreadsheet=parse.Spreadsheet(depth,sums)
-			spreadsheet.read2(self.txtFilename,nCols)
+			spreadsheet.read(self.txtFilename,nCols)
 			# TODO check total
 			# TODO add column headers
 			# example for pr04-2013-15.txt:

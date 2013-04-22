@@ -98,43 +98,7 @@ class Spreadsheet:
 		entry.number=numberStr
 		self.root.addLeaf(entry,number)
 		return entry
-	def read1(self,filename): # for pr03-2013-15.txt, no sorting - TODO obsolete - remove it
-		entry=None
-		for line in open(filename,encoding='utf8'):
-			m=re.match('((?:\d+\.)+)\s+(?:(\d{6}[0-9а-я])(\d{4})\s+)?([0-9 ]+\.\d)(.*)',line)
-			if m:
-				number=m.group(1)
-				entry=self.makeEntry(number)
-				entry.article=m.group(2)
-				entry.section=m.group(3)
-				entry.parseAmount(m.group(4))
-				name_type=m.group(5)
-				mm=re.match('(.*)\s(\d\d\d)',name_type)
-				if mm:
-					entry.appendName(mm.group(1))
-					entry.type=mm.group(2)
-				else:
-					entry.appendName(name_type)
-					entry.type=None
-				continue
-			if re.match('\d\d-...-2012',line): # new page
-				entry=None
-				continue
-			m=re.match('^\d\d\d$',line) # type on separate line
-			if m:
-				if entry:
-					entry.type=m.group(0)
-				continue
-			m=re.match('([0-9 ]+\.\d)(Итого):',line)
-			if m: # total
-				self.root.name=m.group(2)
-				self.root.parseAmount(m.group(1))
-				continue
-			else: # next line of name
-				if entry:
-					entry.appendName(line)
-		self.root.scanRows()
-	def read2(self,filename,nCols=1): # for pr04-2013-15.txt, no sorting - FIXME why no sorting? read1 was for no sorting; read2 was for sorting?
+	def read(self,filename,nCols=1):
 		entry=None
 		amPattern='\s([0-9 ]+\.\d)'*nCols+'$'
 		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])'
