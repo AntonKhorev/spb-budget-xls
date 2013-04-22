@@ -11,10 +11,16 @@ import data,parse
 # приложения, которые парсим
 class Document:
 	def __init__(self,law,data):
-		# path = путь внутри архива
+		# fix data
+		if isinstance(data['forYear'],(str,int)):
+			data['forYear']=(data['forYear'],)
+		data['forYear']=tuple(str(y) for y in data['forYear'])
+		# init
 		self.law=law
-		self.pdfFilename=self.law.environment.rootPath+'/pdf/'+self.law.code+'.pdf'
-		self.txtFilename=self.law.environment.rootPath+'/txt/'+self.law.code+'.txt'
+		self.forYears=data['forYear']
+		basename=self.law.code+'-'+','.join(self.forYears)
+		self.pdfFilename=self.law.environment.rootPath+'/pdf/'+basename+'.pdf'
+		self.txtFilename=self.law.environment.rootPath+'/txt/'+basename+'.txt'
 		self.zipContents=data['zipContents']
 		self.total=data['total']
 	def hasPdf(self):
