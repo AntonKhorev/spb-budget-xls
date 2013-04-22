@@ -2,3 +2,4 @@ pdf/*.pdf
 txt/*.txt
 csv/*.csv
 zip/20??
+src/__pycache__
