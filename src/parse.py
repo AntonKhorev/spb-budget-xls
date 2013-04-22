@@ -11,6 +11,7 @@ class Entry:
 	def appendName(self,name):
 		name=name.strip()
 		name=re.sub(r'" ([А-Я])',r'"\1',name) # " Дирекция -> "Дирекция
+		name=re.sub(r'Ы ([А-Я])',r'Ы\1',name) # ЖИЛИЩНЫ Й -> ЖИЛИЩНЫЙ
 		if self.name is None:
 			self.name=name
 		else:
