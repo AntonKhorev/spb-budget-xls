@@ -19,7 +19,7 @@ class Entry:
 				self.name+=' '
 			self.name+=name
 	def parseAmount(self,amountText):
-		amount=re.sub('\s|\.','',amountText)
+		amount=re.sub('\s|\.|,','',amountText)
 		return int(amount)
 	def addAmount(self,amountText,key=0):
 		self.amounts[key]=self.parseAmount(amountText)
@@ -109,8 +109,8 @@ class Spreadsheet:
 		return entry
 	def read(self,filename,nCols=1):
 		entry=None
-		amPattern='\s([0-9 ]+\.\d)'*nCols+'$'
-		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])'
+		amPattern='\s([0-9 ]+[.,]\d)'*nCols+'$' # amount pattern
+		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])' # article (code) pattern
 		for line in open(filename,encoding='utf8'):
 			m=re.match('^((?:\d+\.)+)\s+(.*)$',line)
 			if m:

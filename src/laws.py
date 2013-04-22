@@ -103,7 +103,5 @@ for law in e.laws:
 			document.writePdf()
 		if not document.hasTxt():
 			document.writeTxt()
-		if law.code!='2013.0.p':
-			continue # debug
 		if not document.hasCsvs():
 			document.writeCsvs()
