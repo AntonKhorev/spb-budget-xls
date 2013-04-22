@@ -69,14 +69,34 @@ data={
 			],
 		},{
 			'code':'2013.0.z',
+			'title':'О бюджете Санкт-Петербурга на 2013 год и на плановый период 2014 и 2015 годов',
 			'date':'28.11.2012',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=586@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2013/full/bd2013-15.zip',
+			'documents':[
+				{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2013 год',
+					'appendixNumber':3,
+					'zipContents':'pr03_2013.pdf',
+					'forYear':2013,
+					'total':'411 033 787.5',
+				}
+			],
 		},{
 			'code':'2013.1.p',
+			'title':'О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2013 год и на плановый период 2014 и 2015 годов»',
 			'date':'12.04.2013',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=602@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2013/pr_1izm/pr_1izm.zip',
+			'documents':[
+				{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2013 год',
+					'appendixNumber':2, # приложение 2 к изменению приложения 3
+					'zipContents':'pr02-1izm_2013-15.zip/pr02-1izm_2013-15.pdf', # дважды запаковали
+					'forYear':2013,
+					'total':'429 438 320.2',
+				}
+			],
 		}
 	],
 }

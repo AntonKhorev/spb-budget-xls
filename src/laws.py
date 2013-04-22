@@ -2,6 +2,7 @@
 # filenames are always absolute/ready to be read
 
 import os.path
+import io
 import zipfile
 
 import data
@@ -13,14 +14,22 @@ class Document:
 		self.law=law
 		self.pdfFilename=self.law.environment.rootPath+'/pdf/'+self.law.code+'.pdf'
 		self.zipContents=data['zipContents']
+	def hasPdf(self):
+		return os.path.isfile(self.pdfFilename)
 	def writePdf(self):
-		zipFile=zipfile.ZipFile(law.zipFilename)
+		# attempt to read before opening pdfFile - otherwise might get zero-length file on error
+		bytes=None
+		for s in self.zipContents.split('/'):
+			if bytes is None:
+				zipFile=zipfile.ZipFile(law.zipFilename)
+			else:
+				zipFile=zipfile.ZipFile(io.BytesIO(bytes))
+			bytes=zipFile.read(s)
+			zipFile.close()
+		# write pdf
 		pdfFile=open(self.pdfFilename,'wb')
-		pdfFile.write(
-			zipFile.read(self.zipContents)
-		)
+		pdfFile.write(bytes)
 		pdfFile.close()
-		zipFile.close()
 
 # закон или законопроект, в к-рый входит несколько приложений - с ними отдельно разбираться
 class Law:
@@ -43,9 +52,8 @@ class Law:
 			raise Exception('invalid download url')
 		self.zipFilename=self.environment.rootPath+'/zip/'+data['downloadUrl'][len(self.environment.rootUrl):]
 		self.documents=(Document(self,documentData) for documentData in data['documents'])
-	def checkZip(self):
-		if not os.path.isfile(self.zipFilename):
-			raise Exception('file '+self.zipFilename+' not found')
+	def hasZip(self):
+		return os.path.isfile(self.zipFilename)
 
 class Environment:
 	def __init__(self,data):
@@ -57,6 +65,8 @@ class Environment:
 
 e=Environment(data.data)
 for law in e.laws:
-	law.checkZip()
+	if not law.hasZip():
+		raise Exception(law.zipFilename+' has to be downloaded')
 	for document in law.documents:
-		document.writePdf()
+		if not document.hasPdf():
+			document.writePdf()
