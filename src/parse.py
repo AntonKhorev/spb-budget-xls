@@ -109,7 +109,7 @@ class Spreadsheet:
 		return entry
 	def read(self,filename,nCols=1):
 		entry=None
-		amPattern='\s([0-9 ]+[.,]\d)'*nCols+'$' # amount pattern
+		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*nCols+'$' # amount pattern
 		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])' # article (code) pattern
 		reLeadNumberLine=re.compile('^((?:\d+\.)+)\s+(.*)$')
 		reLineEndingDepth1=re.compile('^(.*?)'+amPattern)
