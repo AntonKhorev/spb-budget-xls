@@ -109,10 +109,9 @@ class Entry:
 		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
 
 class Spreadsheet:
-	def __init__(self,depthLimit=3,useSums=True):
+	def __init__(self,depthLimit=3):
 		self.row=2 # row 1 for header
 		self.depthLimit=depthLimit
-		self.useSums=useSums
 		self.root=Entry(self.row)
 		self.amountHeader=['Сумма (тыс. руб.)']
 
@@ -219,7 +218,7 @@ class Spreadsheet:
 	def setAmountHeader(self,header):
 		self.amountHeader=list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for k,v in sorted(header.items())))
 
-	def write(self,filename):
+	def write(self,filename,useSums):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
 		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов']+self.amountHeader)
-		self.root.write(writer,self.useSums,self.depthLimit)
+		self.root.write(writer,useSums,self.depthLimit)

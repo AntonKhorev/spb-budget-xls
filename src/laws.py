@@ -68,12 +68,12 @@ class Document:
 		for i,year in enumerate(self.forYears):
 			header[i]=('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)'
 		for sums,depth,csvFilename in self.getCsvAttrs():
-			spreadsheet=parse.Spreadsheet(depth,sums)
+			spreadsheet=parse.Spreadsheet(depth)
 			spreadsheet.read(self.txtFilename,self.nCols)
 			spreadsheet.check(self.totals)
 			spreadsheet.setAmountHeader(header)
 			# TODO add document name somewhere
-			spreadsheet.write(csvFilename)
+			spreadsheet.write(csvFilename,sums)
 
 # закон или законопроект, в к-рый входит несколько приложений - с ними отдельно разбираться
 class Law:
