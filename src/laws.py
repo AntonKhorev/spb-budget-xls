@@ -69,12 +69,10 @@ class Document:
 				return False
 		return True
 	def writeCsvsAndXlss(self):
-		header={}
-		for i,year in enumerate(self.forYears):
-			header[i]=('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)'
+		header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
 		for depth in range(1,4):
-			spreadsheet=parse.Spreadsheet(depth)
-			spreadsheet.read(self.txtFilename,self.nCols)
+			spreadsheet=parse.Spreadsheet(self.nCols,depth)
+			spreadsheet.read(self.txtFilename)
 			spreadsheet.check(self.totals)
 			spreadsheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
 			spreadsheet.setTableTitle(self.title)

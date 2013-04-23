@@ -118,11 +118,12 @@ class Entry:
 		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
 
 class Spreadsheet:
-	def __init__(self,depthLimit=3):
+	def __init__(self,nCols,depthLimit):
+		self.nCols=nCols
 		self.row=2 # row 1 for header
 		self.depthLimit=depthLimit
 		self.root=Entry(self.row)
-		self.amountHeader=['Сумма (тыс. руб.)']
+		self.amountHeader=['Сумма (тыс. руб.)']*self.nCols
 		self.documentTitle='Приложение к Закону Санкт-Петербурга о бюджете'
 		self.tableTitle='Ведомственная структура расходов бюджета Санкт-Петербурга'
 
@@ -137,10 +138,10 @@ class Spreadsheet:
 		self.root.addLeaf(entry,number)
 		return entry
 
-	def read(self,filename,nCols=1):
+	def read(self,filename):
 		entry=None
 
-		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*nCols+'$' # amount pattern
+		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*self.nCols+'$' # amount pattern
 		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])' # article (code) pattern
 		reLeadNumberLine=re.compile('^((?:\d+\.)+)\s+(.*)$')
 		reLeadNumberLineWithDotChopped=re.compile('^((?:\d+\.)+\d+)\s+(.*)$')
@@ -158,7 +159,7 @@ class Spreadsheet:
 				if m:
 					entry=self.makeEntry(number)
 					entry.appendName(m.group(1))
-					for i in range(nCols):
+					for i in range(self.nCols):
 						entry.addAmount(m.group(i+2),i)
 					return entry
 			elif nc==2:
@@ -168,7 +169,7 @@ class Spreadsheet:
 					entry.appendName(m.group(1))
 					entry.section=m.group(2)
 					entry.article=m.group(3)
-					for i in range(nCols):
+					for i in range(self.nCols):
 						entry.addAmount(m.group(i+4),i)
 					return entry
 			elif nc==3:
@@ -179,7 +180,7 @@ class Spreadsheet:
 					entry.section=m.group(2)
 					entry.article=m.group(3)
 					entry.type=m.group(4)
-					for i in range(nCols):
+					for i in range(self.nCols):
 						entry.addAmount(m.group(i+5),i)
 					return entry
 			else:
@@ -213,7 +214,7 @@ class Spreadsheet:
 			m=reTotalLine.match(line)
 			if m: # total
 				self.root.name=m.group(1)
-				for i in range(nCols):
+				for i in range(self.nCols):
 					self.root.addAmount(m.group(i+2),i)
 				continue
 			if reNewPageLine.match(line): # new page
@@ -228,7 +229,7 @@ class Spreadsheet:
 		self.root.checkAmounts(amountTexts)
 
 	def setAmountHeader(self,header):
-		self.amountHeader=list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for k,v in sorted(header.items())))
+		self.amountHeader=header
 
 	def setDocumentTitle(self,documentTitle):
 		self.documentTitle=documentTitle
@@ -238,7 +239,9 @@ class Spreadsheet:
 
 	# private
 	def getHeaderRow(self):
-		return ['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов']+self.amountHeader
+		return [
+			'Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов'
+		]+list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for v in self.amountHeader))
 
 	def writeCsv(self,filename,useSums):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
@@ -257,6 +260,16 @@ class Spreadsheet:
 		ws.col(3).width=256*8
 		ws.col(4).width=256*4
 
+		# colspans
+		colspan=len(self.getHeaderRow())-1
+		ws.merge(0,0,0,colspan)
+		ws.merge(1,1,0,colspan)
+		# for ladder
+		for i in range(self.nCols):
+			c1=5+i*(self.depthLimit+1)
+			c2=5+i*(self.depthLimit+1)+self.depthLimit
+			ws.merge(2,2,c1,c2)
+
 		# styles
 		styleDocumentTitle=xlwt.easyxf('font: bold on') # TODO larger font?, no bold
 		styleTableTitle=xlwt.easyxf('font: bold on') # TODO larger font
@@ -266,7 +279,8 @@ class Spreadsheet:
 		ws.write(0,0,self.documentTitle,styleDocumentTitle)
 		ws.write(1,0,self.tableTitle,styleTableTitle)
 		for i,cell in enumerate(self.getHeaderRow()):
-			ws.write(2,i,cell,styleHeader)
+			if cell is not None:
+				ws.write(2,i,cell,styleHeader)
 
 		# data
 		class Writer:
@@ -274,7 +288,8 @@ class Spreadsheet:
 				self.row=3
 			def writerow(self,cells):
 				for i,cell in enumerate(cells):
-					ws.write(self.row,i,cell)
+					if cell is not None:
+						ws.write(self.row,i,cell)
 				self.row+=1
 
 		self.root.write(Writer(),False,self.depthLimit)
