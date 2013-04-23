@@ -1,0 +1,5 @@
+parsed txts go here
+filename format:
+something(3,sums).xls
+3 = detail level
+sums = has spreadsheet SUM() function

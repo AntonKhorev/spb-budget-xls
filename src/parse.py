@@ -1,6 +1,15 @@
+# for writeXls():
+#	need this fork of this port of xls writer
+#	https://bitbucket.org/luensdorf/xlwt3
+# 	TODO other libs to consider:
+#		http://pythonhosted.org/openpyxl/
+#		http://www.python-excel.org/
+#		https://pypi.python.org/pypi/xlwt3
+
 import os.path, glob
 import re, csv
 import itertools
+import xlwt3 as xlwt
 
 class Entry:
 	def __init__(self,row):
@@ -86,7 +95,7 @@ class Entry:
 		for i,amountText in enumerate(amountTexts):
 			self.checkAmount(amountText,i)
 
-	def write(self,writer,useSums,depthLimit,depth=0):
+	def writeCsv(self,writer,useSums,depthLimit,depth=0):
 		if useSums and self.children:
 			ams=[]
 			for i,(k,v) in enumerate(sorted(self.amounts.items())):
@@ -103,7 +112,7 @@ class Entry:
 			amList=ams
 		writer.writerow([self.number,self.name,self.section,self.article,self.type]+amList)
 		for n,entry in sorted(self.children.items()):
-			entry.write(writer,useSums,depthLimit,depth+1)
+			entry.writeCsv(writer,useSums,depthLimit,depth+1)
 
 	def __str__(self):
 		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
@@ -218,7 +227,13 @@ class Spreadsheet:
 	def setAmountHeader(self,header):
 		self.amountHeader=list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for k,v in sorted(header.items())))
 
-	def write(self,filename,useSums):
+	def writeCsv(self,filename,useSums):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
 		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов']+self.amountHeader)
-		self.root.write(writer,useSums,self.depthLimit)
+		self.root.writeCsv(writer,useSums,self.depthLimit)
+
+	def writeXls(self,filename):
+		wb=xlwt.Workbook()
+		# ws=wb.add_sheet('Ведомственная структура расходов') # can't use Russian?
+		ws=wb.add_sheet('expenditures')
+		wb.save(filename)

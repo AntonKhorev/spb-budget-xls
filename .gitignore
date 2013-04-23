@@ -2,5 +2,6 @@ bin/*.jar
 pdf/*.pdf
 txt/*.txt
 csv/*.csv
+xls/*.xls
 zip/20??
 src/__pycache__

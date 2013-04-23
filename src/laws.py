@@ -55,13 +55,18 @@ class Document:
 			raise Exception('external command failure')
 	def getCsvFilename(self,depth,sums):
 		return self.law.environment.rootPath+'/csv/'+self.code+'('+str(depth)+(',sums' if sums else '')+').csv'
-	def hasCsvs(self):
+	def getXlsFilename(self,depth):
+		sums=True
+		return self.law.environment.rootPath+'/xls/'+self.code+'('+str(depth)+(',sums' if sums else '')+').xls'
+	def hasCsvsAndXlss(self):
 		for depth in range(1,4):
 			for sums in (False,True):
 				if not os.path.isfile(self.getCsvFilename(depth,sums)):
 					return False
+			if not os.path.isfile(self.getXlsFilename(depth)):
+				return False
 		return True
-	def writeCsvs(self):
+	def writeCsvsAndXlss(self):
 		header={}
 		for i,year in enumerate(self.forYears):
 			header[i]=('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)'
@@ -73,8 +78,9 @@ class Document:
 			# TODO add document name somewhere
 			for sums in (False,True):
 				csvFilename=self.getCsvFilename(depth,sums)
-				spreadsheet.write(csvFilename,sums)
-
+				spreadsheet.writeCsv(csvFilename,sums)
+			xlsFilename=self.getXlsFilename(depth)
+			spreadsheet.writeXls(xlsFilename)
 
 # закон или законопроект, в к-рый входит несколько приложений - с ними отдельно разбираться
 class Law:
@@ -118,5 +124,5 @@ for law in e.laws:
 			document.writePdf()
 		if not document.hasTxt():
 			document.writeTxt()
-		if not document.hasCsvs():
-			document.writeCsvs()
+		if not document.hasCsvsAndXlss():
+			document.writeCsvsAndXlss()
