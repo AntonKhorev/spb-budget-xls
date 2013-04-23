@@ -123,7 +123,10 @@ class Spreadsheet:
 		self.depthLimit=depthLimit
 		self.root=Entry(self.row)
 		self.amountHeader=['Сумма (тыс. руб.)']
+		self.documentTitle='Приложение к Закону Санкт-Петербурга о бюджете'
+		self.tableTitle='Ведомственная структура расходов бюджета Санкт-Петербурга'
 
+	# private
 	def makeEntry(self,numberStr):
 		number=[int(n) for n in numberStr.split('.') if n!='']
 		if len(number)>self.depthLimit:
@@ -227,13 +230,30 @@ class Spreadsheet:
 	def setAmountHeader(self,header):
 		self.amountHeader=list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for k,v in sorted(header.items())))
 
+	def setDocumentTitle(self,documentTitle):
+		self.documentTitle=documentTitle
+
+	def setTableTitle(self,tableTitle):
+		self.tableTitle=tableTitle
+
+	# private
+	def getHeaderRow(self):
+		return ['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов']+self.amountHeader
+
 	def writeCsv(self,filename,useSums):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
-		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов']+self.amountHeader)
+		writer.writerow(self.getHeaderRow())
 		self.root.writeCsv(writer,useSums,self.depthLimit)
 
 	def writeXls(self,filename):
 		wb=xlwt.Workbook()
 		# ws=wb.add_sheet('Ведомственная структура расходов') # can't use Russian?
 		ws=wb.add_sheet('expenditures')
+		styleDocumentTitle=xlwt.easyxf('font: bold on') # TODO larger font?, no bold
+		styleTableTitle=xlwt.easyxf('font: bold on') # TODO larger font
+		styleHeader=xlwt.easyxf('font: bold on')
+		ws.write(0,0,self.documentTitle,styleDocumentTitle)
+		ws.write(1,0,self.tableTitle,styleTableTitle)
+		for i,cell in enumerate(self.getHeaderRow()):
+			ws.write(2,i,cell,styleHeader)
 		wb.save(filename)

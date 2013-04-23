@@ -31,6 +31,8 @@ class Document:
 			raise Exception('invalid number of columns')
 		self.nCols=len(self.totals)
 		self.delta=data['delta']
+		self.appendixNumber=data['appendixNumber']
+		self.title=data['title']
 	def hasPdf(self):
 		return os.path.isfile(self.pdfFilename)
 	def writePdf(self):
@@ -74,8 +76,9 @@ class Document:
 			spreadsheet=parse.Spreadsheet(depth)
 			spreadsheet.read(self.txtFilename,self.nCols)
 			spreadsheet.check(self.totals)
+			spreadsheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
+			spreadsheet.setTableTitle(self.title)
 			spreadsheet.setAmountHeader(header)
-			# TODO add document name somewhere
 			for sums in (False,True):
 				csvFilename=self.getCsvFilename(depth,sums)
 				spreadsheet.writeCsv(csvFilename,sums)
@@ -102,6 +105,7 @@ class Law:
 		if not data['downloadUrl'].startswith(self.environment.rootUrl):
 			raise Exception('invalid download url')
 		self.zipFilename=self.environment.rootPath+'/zip/'+data['downloadUrl'][len(self.environment.rootUrl):]
+		self.title=data['title']
 		self.documents=(Document(self,documentData) for documentData in data['documents'])
 	def hasZip(self):
 		return os.path.isfile(self.zipFilename)
