@@ -106,9 +106,9 @@ class Entry:
 					columnLetter=chr(ord('F')+i)
 				# formula
 				if self.rowSpan is None or not writer.stairs:
-					ams.append('='+'+'.join(columnLetter+str(entry.row) for n,entry in sorted(self.children.items())))
+					ams.append('='+'+'.join(columnLetter+writer.strrow(entry.row) for n,entry in sorted(self.children.items())))
 				else:
-					ams.append('=SUM('+columnLetter+str(self.rowSpan[0]+1)+':'+columnLetter+str(self.rowSpan[1]-1)+')')
+					ams.append('=SUM('+columnLetter+writer.strrow(self.rowSpan[0]+1)+':'+columnLetter+writer.strrow(self.rowSpan[1]-1)+')')
 		else:
 			ams=[self.formatAmount(v) for k,v in sorted(self.amounts.items())]
 		if writer.stairs:
@@ -125,7 +125,7 @@ class Entry:
 class Spreadsheet:
 	def __init__(self,nCols,depthLimit):
 		self.nCols=nCols
-		self.row=2 # row 1 for header
+		self.row=0
 		self.depthLimit=depthLimit
 		self.root=Entry(self.row)
 		self.amountHeader=['Сумма (тыс. руб.)']*self.nCols
@@ -261,6 +261,8 @@ class Spreadsheet:
 				self.stairs=stairs
 				self.useSums=useSums
 				self.depthLimit=depthLimit
+			def strrow(self,row):
+				return str(row+2) # row 1 for header
 			def writerow(self,cells):
 				csvWriter.writerow(cells)
 
@@ -308,9 +310,15 @@ class Spreadsheet:
 				self.stairs=stairs
 				self.useSums=useSums
 				self.depthLimit=depthLimit
+			def strrow(self,row):
+				return str(row+4) # rows 1..3 for header
 			def writerow(self,cells):
 				for i,cell in enumerate(cells):
-					if cell is not None:
+					if cell is None:
+						continue
+					if i>=5 and cell[0]=='=':
+						ws.write(self.row,i,xlwt.Formula(cell[1:]))
+					else:
 						ws.write(self.row,i,cell)
 				self.row+=1
 
