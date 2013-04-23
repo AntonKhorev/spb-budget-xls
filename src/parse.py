@@ -8,6 +8,7 @@ class Entry:
 		self.children={}
 		self.number=self.name=self.article=self.section=self.type=None
 		self.amounts={}
+
 	def appendName(self,name):
 		name=name.strip()
 		name=re.sub(r'" ([А-Я])',r'"\1',name) # " Дирекция -> "Дирекция
@@ -18,15 +19,19 @@ class Entry:
 			if self.name[-1]!='-' or self.name[-2]==' ':
 				self.name+=' '
 			self.name+=name
+
 	def parseAmount(self,amountText):
 		amount=re.sub('\s|\.|,','',amountText)
 		return int(amount)
+
 	def addAmount(self,amountText,key=0):
 		self.amounts[key]=self.parseAmount(amountText)
+
 	def checkAmount(self,amountText,key=0):
 		amount=self.parseAmount(amountText)
 		if amount!=self.amounts[key]:
 			raise Exception("amount doesn't match")
+
 	def addLeaf(self,entry,number):
 		n=number.pop(0)
 		if len(number)==0:
@@ -37,9 +42,11 @@ class Entry:
 			if n not in self.children:
 				raise Exception('child not found')
 			self.children[n].addLeaf(entry,number)
+
 	def formatAmount(self,amount):
 		a=str(amount)
 		return a[:-1]+','+a[-1]
+
 	def scanRows(self):
 		if not self.children:
 			self.rowSpan=(self.row,self.row+1)
@@ -61,17 +68,26 @@ class Entry:
 				return
 		self.rowSpan=(rows[0][0]-1,rows[-1][1])
 
+	def check(self):
+		if not self.children:
+			return
+		sumAmounts={}
+		for child in self.children.values():
+			for k,v in child.amounts.items():
+				if k not in sumAmounts:
+					sumAmounts[k]=0
+				sumAmounts[k]+=v
+		if sumAmounts!=self.amounts:
+			raise Exception('sum(children)!=amount: '+str(sumAmounts)+' != '+str(self.amounts))
+		for n,entry in sorted(self.children.items()):
+			entry.check()
+
+	def checkAmounts(self,amountTexts):
+		for i,amountText in enumerate(amountTexts):
+			self.checkAmount(amountText,i)
+
 	def write(self,writer,useSums,depthLimit,depth=0):
 		if useSums and self.children:
-			sumAmounts={}
-			for child in self.children.values():
-				for k,v in child.amounts.items():
-					if k not in sumAmounts:
-						sumAmounts[k]=0
-					sumAmounts[k]+=v
-			if sumAmounts!=self.amounts:
-				raise Exception('sum(children)!=amount: '+str(sumAmounts)+' != '+str(self.amounts))
-			# amounts to write
 			ams=[]
 			for i,(k,v) in enumerate(sorted(self.amounts.items())):
 				columnLetter=chr(ord('F')+depth+1+i*(depthLimit+1))
@@ -88,6 +104,7 @@ class Entry:
 		writer.writerow([self.number,self.name,self.section,self.article,self.type]+amList)
 		for n,entry in sorted(self.children.items()):
 			entry.write(writer,useSums,depthLimit,depth+1)
+
 	def __str__(self):
 		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
 
@@ -98,6 +115,7 @@ class Spreadsheet:
 		self.useSums=useSums
 		self.root=Entry(self.row)
 		self.amountHeader=['Сумма (тыс. руб.)']
+
 	def makeEntry(self,numberStr):
 		number=[int(n) for n in numberStr.split('.') if n!='']
 		if len(number)>self.depthLimit:
@@ -107,6 +125,7 @@ class Spreadsheet:
 		entry.number=numberStr
 		self.root.addLeaf(entry,number)
 		return entry
+
 	def read(self,filename,nCols=1):
 		entry=None
 
@@ -192,11 +211,14 @@ class Spreadsheet:
 			if entry: # next line of name
 				entry.appendName(line)
 		self.root.scanRows()
-	def checkTotals(self,amountTexts):
-		for i,amountText in enumerate(amountTexts):
-			self.root.checkAmount(amountText,i)
+
+	def check(self,amountTexts):
+		self.root.check()
+		self.root.checkAmounts(amountTexts)
+
 	def setAmountHeader(self,header):
 		self.amountHeader=list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for k,v in sorted(header.items())))
+
 	def write(self,filename):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
 		writer.writerow(['Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов']+self.amountHeader)

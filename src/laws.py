@@ -70,7 +70,7 @@ class Document:
 		for sums,depth,csvFilename in self.getCsvAttrs():
 			spreadsheet=parse.Spreadsheet(depth,sums)
 			spreadsheet.read(self.txtFilename,self.nCols)
-			spreadsheet.checkTotals(self.totals)
+			spreadsheet.check(self.totals)
 			spreadsheet.setAmountHeader(header)
 			# TODO add document name somewhere
 			spreadsheet.write(csvFilename)
