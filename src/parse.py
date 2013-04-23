@@ -109,51 +109,61 @@ class Spreadsheet:
 		return entry
 	def read(self,filename,nCols=1):
 		entry=None
+
 		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*nCols+'$' # amount pattern
 		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])' # article (code) pattern
 		reLeadNumberLine=re.compile('^((?:\d+\.)+)\s+(.*)$')
+		reLeadNumberLineWithDotChopped=re.compile('^((?:\d+\.)+\d+)\s+(.*)$')
 		reLineEndingDepth1=re.compile('^(.*?)'+amPattern)
 		reLineEndingDepth2=re.compile('^(.*?)'+arPattern+amPattern)
 		reLineEndingDepth3=re.compile('^(.*?)'+arPattern+'\s(\d{3})'+amPattern)
 		reTotalLine=re.compile('^(Итого):'+amPattern)
 		reNewPageLine=re.compile('^\d+\s+Приложение')
+
+		def readLeadNumberLine(number,rest):
+			nc=number.count('.') # depth: 1 = x. ; 2 = x.y. ; 3 = x.y.z.
+			if nc==1:
+				m=reLineEndingDepth1.match(rest)
+				if m:
+					entry=self.makeEntry(number)
+					entry.appendName(m.group(1))
+					for i in range(nCols):
+						entry.addAmount(m.group(i+2),i)
+					return entry
+			elif nc==2:
+				m=reLineEndingDepth2.match(rest)
+				if m:
+					entry=self.makeEntry(number)
+					entry.appendName(m.group(1))
+					entry.section=m.group(2)
+					entry.article=m.group(3)
+					for i in range(nCols):
+						entry.addAmount(m.group(i+4),i)
+					return entry
+			elif nc==3:
+				m=reLineEndingDepth3.match(rest)
+				if m:
+					entry=self.makeEntry(number)
+					entry.appendName(m.group(1))
+					entry.section=m.group(2)
+					entry.article=m.group(3)
+					entry.type=m.group(4)
+					for i in range(nCols):
+						entry.addAmount(m.group(i+5),i)
+					return entry
+			else:
+				raise Exception('unsupported number')
+			return None
+
 		for line in open(filename,encoding='utf8'):
 			m=reLeadNumberLine.match(line)
 			if m:
 				number=m.group(1)
 				rest=m.group(2)
-				nc=number.count('.') # depth: 1 = x. ; 2 = x.y. ; 3 = x.y.z.
-				if nc==1:
-					m=reLineEndingDepth1.match(rest)
-					if m:
-						entry=self.makeEntry(number)
-						entry.appendName(m.group(1))
-						for i in range(nCols):
-							entry.addAmount(m.group(i+2),i)
-						continue
-				elif nc==2:
-					m=reLineEndingDepth2.match(rest)
-					if m:
-						entry=self.makeEntry(number)
-						entry.appendName(m.group(1))
-						entry.section=m.group(2)
-						entry.article=m.group(3)
-						for i in range(nCols):
-							entry.addAmount(m.group(i+4),i)
-						continue
-				elif nc==3:
-					m=reLineEndingDepth3.match(rest)
-					if m:
-						entry=self.makeEntry(number)
-						entry.appendName(m.group(1))
-						entry.section=m.group(2)
-						entry.article=m.group(3)
-						entry.type=m.group(4)
-						for i in range(nCols):
-							entry.addAmount(m.group(i+5),i)
-						continue
-				else:
-					raise Exception('unsupported number')
+				e=readLeadNumberLine(number,rest)
+				if e is not None:
+					entry=e
+					continue
 			m=reTotalLine.match(line)
 			if m: # total
 				self.root.name=m.group(1)
