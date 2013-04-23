@@ -249,14 +249,26 @@ class Spreadsheet:
 		wb=xlwt.Workbook()
 		# ws=wb.add_sheet('Ведомственная структура расходов') # can't use Russian?
 		ws=wb.add_sheet('expenditures')
+
+		# column widths
+		ws.col(0).width=256*8
+		ws.col(1).width=256*100
+		ws.col(2).width=256*5
+		ws.col(3).width=256*8
+		ws.col(4).width=256*4
+
+		# styles
 		styleDocumentTitle=xlwt.easyxf('font: bold on') # TODO larger font?, no bold
 		styleTableTitle=xlwt.easyxf('font: bold on') # TODO larger font
 		styleHeader=xlwt.easyxf('font: bold on')
+
+		# headers
 		ws.write(0,0,self.documentTitle,styleDocumentTitle)
 		ws.write(1,0,self.tableTitle,styleTableTitle)
 		for i,cell in enumerate(self.getHeaderRow()):
 			ws.write(2,i,cell,styleHeader)
 
+		# data
 		class Writer:
 			def __init__(self):
 				self.row=3
