@@ -55,18 +55,21 @@ class Document:
 		status=subprocess.call(['java','-jar',self.law.environment.pdfboxFilename,'ExtractText','-encoding','UTF-8','-sort',self.pdfFilename,self.txtFilename])
 		if status!=0:
 			raise Exception('external command failure')
-	def getCsvFilename(self,depth,sums):
-		return self.law.environment.rootPath+'/csv/'+self.code+'('+str(depth)+(',sums' if sums else '')+').csv'
-	def getXlsFilename(self,depth):
+	def getFilenameParensPart(self,depth,stairs,sums):
+		return '('+str(depth)+(',stairs' if stairs else '')+(',sums' if sums else '')+')'
+	def getCsvFilename(self,depth,stairs,sums):
+		return self.law.environment.rootPath+'/csv/'+self.code+self.getFilenameParensPart(depth,stairs,sums)+'.csv'
+	def getXlsFilename(self,depth,stairs):
 		sums=True
-		return self.law.environment.rootPath+'/xls/'+self.code+'('+str(depth)+(',sums' if sums else '')+').xls'
+		return self.law.environment.rootPath+'/xls/'+self.code+self.getFilenameParensPart(depth,stairs,sums)+'.xls'
 	def hasCsvsAndXlss(self):
 		for depth in range(1,4):
-			for sums in (False,True):
-				if not os.path.isfile(self.getCsvFilename(depth,sums)):
+			for stairs in (False,True):
+				for sums in (False,True):
+					if not os.path.isfile(self.getCsvFilename(depth,stairs,sums)):
+						return False
+				if not os.path.isfile(self.getXlsFilename(depth,stairs)):
 					return False
-			if not os.path.isfile(self.getXlsFilename(depth)):
-				return False
 		return True
 	def writeCsvsAndXlss(self):
 		header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
@@ -77,11 +80,12 @@ class Document:
 			spreadsheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
 			spreadsheet.setTableTitle(self.title)
 			spreadsheet.setAmountHeader(header)
-			for sums in (False,True):
-				csvFilename=self.getCsvFilename(depth,sums)
-				spreadsheet.writeCsv(csvFilename,sums)
-			xlsFilename=self.getXlsFilename(depth)
-			spreadsheet.writeXls(xlsFilename)
+			for stairs in (False,True):
+				for sums in (False,True):
+					csvFilename=self.getCsvFilename(depth,stairs,sums)
+					spreadsheet.writeCsv(csvFilename,stairs,sums)
+				xlsFilename=self.getXlsFilename(depth,stairs)
+				spreadsheet.writeXls(xlsFilename,stairs)
 
 # закон или законопроект, в к-рый входит несколько приложений - с ними отдельно разбираться
 class Law:

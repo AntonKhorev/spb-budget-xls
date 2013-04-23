@@ -95,24 +95,29 @@ class Entry:
 		for i,amountText in enumerate(amountTexts):
 			self.checkAmount(amountText,i)
 
-	def write(self,writer,useSums,depthLimit,depth=0):
-		if useSums and self.children:
+	def write(self,writer,depth=0):
+		if writer.useSums and self.children:
 			ams=[]
 			for i,(k,v) in enumerate(sorted(self.amounts.items())):
-				columnLetter=chr(ord('F')+depth+1+i*(depthLimit+1))
-				if self.rowSpan is None:
+				# column to sum from
+				if writer.stairs:
+					columnLetter=chr(ord('F')+depth+1+i*(writer.depthLimit+1))
+				else:
+					columnLetter=chr(ord('F')+i)
+				# formula
+				if self.rowSpan is None or not writer.stairs:
 					ams.append('='+'+'.join(columnLetter+str(entry.row) for n,entry in sorted(self.children.items())))
 				else:
 					ams.append('=SUM('+columnLetter+str(self.rowSpan[0]+1)+':'+columnLetter+str(self.rowSpan[1]-1)+')')
 		else:
 			ams=[self.formatAmount(v) for k,v in sorted(self.amounts.items())]
-		if useSums:
-			amList=list(itertools.chain.from_iterable([None]*depth+[am]+[None]*(depthLimit-depth) for am in ams))
+		if writer.stairs:
+			amList=list(itertools.chain.from_iterable([None]*depth+[am]+[None]*(writer.depthLimit-depth) for am in ams))
 		else:
 			amList=ams
 		writer.writerow([self.number,self.name,self.section,self.article,self.type]+amList)
 		for n,entry in sorted(self.children.items()):
-			entry.write(writer,useSums,depthLimit,depth+1)
+			entry.write(writer,depth+1)
 
 	def __str__(self):
 		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
@@ -238,17 +243,30 @@ class Spreadsheet:
 		self.tableTitle=tableTitle
 
 	# private
-	def getHeaderRow(self):
+	def getHeaderRow(self,stairs):
 		return [
 			'Номер','Наименование','Код раздела','Код целевой статьи','Код вида расходов'
-		]+list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for v in self.amountHeader))
+		]+(
+			list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for v in self.amountHeader)) if stairs
+			else self.amountHeader
+		)
 
-	def writeCsv(self,filename,useSums):
-		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
-		writer.writerow(self.getHeaderRow())
-		self.root.write(writer,useSums,self.depthLimit)
+	def writeCsv(self,filename,stairs,useSums):
+		csvWriter=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
+		csvWriter.writerow(self.getHeaderRow(stairs))
 
-	def writeXls(self,filename):
+		depthLimit=self.depthLimit
+		class Writer:
+			def __init__(self):
+				self.stairs=stairs
+				self.useSums=useSums
+				self.depthLimit=depthLimit
+			def writerow(self,cells):
+				csvWriter.writerow(cells)
+
+		self.root.write(Writer())
+
+	def writeXls(self,filename,stairs,useSums=True):
 		wb=xlwt.Workbook()
 		# ws=wb.add_sheet('Ведомственная структура расходов') # can't use Russian?
 		ws=wb.add_sheet('expenditures')
@@ -261,14 +279,14 @@ class Spreadsheet:
 		ws.col(4).width=256*4
 
 		# colspans
-		colspan=len(self.getHeaderRow())-1
+		colspan=len(self.getHeaderRow(stairs))-1
 		ws.merge(0,0,0,colspan)
 		ws.merge(1,1,0,colspan)
-		# for ladder
-		for i in range(self.nCols):
-			c1=5+i*(self.depthLimit+1)
-			c2=5+i*(self.depthLimit+1)+self.depthLimit
-			ws.merge(2,2,c1,c2)
+		if stairs:
+			for i in range(self.nCols):
+				c1=5+i*(self.depthLimit+1)
+				c2=5+i*(self.depthLimit+1)+self.depthLimit
+				ws.merge(2,2,c1,c2)
 
 		# styles
 		styleDocumentTitle=xlwt.easyxf('font: bold on') # TODO larger font?, no bold
@@ -278,19 +296,23 @@ class Spreadsheet:
 		# headers
 		ws.write(0,0,self.documentTitle,styleDocumentTitle)
 		ws.write(1,0,self.tableTitle,styleTableTitle)
-		for i,cell in enumerate(self.getHeaderRow()):
+		for i,cell in enumerate(self.getHeaderRow(stairs)):
 			if cell is not None:
 				ws.write(2,i,cell,styleHeader)
 
 		# data
+		depthLimit=self.depthLimit
 		class Writer:
 			def __init__(self):
-				self.row=3
+				self.row=3 # private
+				self.stairs=stairs
+				self.useSums=useSums
+				self.depthLimit=depthLimit
 			def writerow(self,cells):
 				for i,cell in enumerate(cells):
 					if cell is not None:
 						ws.write(self.row,i,cell)
 				self.row+=1
 
-		self.root.write(Writer(),False,self.depthLimit)
+		self.root.write(Writer())
 		wb.save(filename)
