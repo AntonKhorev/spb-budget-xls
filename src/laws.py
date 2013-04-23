@@ -17,6 +17,8 @@ class Document:
 		data['forYear']=tuple(str(y) for y in data['forYear'])
 		if isinstance(data['total'],(str,int)):
 			data['total']=(data['total'],)
+		if 'delta' not in data:
+			data['delta']=False
 		# init
 		self.law=law
 		self.forYears=data['forYear']
@@ -28,6 +30,7 @@ class Document:
 		if len(self.forYears)!=len(self.totals):
 			raise Exception('invalid number of columns')
 		self.nCols=len(self.totals)
+		self.delta=data['delta']
 	def hasPdf(self):
 		return os.path.isfile(self.pdfFilename)
 	def writePdf(self):
@@ -61,13 +64,14 @@ class Document:
 				return False
 		return True
 	def writeCsvs(self):
+		header={}
+		for i,year in enumerate(self.forYears):
+			header[i]=('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)'
 		for sums,depth,csvFilename in self.getCsvAttrs():
 			spreadsheet=parse.Spreadsheet(depth,sums)
 			spreadsheet.read(self.txtFilename,self.nCols)
 			spreadsheet.checkTotals(self.totals)
-			# TODO add column headers
-			# example for pr04-2013-15.txt:
-			# spreadsheet.setAmountHeader({0:'Плановый период 2014 г. (тыс. руб.)',1:'Плановый период 2015 г. (тыс. руб.)'})
+			spreadsheet.setAmountHeader(header)
 			# TODO add document name somewhere
 			spreadsheet.write(csvFilename)
 
