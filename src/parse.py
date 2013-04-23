@@ -114,6 +114,7 @@ class Spreadsheet:
 		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])' # article (code) pattern
 		reLeadNumberLine=re.compile('^((?:\d+\.)+)\s+(.*)$')
 		reLeadNumberLineWithDotChopped=re.compile('^((?:\d+\.)+\d+)\s+(.*)$')
+		reLineAfterLineWithDotChopped=re.compile('^\.\s+(.*)$')
 		reLineEndingDepth1=re.compile('^(.*?)'+amPattern)
 		reLineEndingDepth2=re.compile('^(.*?)'+arPattern+amPattern)
 		reLineEndingDepth3=re.compile('^(.*?)'+arPattern+'\s(\d{3})'+amPattern)
@@ -155,7 +156,22 @@ class Spreadsheet:
 				raise Exception('unsupported number')
 			return None
 
-		for line in open(filename,encoding='utf8'):
+		f=open(filename,encoding='utf8')
+		lines=f.readlines()
+		f.close()
+
+		for i,line in enumerate(lines):
+			m=reLeadNumberLineWithDotChopped.match(line)
+			if m and i<len(lines)-1:
+				mm=reLineAfterLineWithDotChopped.match(lines[i+1])
+				if mm:
+					number=m.group(1)+'.'
+					rest=m.group(2)
+					e=readLeadNumberLine(number,rest)
+					if e is not None:
+						entry=e
+						lines[i+1]=mm.group(1)
+						continue
 			m=reLeadNumberLine.match(line)
 			if m:
 				number=m.group(1)
