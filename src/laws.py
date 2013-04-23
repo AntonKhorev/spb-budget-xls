@@ -53,27 +53,28 @@ class Document:
 		status=subprocess.call(['java','-jar',self.law.environment.pdfboxFilename,'ExtractText','-encoding','UTF-8','-sort',self.pdfFilename,self.txtFilename])
 		if status!=0:
 			raise Exception('external command failure')
-	def getCsvAttrs(self):
-		for sums in (False,True):
-			for depth in range(1,4):
-				filename=self.law.environment.rootPath+'/csv/'+self.code+'('+str(depth)+(',sums' if sums else '')+').csv'
-				yield sums,depth,filename
+	def getCsvFilename(self,depth,sums):
+		return self.law.environment.rootPath+'/csv/'+self.code+'('+str(depth)+(',sums' if sums else '')+').csv'
 	def hasCsvs(self):
-		for _,_,csvFilename in self.getCsvAttrs():
-			if not os.path.isfile(csvFilename):
-				return False
+		for depth in range(1,4):
+			for sums in (False,True):
+				if not os.path.isfile(self.getCsvFilename(depth,sums)):
+					return False
 		return True
 	def writeCsvs(self):
 		header={}
 		for i,year in enumerate(self.forYears):
 			header[i]=('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)'
-		for sums,depth,csvFilename in self.getCsvAttrs():
+		for depth in range(1,4):
 			spreadsheet=parse.Spreadsheet(depth)
 			spreadsheet.read(self.txtFilename,self.nCols)
 			spreadsheet.check(self.totals)
 			spreadsheet.setAmountHeader(header)
 			# TODO add document name somewhere
-			spreadsheet.write(csvFilename,sums)
+			for sums in (False,True):
+				csvFilename=self.getCsvFilename(depth,sums)
+				spreadsheet.write(csvFilename,sums)
+
 
 # закон или законопроект, в к-рый входит несколько приложений - с ними отдельно разбираться
 class Law:
