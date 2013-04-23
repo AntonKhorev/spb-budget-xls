@@ -95,7 +95,7 @@ class Entry:
 		for i,amountText in enumerate(amountTexts):
 			self.checkAmount(amountText,i)
 
-	def writeCsv(self,writer,useSums,depthLimit,depth=0):
+	def write(self,writer,useSums,depthLimit,depth=0):
 		if useSums and self.children:
 			ams=[]
 			for i,(k,v) in enumerate(sorted(self.amounts.items())):
@@ -112,7 +112,7 @@ class Entry:
 			amList=ams
 		writer.writerow([self.number,self.name,self.section,self.article,self.type]+amList)
 		for n,entry in sorted(self.children.items()):
-			entry.writeCsv(writer,useSums,depthLimit,depth+1)
+			entry.write(writer,useSums,depthLimit,depth+1)
 
 	def __str__(self):
 		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
@@ -243,7 +243,7 @@ class Spreadsheet:
 	def writeCsv(self,filename,useSums):
 		writer=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
 		writer.writerow(self.getHeaderRow())
-		self.root.writeCsv(writer,useSums,self.depthLimit)
+		self.root.write(writer,useSums,self.depthLimit)
 
 	def writeXls(self,filename):
 		wb=xlwt.Workbook()
@@ -256,4 +256,14 @@ class Spreadsheet:
 		ws.write(1,0,self.tableTitle,styleTableTitle)
 		for i,cell in enumerate(self.getHeaderRow()):
 			ws.write(2,i,cell,styleHeader)
+
+		class Writer:
+			def __init__(self):
+				self.row=3
+			def writerow(self,cells):
+				for i,cell in enumerate(cells):
+					ws.write(self.row,i,cell)
+				self.row+=1
+
+		self.root.write(Writer(),False,self.depthLimit)
 		wb.save(filename)
