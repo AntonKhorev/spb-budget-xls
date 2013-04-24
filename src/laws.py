@@ -72,7 +72,7 @@ class Document:
 					return False
 		return True
 	def writeCsvsAndXlss(self):
-		header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
+		header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
 		for depth in range(1,4):
 			spreadsheet=parse.Spreadsheet(self.nCols,depth)
 			spreadsheet.read(self.txtFilename)
