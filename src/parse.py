@@ -293,28 +293,30 @@ class Spreadsheet:
 				ws.merge(2,2,c1,c2)
 
 		# styles
-		styleDocumentTitle=xlwt.easyxf('font: bold on') # TODO larger font?, no bold
-		styleTableTitle=xlwt.easyxf('font: bold on') # TODO larger font
+		styleDocumentTitle=xlwt.easyxf('font: height 240')
+		styleTableTitle=xlwt.easyxf('font: bold on, height 240')
+		ws.row(0).height=ws.row(1).height=400
 		styleHeader=xlwt.easyxf('font: bold on')
 		styleAmount=xlwt.easyxf(num_format_str='### ### ##0.0')
 
 		# headers
+		nHeaderRows=4
 		ws.write(0,0,self.documentTitle,styleDocumentTitle)
 		ws.write(1,0,self.tableTitle,styleTableTitle)
 		for i,cell in enumerate(self.getHeaderRow(stairs)):
 			if cell is not None:
-				ws.write(2,i,cell,styleHeader)
+				ws.write(nHeaderRows-1,i,cell,styleHeader)
 
 		# data
 		depthLimit=self.depthLimit
 		class Writer:
 			def __init__(self):
-				self.row=3 # private
+				self.row=nHeaderRows # private
 				self.stairs=stairs
 				self.useSums=useSums
 				self.depthLimit=depthLimit
 			def strrow(self,row):
-				return str(row+4) # rows 1..3 for header
+				return str(row+nHeaderRows+1) # rows 1..nHeaderRows for header
 			def writerow(self,cells):
 				for i,cell in enumerate(cells):
 					if cell is None:
