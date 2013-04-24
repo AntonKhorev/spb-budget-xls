@@ -1,6 +1,7 @@
 # basic types
 # filenames are always absolute/ready to be read
 
+import sys
 import os.path
 import io
 import zipfile
@@ -121,14 +122,18 @@ class Environment:
 		self.pdfboxFilename=self.rootPath+'/bin/'+data['pdfboxJar']
 		self.laws=(Law(self,lawData) for lawData in data['laws'])
 
-e=Environment(data.data)
-for law in e.laws:
+env=Environment(data.data)
+for law in env.laws:
 	if not law.hasZip():
 		raise Exception(law.zipFilename+' has to be downloaded')
 	for document in law.documents:
-		if not document.hasPdf():
-			document.writePdf()
-		if not document.hasTxt():
-			document.writeTxt()
-		if not document.hasCsvsAndXlss():
-			document.writeCsvsAndXlss()
+		try:
+			if not document.hasPdf():
+				document.writePdf()
+			if not document.hasTxt():
+				document.writeTxt()
+			if not document.hasCsvsAndXlss():
+				document.writeCsvsAndXlss()
+		except Exception as e:
+			tb=sys.exc_info()[2]
+			raise Exception('error in document '+document.code+': '+str(e)).with_traceback(tb)
