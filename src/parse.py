@@ -273,6 +273,11 @@ class Spreadsheet:
 		# ws=wb.add_sheet('Ведомственная структура расходов') # can't use Russian?
 		ws=wb.add_sheet('expenditures')
 
+		# split panes
+		nHeaderRows=4
+		ws.set_panes_frozen(True)
+		ws.set_horz_split_pos(nHeaderRows)
+
 		# column widths
 		ws.col(0).width=256*8
 		ws.col(1).width=256*100
@@ -290,7 +295,8 @@ class Spreadsheet:
 			for i in range(self.nCols):
 				c1=5+i*(self.depthLimit+1)
 				c2=5+i*(self.depthLimit+1)+self.depthLimit
-				ws.merge(2,2,c1,c2)
+				r=nHeaderRows-1
+				ws.merge(r,r,c1,c2)
 
 		# styles
 		styleDocumentTitle=xlwt.easyxf('font: height 240')
@@ -300,7 +306,6 @@ class Spreadsheet:
 		styleAmount=xlwt.easyxf(num_format_str='### ### ##0.0')
 
 		# headers
-		nHeaderRows=4
 		ws.write(0,0,self.documentTitle,styleDocumentTitle)
 		ws.write(1,0,self.tableTitle,styleTableTitle)
 		for i,cell in enumerate(self.getHeaderRow(stairs)):
