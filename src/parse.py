@@ -279,6 +279,8 @@ class Spreadsheet:
 		ws.col(2).width=256*5
 		ws.col(3).width=256*8
 		ws.col(4).width=256*4
+		for i in range(5,5+((self.depthLimit if stairs else 0)+1)*self.nCols):
+			ws.col(i).width=256*15
 
 		# colspans
 		colspan=len(self.getHeaderRow(stairs))-1
@@ -294,6 +296,7 @@ class Spreadsheet:
 		styleDocumentTitle=xlwt.easyxf('font: bold on') # TODO larger font?, no bold
 		styleTableTitle=xlwt.easyxf('font: bold on') # TODO larger font
 		styleHeader=xlwt.easyxf('font: bold on')
+		styleAmount=xlwt.easyxf(num_format_str='### ### ##0.0')
 
 		# headers
 		ws.write(0,0,self.documentTitle,styleDocumentTitle)
@@ -317,7 +320,9 @@ class Spreadsheet:
 					if cell is None:
 						continue
 					if i>=5 and cell[0]=='=':
-						ws.write(self.row,i,xlwt.Formula(cell[1:]))
+						ws.write(self.row,i,xlwt.Formula(cell[1:]),styleAmount)
+					elif i>=5:
+						ws.write(self.row,i,float(cell.replace(',','.')),styleAmount)
 					else:
 						ws.write(self.row,i,cell)
 				self.row+=1
