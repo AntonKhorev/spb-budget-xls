@@ -274,7 +274,7 @@ class Spreadsheet:
 		ws=wb.add_sheet('expenditures')
 
 		# split panes
-		nHeaderRows=4
+		nHeaderRows=3
 		ws.set_panes_frozen(True)
 		ws.set_horz_split_pos(nHeaderRows)
 
@@ -286,6 +286,10 @@ class Spreadsheet:
 		ws.col(4).width=256*4
 		for i in range(5,5+((self.depthLimit if stairs else 0)+1)*self.nCols):
 			ws.col(i).width=256*15
+
+		# row heights
+		ws.row(0).height=ws.row(1).height=400
+		ws.row(nHeaderRows-1).height=1200
 
 		# colspans
 		colspan=len(self.getHeaderRow(stairs))-1
@@ -301,9 +305,10 @@ class Spreadsheet:
 		# styles
 		styleDocumentTitle=xlwt.easyxf('font: height 240')
 		styleTableTitle=xlwt.easyxf('font: bold on, height 240')
-		ws.row(0).height=ws.row(1).height=400
-		styleHeader=xlwt.easyxf('font: bold on')
-		# для русского НУЖНО писать ',' вместо ' ' и '.' вместо ','
+		styleHeader=xlwt.easyxf('font: bold on; align: wrap on')
+		styleThinHeader=xlwt.easyxf('font: bold on, height 180; align: wrap on')
+		styleVeryThinHeader=xlwt.easyxf('font: height 140; align: wrap on')
+		# для русского в числовом формате НУЖНО писать ',' вместо ' ' и '.' вместо ','
 		if delta:
 			styleAmount=xlwt.easyxf(num_format_str="+#,##0.0;-#,##0.0;0.0")
 		else:
@@ -313,8 +318,15 @@ class Spreadsheet:
 		ws.write(0,0,self.documentTitle,styleDocumentTitle)
 		ws.write(1,0,self.tableTitle,styleTableTitle)
 		for i,cell in enumerate(self.getHeaderRow(stairs)):
-			if cell is not None:
-				ws.write(nHeaderRows-1,i,cell,styleHeader)
+			if cell is None:
+				continue
+			if 2<=i<=3:
+				style=styleThinHeader
+			elif i==4:
+				style=styleVeryThinHeader
+			else:
+				style=styleHeader
+			ws.write(nHeaderRows-1,i,cell,style)
 
 		# data
 		depthLimit=self.depthLimit
