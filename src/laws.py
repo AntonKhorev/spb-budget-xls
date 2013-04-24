@@ -85,7 +85,7 @@ class Document:
 					csvFilename=self.getCsvFilename(depth,stairs,sums)
 					spreadsheet.writeCsv(csvFilename,stairs,sums)
 				xlsFilename=self.getXlsFilename(depth,stairs)
-				spreadsheet.writeXls(xlsFilename,stairs)
+				spreadsheet.writeXls(xlsFilename,self.delta,stairs)
 
 # закон или законопроект, в к-рый входит несколько приложений - с ними отдельно разбираться
 class Law:

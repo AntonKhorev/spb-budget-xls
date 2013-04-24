@@ -268,7 +268,7 @@ class Spreadsheet:
 
 		self.root.write(Writer())
 
-	def writeXls(self,filename,stairs,useSums=True):
+	def writeXls(self,filename,delta,stairs,useSums=True):
 		wb=xlwt.Workbook()
 		# ws=wb.add_sheet('Ведомственная структура расходов') # can't use Russian?
 		ws=wb.add_sheet('expenditures')
@@ -303,7 +303,11 @@ class Spreadsheet:
 		styleTableTitle=xlwt.easyxf('font: bold on, height 240')
 		ws.row(0).height=ws.row(1).height=400
 		styleHeader=xlwt.easyxf('font: bold on')
-		styleAmount=xlwt.easyxf(num_format_str='### ### ##0.0')
+		# для русского НУЖНО писать ',' вместо ' ' и '.' вместо ','
+		if delta:
+			styleAmount=xlwt.easyxf(num_format_str="+#,##0.0;-#,##0.0;0.0")
+		else:
+			styleAmount=xlwt.easyxf(num_format_str='#,##0.0')
 
 		# headers
 		ws.write(0,0,self.documentTitle,styleDocumentTitle)
