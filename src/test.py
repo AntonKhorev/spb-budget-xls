@@ -14,6 +14,13 @@ class TestLineReader(unittest.TestCase):
 		]
 		self.lr1=reader.LineReader(1)
 		self.lr2=reader.LineReader(2)
+
+	def doTestName(self,lr,lines,name):
+		rows=[None]
+		for i in range(len(lines)-1):
+			lines[i+1]=lr.read(rows,lines[i],lines[i+1])
+		self.assertEqual(rows[-1]['name'],name)
+
 	def test1(self):
 		rows=[None]
 		nextLine=self.lr1.read(rows,self.text1[0],self.text1[1])
@@ -139,6 +146,13 @@ class TestLineReader(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'2.','name':'АРХИВНЫЙ КОМИТЕТ САНКТ-ПЕТЕРБУРГА','amounts':[3358999]},
 		])
+	def testZnaniye(self):
+		self.doTestName(self.lr1,[
+			'19.39. Субсидия Межрегиональной общественной 0801 4400210 200.0',
+			'организации " Общество " Знание"  Санкт-',
+			'Петербурга и Ленинградской области"  на ',
+			'проведение культурно-образовательных и ',
+		],'Субсидия Межрегиональной общественной организации "Общество "Знание" Санкт-Петербурга и Ленинградской области" на')
 
 if __name__=='__main__':
 	unittest.main()
