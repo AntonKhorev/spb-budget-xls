@@ -215,7 +215,7 @@ class Spreadsheet:
 		ws.set_horz_split_pos(nHeaderRows)
 
 		# column widths
-		ws.col(0).width=256*8
+		ws.col(0).width=256*10
 		ws.col(1).width=256*100
 		ws.col(2).width=256*5
 		ws.col(3).width=256*8
