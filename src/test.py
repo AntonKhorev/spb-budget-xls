@@ -73,6 +73,21 @@ class TestLineReader(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'12.12.1.','name':'Выполнение функций государственными','section':'0707','article':'4320024','type':'012','amounts':[-6686223,-6709983]}
 		])
+	def testSpacesAroundQuote(self):
+		rows=[None]
+		line='63.18. Расходы на выполнение мероприятий по 0501 3500910 808.0'
+		nextLine='обследованию и сносу " деревьев-угроз" , '
+		line=self.lr1.read(rows,line,nextLine)
+		self.assertEqual(line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'63.18.','name':'Расходы на выполнение мероприятий по','section':'0501','article':'3500910','amounts':[8080]},
+		])
+		nextLine='находящихся на придомовой территории, не '
+		line=self.lr1.read(rows,line,nextLine)
+		self.assertEqual(line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'63.18.','name':'Расходы на выполнение мероприятий по обследованию и сносу "деревьев-угроз",','section':'0501','article':'3500910','amounts':[8080]},
+		])
 
 if __name__=='__main__':
 	unittest.main()
