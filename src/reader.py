@@ -33,7 +33,7 @@ class LineReader:
 			name2=re.sub(r' ,',',',name2)
 			name2=re.sub(r' {2,}',' ',name2)
 			name2=re.sub(r'" ([А-Я])',r'"\1',name2) # " Дирекция -> "Дирекция
-			name2=re.sub(r'Ы ([А-Я])',r'Ы\1',name2) # ЖИЛИЩНЫ Й -> ЖИЛИЩНЫЙ
+			name2=re.sub(r'Ы ([А-ЗЙ-Я])',r'Ы\1',name2) # ЖИЛИЩНЫ Й -> ЖИЛИЩНЫЙ, СРЕДЫ И -> СРЕДЫ И
 			name2=re.sub(r' " ([а-я-]+)"',r' "\1"',name2) # " деревьев-угроз" -> "деревьев-угроз"
 			if name1 is None:
 				return name2

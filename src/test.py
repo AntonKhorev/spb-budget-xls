@@ -103,6 +103,42 @@ class TestLineReader(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'1.3.','name':'Расходы на материальное обеспечение деятельности членов Совета Федерации и их','section':'0103','article':'0011201','amounts':[1490]},
 		])
+	def testPrirodopolzovanie(self):
+		rows=[None]
+		line='24. КОМИТЕТ ПО 1 963 666.1 1 467 692.3'
+		nextLine='ПРИРОДОПОЛЬЗОВАНИЮ, ОХРАНЕ '
+		line=self.lr2.read(rows,line,nextLine)
+		self.assertEqual(line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'24.','name':'КОМИТЕТ ПО','amounts':[19636661,14676923]},
+		])
+		nextLine='ОКРУЖАЮЩЕЙ СРЕДЫ И '
+		line=self.lr2.read(rows,line,nextLine)
+		self.assertEqual(line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'24.','name':'КОМИТЕТ ПО ПРИРОДОПОЛЬЗОВАНИЮ, ОХРАНЕ','amounts':[19636661,14676923]},
+		])
+		nextLine='ОБЕСПЕЧЕНИЮ ЭКОЛОГИЧЕСКОЙ '
+		line=self.lr2.read(rows,line,nextLine)
+		self.assertEqual(line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'24.','name':'КОМИТЕТ ПО ПРИРОДОПОЛЬЗОВАНИЮ, ОХРАНЕ ОКРУЖАЮЩЕЙ СРЕДЫ И','amounts':[19636661,14676923]},
+		])
+		nextLine='БЕЗОПАСНОСТИ (825)'
+		line=self.lr2.read(rows,line,nextLine)
+		self.assertEqual(line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'24.','name':'КОМИТЕТ ПО ПРИРОДОПОЛЬЗОВАНИЮ, ОХРАНЕ ОКРУЖАЮЩЕЙ СРЕДЫ И ОБЕСПЕЧЕНИЮ ЭКОЛОГИЧЕСКОЙ','amounts':[19636661,14676923]},
+		])
+	def testArkhivnyi(self):
+		rows=[None]
+		line='2. АРХИВНЫ Й КОМИТЕТ САНКТ-ПЕТЕРБУРГА 335 899.9'
+		nextLine='(803)'
+		line=self.lr1.read(rows,line,nextLine)
+		self.assertEqual(line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'2.','name':'АРХИВНЫЙ КОМИТЕТ САНКТ-ПЕТЕРБУРГА','amounts':[3358999]},
+		])
 
 if __name__=='__main__':
 	unittest.main()
