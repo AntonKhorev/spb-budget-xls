@@ -137,4 +137,4 @@ for law in env.laws:
 				document.writeCsvsAndXlss()
 		except Exception as e:
 			tb=sys.exc_info()[2]
-			raise Exception('error in document '+document.code+': '+str(e)).with_traceback(tb)
+			raise Exception(str(e)+' in document '+document.code).with_traceback(tb)
