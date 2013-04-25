@@ -74,13 +74,12 @@ class Document:
 		return True
 	def writeCsvsAndXlss(self):
 		header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
+		sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols)
+		sheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
+		sheet.setTableTitle(self.title)
+		sheet.setAmountHeader(header)
 		for depth in range(1,4):
-			sheet=spreadsheet.Spreadsheet(self.nCols,depth)
-			sheet.read(self.txtFilename)
-			sheet.check(self.totals)
-			sheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
-			sheet.setTableTitle(self.title)
-			sheet.setAmountHeader(header)
+			sheet.build(depth,self.totals)
 			for stairs in (False,True):
 				for sums in (False,True):
 					csvFilename=self.getCsvFilename(depth,stairs,sums)

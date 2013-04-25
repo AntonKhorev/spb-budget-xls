@@ -105,14 +105,12 @@ class Entry:
 		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
 
 class Spreadsheet:
-	def __init__(self,nCols,depthLimit):
+	def __init__(self,filename,nCols):
 		self.nCols=nCols
-		self.depthLimit=depthLimit
-		self.amountHeader=['Сумма (тыс. руб.)']*self.nCols
+		self.amountHeader=['Сумма (тыс. руб.)']*self.nCols
 		self.documentTitle='Приложение к Закону Санкт-Петербурга о бюджете'
 		self.tableTitle='Ведомственная структура расходов бюджета Санкт-Петербурга'
 
-	def read(self,filename):
 		# read file
 		f=open(filename,encoding='utf8')
 		lines=f.readlines()
@@ -120,16 +118,28 @@ class Spreadsheet:
 
 		# parse
 		lr=reader.LineReader(self.nCols)
-		rows=[{},None]
+		self.rows=[{},None]
 		for i,line in enumerate(lines):
 			nextLine=lines[i+1] if i<len(lines)-1 else None
-			nextLine=lr.read(rows,line,nextLine)
+			nextLine=lr.read(self.rows,line,nextLine)
 			if i<len(lines)-1:
 				lines[i+1]=nextLine
 
+	def setAmountHeader(self,header):
+		self.amountHeader=header
+
+	def setDocumentTitle(self,documentTitle):
+		self.documentTitle=documentTitle
+
+	def setTableTitle(self,tableTitle):
+		self.tableTitle=tableTitle
+
+	def build(self,depthLimit,amountTexts):
+		self.depthLimit=depthLimit
+
 		# make entries
 		iRow=0
-		for i,row in enumerate(rows):
+		for i,row in enumerate(self.rows):
 			if row is None:
 				continue
 			entry=Entry(iRow,row)
@@ -149,19 +159,10 @@ class Spreadsheet:
 		# make rowspans
 		self.root.scanRows()
 
-	def check(self,amountTexts):
+		# check amounts
 		self.root.check()
 		for i,amountText in enumerate(amountTexts):
 			self.root.checkAmount(reader.parseAmount(amountText),i)
-
-	def setAmountHeader(self,header):
-		self.amountHeader=header
-
-	def setDocumentTitle(self,documentTitle):
-		self.documentTitle=documentTitle
-
-	def setTableTitle(self,tableTitle):
-		self.tableTitle=tableTitle
 
 	# private
 	def getHeaderRow(self,stairs):
