@@ -7,7 +7,7 @@ import io
 import zipfile
 import subprocess
 
-import data,spreadsheet
+import data,spreadsheet,writer
 
 # приложения, которые парсим
 class Document:
@@ -104,11 +104,26 @@ class Law:
 			data['documents']=[]
 		self.environment=environment
 		self.code=data['code']
+		self.year,version,pz=self.code.split('.')
+		if version=='0':
+			self.description='первоначальный'
+		elif version in ('1','2','3'):
+			self.description=version+'-я корректировка'
+		elif version=='i':
+			self.description='исполнение'
+		else:
+			raise Exception('unknown law version')
+		if pz=='p':
+			self.description+=' проект'
+		elif pz=='z':
+			self.description+=' закон'
+		else:
+			raise Exception('unknown law pz')
 		if not data['downloadUrl'].startswith(self.environment.rootUrl):
 			raise Exception('invalid download url')
 		self.zipFilename=self.environment.rootPath+'/zip/'+data['downloadUrl'][len(self.environment.rootUrl):]
 		self.title=data['title']
-		self.documents=(Document(self,documentData) for documentData in data['documents'])
+		self.documents=[Document(self,documentData) for documentData in data['documents']]
 	def hasZip(self):
 		return os.path.isfile(self.zipFilename)
 
@@ -119,7 +134,13 @@ class Environment:
 		)
 		self.rootUrl=data['rootUrl']
 		self.pdfboxFilename=self.rootPath+'/bin/'+data['pdfboxJar']
-		self.laws=(Law(self,lawData) for lawData in data['laws'])
+		self.laws=[Law(self,lawData) for lawData in data['laws']]
+		self.htmlFilename=self.rootPath+'/index.html'
+	def hasHtml(self):
+		return os.path.isfile(self.htmlFilename)
+	def writeHtml(self):
+		hw=writer.HtmlWriter(self)
+		hw.write(self.htmlFilename)
 
 env=Environment(data.data)
 for law in env.laws:
@@ -136,3 +157,5 @@ for law in env.laws:
 		except Exception as e:
 			tb=sys.exc_info()[2]
 			raise Exception(str(e)+' in document '+document.code).with_traceback(tb)
+if not env.hasHtml():
+	env.writeHtml()
