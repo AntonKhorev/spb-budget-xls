@@ -34,8 +34,8 @@ class TestLineReader(unittest.TestCase):
 		rows=[None,
 			{'number':'1.','name':'АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ-ПЕТЕРБУРГА (801)','amounts':[21147741]},
 		]
-		nextLine=self.lr1.read(rows,self.text1[1],self.text1[2])
-		self.assertEqual(nextLine,self.text1[2])
+		nextLine=self.lr1.read(rows,self.text1[2],self.text1[3])
+		self.assertEqual(nextLine,self.text1[3])
 		self.assertEqual(rows,[None,
 			{'number':'1.','name':'АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ-ПЕТЕРБУРГА (801)','amounts':[21147741]},
 			{'number':'1.1.','name':'Расходы на содержание главы Правительства','section':'0102','article':'0010008','amounts':[20260]},
@@ -45,8 +45,8 @@ class TestLineReader(unittest.TestCase):
 			{'number':'1.','name':'АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ-ПЕТЕРБУРГА (801)','amounts':[21147741]},
 			{'number':'1.1.','name':'Расходы на содержание главы Правительства','section':'0102','article':'0010008','amounts':[20260]},
 		]
-		nextLine=self.lr1.read(rows,self.text1[2],self.text1[3])
-		self.assertEqual(nextLine,self.text1[3])
+		nextLine=self.lr1.read(rows,self.text1[3],self.text1[4])
+		self.assertEqual(nextLine,self.text1[4])
 		self.assertEqual(rows,[None,
 			{'number':'1.','name':'АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ-ПЕТЕРБУРГА (801)','amounts':[21147741]},
 			{'number':'1.1.','name':'Расходы на содержание главы Правительства Санкт-Петербурга','section':'0102','article':'0010008','amounts':[20260]},
@@ -56,8 +56,8 @@ class TestLineReader(unittest.TestCase):
 			{'number':'1.','name':'АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ-ПЕТЕРБУРГА (801)','amounts':[21147741]},
 			{'number':'1.1.','name':'Расходы на содержание главы Правительства Санкт-Петербурга','section':'0102','article':'0010008','amounts':[20260]},
 		]
-		nextLine=self.lr1.read(rows,self.text1[3],self.text1[4])
-		self.assertEqual(nextLine,self.text1[4])
+		nextLine=self.lr1.read(rows,self.text1[4],self.text1[5])
+		self.assertEqual(nextLine,self.text1[5])
 		self.assertEqual(rows,[None,
 			{'number':'1.','name':'АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ-ПЕТЕРБУРГА (801)','amounts':[21147741]},
 			{'number':'1.1.','name':'Расходы на содержание главы Правительства Санкт-Петербурга','section':'0102','article':'0010008','amounts':[20260]},
