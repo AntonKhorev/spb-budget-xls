@@ -123,7 +123,6 @@ class Environment:
 
 env=Environment(data.data)
 for law in env.laws:
-	if law.code!='2012.1.z': continue # DEBUG: this law will fail
 	if not law.hasZip():
 		raise Exception(law.zipFilename+' has to be downloaded')
 	for document in law.documents:

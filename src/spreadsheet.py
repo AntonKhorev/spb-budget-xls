@@ -14,7 +14,7 @@ import reader
 
 class Entry:
 	def __init__(self,iRow,row):
-		self.iRow=iRow
+		self.iRow=iRow # -1 for invisible
 		self.children={}
 		self.number=row.get('number')
 		self.name=row.get('name')
@@ -22,6 +22,9 @@ class Entry:
 		self.section=row.get('section')
 		self.type=row.get('type')
 		self.amounts={i:amount for i,amount in enumerate(row['amounts'])}
+
+	def isVisible(self):
+		return self.iRow>=0
 
 	def checkAmount(self,amount,key=0):
 		if amount!=self.amounts[key]:
@@ -34,14 +37,11 @@ class Entry:
 				raise Exception('duplicate entry')
 			self.children[n]=entry
 		else:
-			if n not in self.children:
-				raise Exception('child not found')
+			if n not in self.children: # missing entry of zero sum:
+				self.children[n]=Entry(-1,{'amounts':[0]*len(entry.amounts)})
 			self.children[n].addLeaf(entry,numberArray)
 
 	def scanRows(self):
-		if not self.children:
-			self.rowSpan=(self.iRow,self.iRow+1)
-			return
 		rows=[]
 		for child in self.children.values():
 			child.scanRows()
@@ -49,15 +49,25 @@ class Entry:
 				self.rowSpan=None
 				return
 			rows.append(child.rowSpan)
+		if not rows:
+			if self.isVisible():
+				self.rowSpan=(self.iRow,self.iRow+1)
+				return
+			else:
+				self.rowSpan=None
+				return
 		rows.sort()
-		if self.iRow+1!=rows[0][0]:
+		if self.isVisible() and self.iRow+1!=rows[0][0]:
 			self.rowSpan=None
 			return
 		for i in range(1,len(rows)):
 			if rows[i-1][1]!=rows[i][0]:
 				self.rowSpan=None
 				return
-		self.rowSpan=(rows[0][0]-1,rows[-1][1])
+		if self.isVisible():
+			self.rowSpan=(rows[0][0]-1,rows[-1][1])
+		else:
+			self.rowSpan=(rows[0][0],rows[-1][1])
 
 	def check(self):
 		if not self.children:
@@ -78,26 +88,30 @@ class Entry:
 			a=str(amount)
 			return a[:-1]+','+a[-1]
 
-		if writer.useSums and self.children:
-			ams=[]
-			for i,(k,v) in enumerate(sorted(self.amounts.items())):
-				# column to sum from
-				if writer.stairs:
-					columnLetter=chr(ord('F')+depth+1+i*(writer.depthLimit+1))
-				else:
-					columnLetter=chr(ord('F')+i)
-				# formula
-				if self.rowSpan is None or not writer.stairs:
-					ams.append('='+'+'.join(columnLetter+writer.strrow(entry.iRow) for n,entry in sorted(self.children.items())))
-				else:
-					ams.append('=SUM('+columnLetter+writer.strrow(self.rowSpan[0]+1)+':'+columnLetter+writer.strrow(self.rowSpan[1]-1)+')')
-		else:
-			ams=[formatAmount(v) for k,v in sorted(self.amounts.items())]
-		if writer.stairs:
-			amList=list(itertools.chain.from_iterable([None]*depth+[am]+[None]*(writer.depthLimit-depth) for am in ams))
-		else:
-			amList=ams
-		writer.writerow([self.number,self.name,self.section,self.article,self.type]+amList)
+		if self.isVisible():
+			if writer.useSums and self.children:
+				ams=[]
+				for i,(k,v) in enumerate(sorted(self.amounts.items())):
+					# column to sum from
+					if writer.stairs:
+						columnLetter=chr(ord('F')+depth+1+i*(writer.depthLimit+1))
+					else:
+						columnLetter=chr(ord('F')+i)
+					# formula
+					if self.rowSpan is None or not writer.stairs:
+						ams.append('='+'+'.join(
+							columnLetter+writer.strrow(entry.iRow) for n,entry in sorted(self.children.items()) if entry.isVisible()
+						))
+					else:
+						ams.append('=SUM('+columnLetter+writer.strrow(self.rowSpan[0]+1)+':'+columnLetter+writer.strrow(self.rowSpan[1]-1)+')')
+			else:
+				ams=[formatAmount(v) for k,v in sorted(self.amounts.items())]
+			if writer.stairs:
+				amList=list(itertools.chain.from_iterable([None]*depth+[am]+[None]*(writer.depthLimit-depth) for am in ams))
+			else:
+				amList=ams
+			writer.writerow([self.number,self.name,self.section,self.article,self.type]+amList)
+
 		for n,entry in sorted(self.children.items()):
 			entry.write(writer,depth+1)
 
