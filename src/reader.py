@@ -95,6 +95,15 @@ class LineReader:
 		if m:
 			number=m.group(1)
 			rest=m.group(2)
+			if number.count('.')==2:
+				mm=self.reLeadNumberLine.match(nextLine)
+				if mm: # test if z. follows x.y. - which is wrong
+					nnumber=mm.group(1)
+					rrest=mm.group(2)
+					if nnumber.count('.')==1:
+						# append z. to x.y.
+						number+=nnumber
+						nextLine=rrest
 			row=readLeadNumberLine(number,rest)
 			if row is not None:
 				rows.append(row)
