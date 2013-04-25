@@ -88,6 +88,21 @@ class TestLineReader(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'63.18.','name':'Расходы на выполнение мероприятий по обследованию и сносу "деревьев-угроз",','section':'0501','article':'3500910','amounts':[8080]},
 		])
+	def testDoubleSpace(self):
+		rows=[None]
+		line="1.3. Расходы на материальное обеспечение 0103 0011201 149.0"
+		nextLine="деятельности  членов Совета Федерации и их "
+		line=self.lr1.read(rows,line,nextLine)
+		self.assertEqual(line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'1.3.','name':'Расходы на материальное обеспечение','section':'0103','article':'0011201','amounts':[1490]},
+		])
+		nextLine="помощников за счет средств федерального "
+		line=self.lr1.read(rows,line,nextLine)
+		self.assertEqual(line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'1.3.','name':'Расходы на материальное обеспечение деятельности членов Совета Федерации и их','section':'0103','article':'0011201','amounts':[1490]},
+		])
 
 if __name__=='__main__':
 	unittest.main()
