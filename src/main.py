@@ -7,7 +7,7 @@ import io
 import zipfile
 import subprocess
 
-import data,parse
+import data,spreadsheet
 
 # приложения, которые парсим
 class Document:
@@ -75,18 +75,18 @@ class Document:
 	def writeCsvsAndXlss(self):
 		header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
 		for depth in range(1,4):
-			spreadsheet=parse.Spreadsheet(self.nCols,depth)
-			spreadsheet.read(self.txtFilename)
-			spreadsheet.check(self.totals)
-			spreadsheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
-			spreadsheet.setTableTitle(self.title)
-			spreadsheet.setAmountHeader(header)
+			sheet=spreadsheet.Spreadsheet(self.nCols,depth)
+			sheet.read(self.txtFilename)
+			sheet.check(self.totals)
+			sheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
+			sheet.setTableTitle(self.title)
+			sheet.setAmountHeader(header)
 			for stairs in (False,True):
 				for sums in (False,True):
 					csvFilename=self.getCsvFilename(depth,stairs,sums)
-					spreadsheet.writeCsv(csvFilename,stairs,sums)
+					sheet.writeCsv(csvFilename,stairs,sums)
 				xlsFilename=self.getXlsFilename(depth,stairs)
-				spreadsheet.writeXls(xlsFilename,self.delta,stairs)
+				sheet.writeXls(xlsFilename,self.delta,stairs)
 
 # закон или законопроект, в к-рый входит несколько приложений - с ними отдельно разбираться
 class Law:
@@ -124,6 +124,7 @@ class Environment:
 
 env=Environment(data.data)
 for law in env.laws:
+	if law.code!='2012.1.z': continue # DEBUG: this law will fail
 	if not law.hasZip():
 		raise Exception(law.zipFilename+' has to be downloaded')
 	for document in law.documents:

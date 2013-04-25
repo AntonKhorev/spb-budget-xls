@@ -7,7 +7,7 @@
 #		https://pypi.python.org/pypi/xlwt3
 
 import os.path, glob
-import re, csv
+import re, csv # TODO remove re
 import itertools
 import xlwt3 as xlwt
 
