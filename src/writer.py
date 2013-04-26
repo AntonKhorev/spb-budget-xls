@@ -8,7 +8,7 @@ class HtmlWriter:
 		file=open(filename,'w',encoding='utf-8')
 		w=file.write
 		e=lambda x: html.escape(str(x))
-		a=lambda link,text: "<a href='"+e(link)+"'>"+e(text)+"</a>"
+		a=lambda link,text: "<a href='"+e(link)+"'>"+text+"</a>"
 		wtd=lambda x: w("<td>"+x+"</td>")
 		wtdrowspan=lambda n,x: w("<td rowspan='"+e(n)+"'>"+x+"</td>")
 		def nonFirstWrite():
@@ -43,21 +43,33 @@ thead tr:first-child th:first-child,
 tbody tr:first-child td:first-child {
 	border-left: none;
 }
+tbody:target {
+	background: #FFC;
+}
 </style>
 </head>
 <body>
 <h1>Ведомственные структуры расходов бюджета Санкт-Петербурга</h1>
-<table>
-<thead>
-<tr><th>год</th><th>закон</th><th>исходные документы</th><th>приложение</th><th>csv без формул</th><th>csv с формулами</th><th>xls</th></tr>
-</thead>
 """
 		)
 		yearLaws=collections.defaultdict(list)
 		for law in self.env.laws:
 			yearLaws[law.year].append(law)
+		w("<p>Документы для годов: ")
+		wn=nonFirstWrite()
+		for year in sorted(yearLaws):
+			wn(", ")
+			w(a("#"+year,e(year)))
+		w(".</p>\n")
+		w(
+"""<table>
+<thead>
+<tr><th>год</th><th>закон</th><th>исходные документы</th><th>приложение</th><th>csv без формул</th><th>csv с формулами</th><th>xls</th></tr>
+</thead>
+"""
+		)
 		for year,laws in sorted(yearLaws.items()):
-			w("<tbody>\n");
+			w("<tbody id='"+e(year)+"'>\n");
 			w("<tr>")
 			wtdrowspan(len(laws)*2,e(year))
 			wn=nonFirstWrite()
