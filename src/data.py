@@ -15,7 +15,7 @@ data={
 	'rootUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/',
 	'pdfboxJar':'pdfbox-app-1.8.1.jar',
 	'laws':[
-		# TODO 2010 and earlier
+		# TODO 2010 and earlier + исполнение за 2011
 		{
 			'code':'2011.0.p',
 			'title':'О бюджете Санкт-Петербурга на 2011 год и на плановый период 2012 и 2013 годов',
@@ -100,13 +100,13 @@ data={
 					'delta':True,
 				}
 			],
-		},{
-			'code':'2011.i.z',
-			'title':'Об исполнении бюджета Санкт-Петербурга за 2011 год',
-			'date':'27.06.2012',
-			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=555@cf_npa_bud',
-			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2011/ispolnenie/isp2011.zip',
-			# другого формата
+		},
+		# {
+			# 'code':'2011.i.z',
+			# 'title':'Об исполнении бюджета Санкт-Петербурга за 2011 год',
+			# 'date':'27.06.2012',
+			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=555@cf_npa_bud',
+			# 'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2011/ispolnenie/isp2011.zip',
 			# 'documents':[
 				# {
 					# 'title':'Показатели расходов бюджета Санкт-Петербурга за 2011 год по ведомственной структуре расходов бюджета Санкт-Петербурга',
@@ -116,7 +116,8 @@ data={
 					# 'total':('431 939 763.4','442 067 920.3','404 032 373.1')
 				# }
 			# ],
-		},{
+		# },
+		{
 			'code':'2012.0.p',
 			'title':'О бюджете Санкт-Петербурга на 2012 год и на плановый период 2013 и 2014 годов',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=503@cf_npa_bud',

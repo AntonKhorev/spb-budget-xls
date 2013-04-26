@@ -10,6 +10,7 @@ class HtmlWriter:
 		e=lambda x: html.escape(str(x))
 		a=lambda link,text: "<a href='"+e(link)+"'>"+e(text)+"</a>"
 		wtd=lambda x: w("<td>"+x+"</td>")
+		wtdrowspan=lambda n,x: w("<td rowspan='"+e(n)+"'>"+x+"</td>")
 		def nonFirstWrite():
 			first=True
 			def wn(s):
@@ -33,7 +34,7 @@ th,td {
 </head>
 <body>
 <table>
-<tr><th>год</th><th>закон</th><th>исходные документы</th></tr>
+<tr><th>год</th><th>закон</th><th>исходные документы</th><th>приложение</th><th>csv без формул</th></tr>
 """
 		)
 		yearLaws=collections.defaultdict(list)
@@ -41,13 +42,26 @@ th,td {
 			yearLaws[law.year].append(law)
 		for year,laws in sorted(yearLaws.items()):
 			w("<tr>")
-			w("<td rowspan='"+e(len(laws))+"'>"+e(year)+"</td>")
+			wtdrowspan(len(laws)*2,e(year))
 			wn=nonFirstWrite()
 			for law in laws:
 				wn("<tr>")
-				wtd(e(law.description))
-				wtd(a(law.viewUrl,"страница")+" "+a(law.downloadUrl,"архив")+" "+a(law.zipPath,"копия"))
-				w("</tr>\n")
+				wtdrowspan(2,e(law.description))
+				wtdrowspan(2,a(law.viewUrl,"страница")+" "+a(law.downloadUrl,"архив")+" "+a(law.zipPath,"копия"))
+				wn2=nonFirstWrite()
+				for doc in law.documents: # assumes 2 documents
+					wn2("<tr>")
+					if len(doc.forYears)==1:
+						wtd("расходы "+e('-'.join(doc.forYears)))
+					else:
+						wtd("план "+e('-'.join(doc.forYears)))
+					w("<td>")
+					for i in range(1,4):
+						w(a(doc.getCsvPath(i,False,False),e(i)+" уров"+("ень" if i==1 else "ня")+" столбиком"))
+						if i<3:
+							w("<br />")
+					w("</td>")
+					w("</tr>\n")
 		w(
 """</table>
 </body>

@@ -59,11 +59,15 @@ class Document:
 			raise Exception('external command failure')
 	def getFilenameParensPart(self,depth,stairs,sums):
 		return '('+str(depth)+(',stairs' if stairs else '')+(',sums' if sums else '')+')'
+	def getCsvPath(self,depth,stairs,sums):
+		return 'csv/'+self.code+self.getFilenameParensPart(depth,stairs,sums)+'.csv'
 	def getCsvFilename(self,depth,stairs,sums):
-		return self.law.environment.rootPath+'/csv/'+self.code+self.getFilenameParensPart(depth,stairs,sums)+'.csv'
-	def getXlsFilename(self,depth,stairs):
+		return self.law.environment.rootPath+'/'+self.getCsvPath(depth,stairs,sums)
+	def getXlsPath(self,depth,stairs):
 		sums=True
-		return self.law.environment.rootPath+'/xls/'+self.code+self.getFilenameParensPart(depth,stairs,sums)+'.xls'
+		return 'xls/'+self.code+self.getFilenameParensPart(depth,stairs,sums)+'.xls'
+	def getXlsFilename(self,depth,stairs):
+		return self.law.environment.rootPath+'/'+self.getXlsPath(depth,stairs)
 	def hasCsvsAndXlss(self):
 		for depth in range(1,4):
 			for stairs in (False,True):
