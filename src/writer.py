@@ -2,8 +2,32 @@ import collections
 import html
 
 class HtmlWriter:
+	class Refs:
+		class Ref:
+			def __init__(self,number,html):
+				self.number=number
+				self.html=html
+			@property
+			def id(self):
+				return "ref-"+str(self.number)
+			@property
+			def ref(self):
+				return "<sup><a href='#"+self.id+"'>["+str(self.number)+"]</a></sup>"
+			@property
+			def body(self):
+				return "<div id='"+self.id+"'>"+self.html+"</div>"
+		def __init__(self):
+			self.refs=[]
+		def __iter__(self):
+			return self.refs.__iter__()
+		def makeRef(self,html):
+			ref=self.__class__.Ref(len(self.refs)+1,html)
+			self.refs.append(ref)
+			return ref
+
 	def __init__(self,env):
 		self.env=env
+
 	def write(self,filename):
 		file=open(filename,'w',encoding='utf-8')
 		w=file.write
@@ -20,6 +44,8 @@ class HtmlWriter:
 					return
 				w(s)
 			return wn
+		refs=HtmlWriter.Refs()
+
 		w(
 """<!DOCTYPE HTML>
 <html>
@@ -27,12 +53,29 @@ class HtmlWriter:
 <meta charset='utf-8'>
 <title>Ведомственные структуры расходов бюджета Санкт-Петербурга в csv и xls</title>
 <style>
+:target {
+	background: #FFC;
+}
+sup {
+	font-size: .7em;
+}
+sup :link {
+	text-decoration: none;
+}
+sup :link:hover {
+	text-decoration: underline;
+}
 table {
 	border: none;
 	border-collapse: collapse;
 }
-th,td {
+td {
 	vertical-align: top;
+}
+th {
+	vertical-align: bottom;
+}
+th,td {
 	padding: .5em;
 	border-left: dotted 1px gray;
 }
@@ -42,9 +85,6 @@ tbody tr:first-child td {
 thead tr:first-child th:first-child,
 tbody tr:first-child td:first-child {
 	border-left: none;
-}
-tbody:target {
-	background: #FFC;
 }
 span {
 	border-bottom: 1px gray dotted;
@@ -64,13 +104,12 @@ span {
 			wn(", ")
 			w(a("#"+year,e(year)))
 		w(".</p>\n")
-		w(
-"""<table>
-<thead>
-<tr><th>год</th><th>закон</th><th>исходные документы</th><th>приложение</th><th>csv без формул</th><th>csv с формулами</th><th>xls</th></tr>
-</thead>
-"""
-		)
+
+		refCsv=refs.makeRef("В кодировке utf-8. Числа с десятичной запятой, потому что в таком формате их читают русские версии электронных таблиц.")
+		w("<table>\n")
+		w("<thead>\n")
+		w("<tr><th>год</th><th>закон</th><th>исходные документы</th><th>приложение</th><th>csv"+refCsv.ref+" без формул</th><th>csv"+refCsv.ref+" с формулами</th><th>xls</th></tr>\n")
+		w("</thead>\n")
 		for year,laws in sorted(yearLaws.items()):
 			w("<tbody id='"+e(year)+"'>\n");
 			w("<tr>")
@@ -100,10 +139,20 @@ span {
 					matrix(doc.getXlsPath)
 					w("</tr>\n")
 			w("</tbody>\n");
+		w("</table>\n")
+
 		w(
-"""</table>
+"""<h2>Примечания</h2>
+<ol>
+"""
+		)
+		for ref in refs:
+			w("<li>"+ref.body+"</li>")
+		w(
+"""</ol>
 </body>
 </html>
 """
 		)
+
 		file.close()
