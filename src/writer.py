@@ -46,6 +46,9 @@ tbody tr:first-child td:first-child {
 tbody:target {
 	background: #FFC;
 }
+span {
+	border-bottom: 1px gray dotted;
+}
 </style>
 </head>
 <body>
@@ -75,15 +78,17 @@ tbody:target {
 			wn=nonFirstWrite()
 			for law in laws:
 				wn("<tr>")
-				wtdrowspan(2,e(law.description))
+				wtdrowspan(2,"<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
 				wtdrowspan(2,a(law.viewUrl,"страница")+" "+a(law.downloadUrl,"архив")+" "+a(law.zipPath,"копия"))
 				wn2=nonFirstWrite()
 				for doc in law.documents: # assumes 2 documents
 					wn2("<tr>")
+					w("<td><span title='"+"Приложение "+e(doc.appendixNumber)+". "+e(doc.title)+"'>")
 					if len(doc.forYears)==1:
-						wtd("расходы "+e('-'.join(doc.forYears)))
+						w("расходы "+e('-'.join(doc.forYears)))
 					else:
-						wtd("план "+e('-'.join(doc.forYears)))
+						w("план "+e('-'.join(doc.forYears)))
+					w("</span></td>")
 					def matrix(path):
 						w("<td><pre><code>"+
 							a(path(1,False),"1.")+"<br />"+
