@@ -33,8 +33,9 @@ th,td {
 </style>
 </head>
 <body>
+<h1>Ведомственные структуры расходов бюджета Санкт-Петербурга</h1>
 <table>
-<tr><th>год</th><th>закон</th><th>исходные документы</th><th>приложение</th><th>csv без формул</th></tr>
+<tr><th>год</th><th>закон</th><th>исходные документы</th><th>приложение</th><th>csv без формул</th><th>csv с формулами</th><th>xls</th></tr>
 """
 		)
 		yearLaws=collections.defaultdict(list)
@@ -55,12 +56,15 @@ th,td {
 						wtd("расходы "+e('-'.join(doc.forYears)))
 					else:
 						wtd("план "+e('-'.join(doc.forYears)))
-					w("<td>")
-					for i in range(1,4):
-						w(a(doc.getCsvPath(i,False,False),e(i)+" уров"+("ень" if i==1 else "ня")+" столбиком"))
-						if i<3:
-							w("<br />")
-					w("</td>")
+					def matrix(path):
+						w("<td><pre><code>"+
+							a(path(1,False),"1.")+"<br />"+
+							a(path(2,False),"1.2.")+"    "+a(path(2,True),"1.2.")+"<br />"+
+							a(path(3,False),"1.2.3.")+"          "+a(path(3,True),"1.2.3.")+
+						"</code></pre></td>")
+					matrix(lambda l,s: doc.getCsvPath(l,s,False))
+					matrix(lambda l,s: doc.getCsvPath(l,s,True))
+					matrix(doc.getXlsPath)
 					w("</tr>\n")
 		w(
 """</table>
