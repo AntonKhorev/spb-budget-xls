@@ -105,10 +105,20 @@ span {
 			w(a("#"+year,e(year)))
 		w(".</p>\n")
 
+		refData=refs.makeRef(
+			"<pre><code>"
+			"1.                  \<br />"
+			"1.2.   1.2.          ) разные уровни раскрытия<br />"
+			"1.2.3.      1.2.3.  /<br />"
+			"  |             \<br />"
+			"«столбиком»   «лесенкой» — в этом варианте проще формулы для суммирования"
+			"</code></pre>"
+		)
 		refCsv=refs.makeRef("В кодировке utf-8. Числа с десятичной запятой, потому что в таком формате их читают русские версии электронных таблиц.")
 		w("<table>\n")
 		w("<thead>\n")
-		w("<tr><th>год</th><th>закон</th><th>исходные документы</th><th>приложение</th><th>csv"+refCsv.ref+" без формул</th><th>csv"+refCsv.ref+" с формулами</th><th>xls</th></tr>\n")
+		w("<tr><th rowspan='2'>год</th><th rowspan='2'>закон</th><th rowspan='2'>исходные документы в pdf</th><th rowspan='2'>приложение</th><th colspan='3'>данные в машиночитаемом виде"+refData.ref+"</th>")
+		w("<tr><th>csv"+refCsv.ref+" без формул</th><th>csv"+refCsv.ref+" с формулами</th><th>xls</th></tr>\n")
 		w("</thead>\n")
 		for year,laws in sorted(yearLaws.items()):
 			w("<tbody id='"+e(year)+"'>\n");
