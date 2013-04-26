@@ -8,6 +8,8 @@ class HtmlWriter:
 		file=open(filename,'w',encoding='utf-8')
 		w=file.write
 		e=lambda x: html.escape(str(x))
+		a=lambda link,text: "<a href='"+e(link)+"'>"+e(text)+"</a>"
+		wtd=lambda x: w("<td>"+x+"</td>")
 		def nonFirstWrite():
 			first=True
 			def wn(s):
@@ -31,7 +33,7 @@ th,td {
 </head>
 <body>
 <table>
-<tr><th>год</th><th>закон</th></tr>
+<tr><th>год</th><th>закон</th><th>исходные документы</th></tr>
 """
 		)
 		yearLaws=collections.defaultdict(list)
@@ -43,7 +45,8 @@ th,td {
 			wn=nonFirstWrite()
 			for law in laws:
 				wn("<tr>")
-				w("<td>"+e(law.description)+"</td>")
+				wtd(e(law.description))
+				wtd(a(law.viewUrl,"страница")+" "+a(law.downloadUrl,"архив")+" "+a(law.zipPath,"копия"))
 				w("</tr>\n")
 		w(
 """</table>

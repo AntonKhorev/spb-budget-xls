@@ -1,5 +1,6 @@
 # basic types
 # filenames are always absolute/ready to be read
+# paths are relative to root
 
 import sys
 import os.path
@@ -90,16 +91,6 @@ class Document:
 # закон или законопроект, в к-рый входит несколько приложений - с ними отдельно разбираться
 class Law:
 	def __init__(self,environment,data):
-		# year = на какой год (первый из (трёх) годов) (FIXME update)
-		# date = дата опубликования
-		# viewUrl = url для просмотра
-		# downloadUrl = url для скачивания
-		#	из него будет делаться путь к скачанным файлам в /zip
-		# version = (FIXME update)
-		#	0 - исходный закон/проект
-		#	1,2,3,... - n-я корректировка (пока была только одна корректировка, даты есть только для 2013)
-		#		бывает и больше корректировок
-		#	-1 - закон об исполнении (его проекта нет, в зипе только приложения)
 		if 'documents' not in data:
 			data['documents']=[]
 		self.environment=environment
@@ -119,11 +110,18 @@ class Law:
 			self.description+=' закон'
 		else:
 			raise Exception('unknown law pz')
-		if not data['downloadUrl'].startswith(self.environment.rootUrl):
+		self.viewUrl=data['viewUrl']
+		self.downloadUrl=data['downloadUrl']
+		if not self.downloadUrl.startswith(self.environment.rootUrl):
 			raise Exception('invalid download url')
-		self.zipFilename=self.environment.rootPath+'/zip/'+data['downloadUrl'][len(self.environment.rootUrl):]
 		self.title=data['title']
 		self.documents=[Document(self,documentData) for documentData in data['documents']]
+	@property
+	def zipPath(self):
+		return 'zip/'+self.downloadUrl[len(self.environment.rootUrl):]
+	@property
+	def zipFilename(self):
+		return self.environment.rootPath+'/'+self.zipPath
 	def hasZip(self):
 		return os.path.isfile(self.zipFilename)
 
