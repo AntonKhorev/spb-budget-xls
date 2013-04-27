@@ -144,20 +144,21 @@ class Environment:
 		hw=writer.HtmlWriter(self)
 		hw.write(self.htmlFilename)
 
-env=Environment(data.data)
-for law in env.laws:
-	if not law.hasZip():
-		raise Exception(law.zipFilename+' has to be downloaded')
-	for document in law.documents:
-		try:
-			if not document.hasPdf():
-				document.writePdf()
-			if not document.hasTxt():
-				document.writeTxt()
-			if not document.hasCsvsAndXlss():
-				document.writeCsvsAndXlss()
-		except Exception as e:
-			tb=sys.exc_info()[2]
-			raise Exception(str(e)+' in document '+document.code).with_traceback(tb)
-if not env.hasHtml():
-	env.writeHtml()
+if __name__=='__main__':
+	env=Environment(data.data)
+	for law in env.laws:
+		if not law.hasZip():
+			raise Exception(law.zipFilename+' has to be downloaded')
+		for document in law.documents:
+			try:
+				if not document.hasPdf():
+					document.writePdf()
+				if not document.hasTxt():
+					document.writeTxt()
+				if not document.hasCsvsAndXlss():
+					document.writeCsvsAndXlss()
+			except Exception as e:
+				tb=sys.exc_info()[2]
+				raise Exception(str(e)+' in document '+document.code).with_traceback(tb)
+	if not env.hasHtml():
+		env.writeHtml()
