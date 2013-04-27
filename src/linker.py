@@ -19,6 +19,7 @@ class Linker:
 					u=urllib.parse.unquote(v)
 					m=re.search(r'(?:csv|xls)/.+\.(?:csv|xls)$',u)
 					if m:
+						v=v.replace('https://www.dropbox.com/','https://dl.dropbox.com/',1) # dropbox special
 						fileLinks[m.group(0)]=v
 		for filename in glob.glob(env.rootPath+'/htm/*.htm'):
 			with open(filename,encoding='utf-8') as f:
