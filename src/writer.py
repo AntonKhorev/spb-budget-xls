@@ -28,11 +28,15 @@ class HtmlWriter:
 	def __init__(self,env):
 		self.env=env
 
-	def write(self,filename):
+	def write(self,filename,zipCopy,linker=None):
 		file=open(filename,'w',encoding='utf-8')
 		w=file.write
 		e=lambda x: html.escape(str(x))
 		a=lambda link,text: "<a href='"+e(link)+"'>"+text+"</a>"
+		if linker is None:
+			af=a
+		else:
+			af=lambda link,text: a(linker.getLink(link),text)
 		wtd=lambda x: w("<td>"+x+"</td>")
 		wtdrowspan=lambda n,x: w("<td rowspan='"+e(n)+"'>"+x+"</td>")
 		def nonFirstWrite():
@@ -128,7 +132,7 @@ span {
 			for law in laws:
 				wn("<tr>")
 				wtdrowspan(2,"<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
-				wtdrowspan(2,a(law.viewUrl,"страница")+" "+a(law.downloadUrl,"архив")+" "+a(law.zipPath,"копия"))
+				wtdrowspan(2,a(law.viewUrl,"страница")+" "+a(law.downloadUrl,"архив")+(" "+a(law.zipPath,"копия") if zipCopy else ""))
 				wn2=nonFirstWrite()
 				for doc in law.documents: # assumes 2 documents
 					wn2("<tr>")
@@ -140,9 +144,9 @@ span {
 					w("</span></td>")
 					def matrix(path):
 						w("<td><pre><code>"+
-							a(path(1,False),"1.")+"<br />"+
-							a(path(2,False),"1.2.")+"   "+a(path(2,True),"1.2.")+"<br />"+
-							a(path(3,False),"1.2.3.")+"      "+a(path(3,True),"1.2.3.")+
+							af(path(1,False),"1.")+"<br />"+
+							af(path(2,False),"1.2.")+"   "+af(path(2,True),"1.2.")+"<br />"+
+							af(path(3,False),"1.2.3.")+"      "+af(path(3,True),"1.2.3.")+
 						"</code></pre></td>")
 					matrix(lambda l,s: doc.getCsvPath(l,s,False))
 					matrix(lambda l,s: doc.getCsvPath(l,s,True))
