@@ -55,7 +55,7 @@ class HtmlWriter:
 <html>
 <head>
 <meta charset='utf-8'>
-<title>Ведомственные структуры расходов бюджета Санкт-Петербурга в csv и xls</title>
+<title>Ведомственная структура расходов бюджета Санкт-Петербурга в csv и xls</title>
 <style>
 :target {
 	background: #FFC;
@@ -96,9 +96,18 @@ span {
 </style>
 </head>
 <body>
-<h1>Ведомственные структуры расходов бюджета Санкт-Петербурга</h1>
+<h1>Ведомственная структура расходов бюджета Санкт-Петербурга</h1>
 """
 		)
+
+		w("<p>Данные извлечены автоматически"+refs.makeRef(
+			a("https://github.com/AntonKhorev/BudgetSpb","Исходный код программы для извлечения")+"."
+		).ref+" из тесктов законов, опубликованных на сайте "+a("http://www.fincom.spb.ru/","Комитета финансов Санкт-Петербурга")+".</p>\n")
+
+		w("<p>Последнее обновление: 31.05.2013."+refs.makeRef(
+			"<dl><dt>31.05.2013</dt><dd>Добавлен закон 1-й корректировки бюджета 2013 г.</dd></dl>"
+		).ref+"</p>\n")
+
 		yearLaws=collections.defaultdict(list)
 		for law in self.env.laws:
 			yearLaws[law.year].append(law)
