@@ -159,6 +159,41 @@ class TestLineReader(unittest.TestCase):
 			'Петербурга" на возмещ-е затрат,связан.с осущ-ем ',
 			'функций по сопров-ю сделок по приобрет-ю ',
 		],'Субсидия ОАО "Фонд имущества Санкт-Петербурга" на возмещ-е затрат,связан.с осущ-ем')
+	def testIspolnenieEntry(self):
+		lr=reader.LineReader(3,2)
+		rows=[None]
+		line='1. АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ- 2 112 960.4 2 143 756.6 2 062 085.8 97.59 96.19'
+		nextLine='ПЕТЕРБУРГА'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'1.','name':'АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ-','amounts':[21129604,21437566,20620858]},
+		])
+	def testIspolnenieTotal(self):
+		lr=reader.LineReader(3,2)
+		rows=[{}]
+		line=' Итого: 431 939 763.4 442 067 920.3 404 032 373.1 93.54 91.40'
+		nextLine='                                                                                                                                                                                                                                         '
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[
+			{'name':'Итого','amounts':[4319397634,4420679203,4040323731]},
+		])
+	def testIspolneniePageBreak(self):
+		lr=reader.LineReader(3,2)
+		rows=[None]
+		line='7. ЖИЛИЩНЫЙ КОМИТЕТ 15 624 229.3 15 794 610.8 14 855 482.4 95.08 94.05'
+		nextLine='Показатели расходов бюджета Санкт-Петербурга за 2011 год'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[
+			None,
+			{'number':'7.','name':'ЖИЛИЩНЫЙ КОМИТЕТ','amounts':[156242293,157946108,148554824]},
+		])
+		nextLine='по ведомственной структуре расходов бюджета Санкт-Петербурга'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[
+			None,
+			{'number':'7.','name':'ЖИЛИЩНЫЙ КОМИТЕТ','amounts':[156242293,157946108,148554824]},
+			None,
+		])
 
 if __name__=='__main__':
 	unittest.main()

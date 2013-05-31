@@ -29,8 +29,12 @@ class Document:
 		self.txtFilename=self.law.environment.rootPath+'/txt/'+self.code+'.txt'
 		self.zipContents=data['zipContents']
 		self.totals=data['total']
-		if len(self.forYears)!=len(self.totals):
-			raise Exception('invalid number of columns')
+		if self.law.version=='i':
+			if len(self.forYears)!=1 or len(self.totals)!=3:
+				raise Exception('invalid number of columns')
+		else:
+			if len(self.forYears)!=len(self.totals):
+				raise Exception('invalid number of columns')
 		self.nCols=len(self.totals)
 		self.delta=data['delta']
 		self.appendixNumber=data['appendixNumber']
@@ -79,7 +83,10 @@ class Document:
 		return True
 	def writeCsvsAndXlss(self):
 		header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
-		sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols)
+		if self.law.version=='i':
+			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,2)
+		else:
+			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols)
 		sheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
 		sheet.setTableTitle(self.title)
 		sheet.setAmountHeader(header)
@@ -99,12 +106,12 @@ class Law:
 			data['documents']=[]
 		self.environment=environment
 		self.code=data['code']
-		self.year,version,pz=self.code.split('.')
-		if version=='0':
+		self.year,self.version,pz=self.code.split('.')
+		if self.version=='0':
 			self.description='первоначальный'
-		elif version in ('1','2','3'):
-			self.description=version+'-я корректировка'
-		elif version=='i':
+		elif self.version in ('1','2','3'):
+			self.description=self.version+'-я корректировка'
+		elif self.version=='i':
 			self.description='исполнение'
 		else:
 			raise Exception('unknown law version')

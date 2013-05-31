@@ -102,24 +102,23 @@ data={
 					'delta':True,
 				}
 			],
-		},
-		# {
-			# 'code':'2011.i.z',
-			# 'title':'Об исполнении бюджета Санкт-Петербурга за 2011 год',
-			# 'date':'27.06.2012',
-			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=555@cf_npa_bud',
-			# 'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2011/ispolnenie/isp2011.zip',
-			# 'documents':[
-				# {
-					# 'title':'Показатели расходов бюджета Санкт-Петербурга за 2011 год по ведомственной структуре расходов бюджета Санкт-Петербурга',
-					# 'appendixNumber':4,
-					# 'zipContents':'isp2011-pr4.pdf',
-					# 'forYear':2011,
-					# 'total':('431 939 763.4','442 067 920.3','404 032 373.1')
-				# }
-			# ],
-		# },
-		{
+		},{
+			'code':'2011.i.z',
+			'title':'Об исполнении бюджета Санкт-Петербурга за 2011 год',
+			'date':'27.06.2012',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=555@cf_npa_bud',
+			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2011/ispolnenie/isp2011.zip',
+			'documents':[
+				{
+					'title':'Показатели расходов бюджета Санкт-Петербурга за 2011 год по ведомственной структуре расходов бюджета Санкт-Петербурга',
+					'appendixNumber':4,
+					'zipContents':'isp2011-pr4.pdf',
+					'forYear':2011,
+					'total':('431 939 763.4','442 067 920.3','404 032 373.1'), # wrong!
+					#'total':('431 939 763.4','442 067 920.3','404 032 372.8'),
+				}
+			],
+		},{
 			'code':'2012.0.p',
 			'title':'О бюджете Санкт-Петербурга на 2012 год и на плановый период 2013 и 2014 годов',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=503@cf_npa_bud',

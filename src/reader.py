@@ -5,10 +5,10 @@ def parseAmount(amountText):
 	return int(amount)
 
 class LineReader:
-	def __init__(self,nCols):
+	def __init__(self,nCols,nPercentageCols=0):
 		self.nCols=nCols
 		# compile regexes
-		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*self.nCols+'$' # amount pattern
+		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*self.nCols+'\s\d+[.,]\d\d'*nPercentageCols+'$' # amount (and percentage if needed) pattern
 		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])' # article (code) pattern
 		self.reLeadNumberLine=re.compile('^((?:\d+\.)+)\s+(.*)$')
 		self.reLeadNumberLineWithDotChopped=re.compile('^((?:\d+\.)+\d+)\s+(.*)$')
@@ -16,8 +16,8 @@ class LineReader:
 		self.reLineEndingDepth1=re.compile('^(.*?)'+amPattern)
 		self.reLineEndingDepth2=re.compile('^(.*?)'+arPattern+amPattern)
 		self.reLineEndingDepth3=re.compile('^(.*?)'+arPattern+'\s(\d{3})'+amPattern)
-		self.reTotalLine=re.compile('^(Итого):'+amPattern)
-		self.reNewPageLine=re.compile('^\d+\s+Приложение')
+		self.reTotalLine=re.compile('^\s?(Итого):'+amPattern)
+		self.reNewPageLine=re.compile('^\d+\s+Приложение|^Показатели расходов бюджета Санкт-Петербурга за')
 
 	# rows:
 	#	dictionary with row data
