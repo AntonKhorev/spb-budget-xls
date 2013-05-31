@@ -21,7 +21,7 @@ class Entry:
 		self.article=row.get('article')
 		self.section=row.get('section')
 		self.type=row.get('type')
-		self.amounts={i:amount for i,amount in enumerate(row['amounts'])}
+		self.amounts=row['amounts']
 
 	def isVisible(self):
 		return self.iRow>=0
@@ -69,19 +69,21 @@ class Entry:
 		else:
 			self.rowSpan=(rows[0][0],rows[-1][1])
 
-	def check(self):
+	def check(self,allowSlack):
 		if not self.children:
 			return
-		sumAmounts={}
+		sumAmounts=[0]*len(self.amounts)
 		for child in self.children.values():
-			for k,v in child.amounts.items():
-				if k not in sumAmounts:
-					sumAmounts[k]=0
+			for k,v in enumerate(child.amounts):
 				sumAmounts[k]+=v
+		if allowSlack:
+			# slack in last column
+			self.slack=self.amounts[-1]-sumAmounts[-1]
+			sumAmounts[-1]=self.amounts[-1]
 		if sumAmounts!=self.amounts:
 			raise Exception('sum(children)!=amount: '+str(sumAmounts)+' != '+str(self.amounts))
 		for n,entry in sorted(self.children.items()):
-			entry.check()
+			entry.check(allowSlack)
 
 	def write(self,writer,depth=0):
 		def formatAmount(amount):
@@ -91,7 +93,7 @@ class Entry:
 		if self.isVisible():
 			if writer.useSums and self.children:
 				ams=[]
-				for i,(k,v) in enumerate(sorted(self.amounts.items())):
+				for i,v in enumerate(self.amounts):
 					# column to sum from
 					if writer.stairs:
 						columnLetter=chr(ord('F')+depth+1+i*(writer.depthLimit+1))
@@ -104,12 +106,20 @@ class Entry:
 						))
 					else:
 						ams.append('=SUM('+columnLetter+writer.strrow(self.rowSpan[0]+1)+':'+columnLetter+writer.strrow(self.rowSpan[1]-1)+')')
+					if i==len(self.amounts)-1 and hasattr(self,'slack'):
+						if writer.stairs:
+							slackColumnLetter=chr(ord('F')+(i+1)*(writer.depthLimit+1))
+						else:
+							slackColumnLetter=chr(ord('F')+i+1)
+						ams[-1]+='+'+slackColumnLetter+writer.strrow(self.iRow)
 			else:
-				ams=[formatAmount(v) for k,v in sorted(self.amounts.items())]
+				ams=[formatAmount(v) for v in self.amounts]
 			if writer.stairs:
 				amList=list(itertools.chain.from_iterable([None]*depth+[am]+[None]*(writer.depthLimit-depth) for am in ams))
 			else:
 				amList=ams
+			if hasattr(self,'slack'):
+				amList+=[formatAmount(self.slack)]
 			writer.writerow([self.number,self.name,self.section,self.article,self.type]+amList)
 
 		for n,entry in sorted(self.children.items()):
@@ -119,8 +129,9 @@ class Entry:
 		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
 
 class Spreadsheet:
-	def __init__(self,filename,nCols,nPercentageCols=0):
+	def __init__(self,filename,nCols,nPercentageCols=0,allowSlack=False):
 		self.nCols=nCols
+		self.allowSlack=allowSlack
 		self.amountHeader=['Сумма (тыс. руб.)']*self.nCols
 		self.documentTitle='Приложение к Закону Санкт-Петербурга о бюджете'
 		self.tableTitle='Ведомственная структура расходов бюджета Санкт-Петербурга'
@@ -173,8 +184,8 @@ class Spreadsheet:
 		# make rowspans
 		self.root.scanRows()
 
-		# check amounts
-		self.root.check()
+		# check amounts / calculate slack
+		self.root.check(self.allowSlack)
 		for i,amountText in enumerate(amountTexts):
 			self.root.checkAmount(reader.parseAmount(amountText),i)
 
@@ -185,6 +196,9 @@ class Spreadsheet:
 		]+(
 			list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for v in self.amountHeader)) if stairs
 			else self.amountHeader
+		)+(
+			['Поправка на округление'] if self.allowSlack
+			else []
 		)
 
 	def writeCsv(self,filename,stairs,useSums):

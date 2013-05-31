@@ -82,10 +82,11 @@ class Document:
 					return False
 		return True
 	def writeCsvsAndXlss(self):
-		header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
 		if self.law.version=='i':
-			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,2)
+			header=['Утверждено по бюджету','План с учетом изменений на отчетный период','Исполнено с начала года']
+			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,2,True)
 		else:
+			header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
 			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols)
 		sheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
 		sheet.setTableTitle(self.title)
