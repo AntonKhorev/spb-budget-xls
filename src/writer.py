@@ -131,7 +131,9 @@ span {
 		w("<table>\n")
 		w("<thead>\n")
 		w("<tr><th rowspan='2'>год</th><th rowspan='2'>закон</th><th rowspan='2'>исходные документы в pdf</th><th rowspan='2'>приложение</th><th colspan='3'>данные в машиночитаемом виде"+refData.ref+"</th>")
-		w("<tr><th>csv"+refCsv.ref+" без формул</th><th>csv"+refCsv.ref+" с формулами</th><th>xls</th></tr>\n")
+		w("<tr><th>csv"+refCsv.ref+" без формул</th><th>csv"+refCsv.ref+" с формулами"+refs.makeRef(
+			"Для правильной работы формул файл необходимо читать с первой строки."
+		).ref+"</th><th>xls</th></tr>\n")
 		w("</thead>\n")
 		for year,laws in sorted(yearLaws.items()):
 			w("<tbody id='"+e(year)+"'>\n");
