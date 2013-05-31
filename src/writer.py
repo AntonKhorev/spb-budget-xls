@@ -136,14 +136,14 @@ span {
 		for year,laws in sorted(yearLaws.items()):
 			w("<tbody id='"+e(year)+"'>\n");
 			w("<tr>")
-			wtdrowspan(len(laws)*2,e(year))
+			wtdrowspan(sum(len(law.documents) for law in laws),e(year))
 			wn=nonFirstWrite()
 			for law in laws:
 				wn("<tr>")
-				wtdrowspan(2,"<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
-				wtdrowspan(2,a(law.viewUrl,"страница")+" "+a(law.downloadUrl,"архив")+(" "+a(law.zipPath,"копия") if zipCopy else ""))
+				wtdrowspan(len(law.documents),"<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
+				wtdrowspan(len(law.documents),a(law.viewUrl,"страница")+" "+a(law.downloadUrl,"архив")+(" "+a(law.zipPath,"копия") if zipCopy else ""))
 				wn2=nonFirstWrite()
-				for doc in law.documents: # assumes 2 documents
+				for doc in law.documents:
 					wn2("<tr>")
 					w("<td><span title='"+"Приложение "+e(doc.appendixNumber)+". "+e(doc.title)+"'>")
 					if len(doc.forYears)==1:
