@@ -78,8 +78,10 @@ class Entry:
 				sumAmounts[k]+=v
 		if allowSlack:
 			# slack in last column
-			self.slack=self.amounts[-1]-sumAmounts[-1]
-			sumAmounts[-1]=self.amounts[-1]
+			slack=self.amounts[-1]-sumAmounts[-1]
+			if slack:
+				self.slack=slack
+				sumAmounts[-1]=self.amounts[-1]
 		if sumAmounts!=self.amounts:
 			raise Exception('sum(children)!=amount: '+str(sumAmounts)+' != '+str(self.amounts))
 		for n,entry in sorted(self.children.items()):
