@@ -11,6 +11,8 @@
 #	в первой редакции - приложение 3
 #	в изменениях - приложение 2 к изменению приложения 3
 
+# urlы можно без www писать
+
 data={
 	'rootUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/',
 	'pdfboxJar':'pdfbox-app-1.8.1.jar',
@@ -263,6 +265,28 @@ data={
 					'zipContents':'pr08-1izm_2013-15.pdf',
 					'forYear':(2014,2015),
 					'total':('-869 518.5','-973 581.1'),
+					'delta':True, # в формате +/-
+				}
+			],
+		},{
+			'code':'2013.1.z',
+			'title':'О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2013 год и на плановый период 2014 и 2015 годов»',
+			'date':'22.05.2013',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=613@cf_npa_bud',
+			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2013/1izm/1izm-bd-2013-15.zip',
+			'documents':[
+				{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2013 год',
+					'appendixNumber':2,
+					'zipContents':'pr02-1izm-2013-15.zip/pr02-1izm-2013-15.pdf',
+					'forYear':2013,
+					'total':'426 643 042.8',
+				},{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2014 и 2015 годов',
+					'appendixNumber':9,
+					'zipContents':'pr09-1izm-2013-15.pdf',
+					'forYear':(2014,2015),
+					'total':('-2 969 518.5','-973 581.1'),
 					'delta':True, # в формате +/-
 				}
 			],
