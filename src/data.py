@@ -18,13 +18,86 @@ data={
 	'rootUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/',
 	'pdfboxJar':'pdfbox-app-1.8.1.jar',
 	'laws':[
-		# TODO 2010 and earlier
-		# {
-			# 'code':'2010.0.p',
-			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=308@cf_npa_bud',
-			# 'dowloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2010/project/pr2010-2012.zip',
-		# },
+		# TODO 2008 and earlier, laws w/o dl link
 		{
+			'code':'2009.0.p',
+			'title':'О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=286@cf_npa_bud',
+			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2009/project/pr2009-2011.zip',
+		},{
+			'code':'2009.0.z',
+			'title':'О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов',
+			'date':'19.11.2008',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=290@cf_npa_bud',
+			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2009/full/zakon2009.zip',
+		},{
+			# 'code':'2009.1.p',
+			# 'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
+			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=293@cf_npa_bud',
+			# 'dowloadUrl':'', # no download url...
+		# },{
+                	'code':'2009.1.z',
+			'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
+			'date':'01.04.2009',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=296@cf_npa_bud',
+			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2009/izm1/zakon-2009-2022-izm1.zip',
+		},{
+                	# 'code':'2009.2.p',
+			# 'title':'О внесении изменения в Закон Санкт-Петербурга', # TODO fix title
+			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=300@cf_npa_bud',
+			# в проекте нет изменений данных, а в законе - уже есть
+		# },{
+			# 'code':'2009.2.z',
+			# 'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
+			# 'date':'24.06.2009',
+			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=302@cf_npa_bud',
+			# 'downloadUrl':'', # no download url
+		# },{
+			# 'code':'2009.3.p',
+			# 'title':'О внесении изменения в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
+			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=307@cf_npa_bud',
+			# 'downloadUrl':'', # no download url
+		# },{
+			# 'code':'2009.3.z',
+			# 'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
+			# 'date':'28.10.2009',
+			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=327@cf_npa_bud',
+			# 'downloadUrl':'', # no download url
+		# },{
+                	# 'code':'2009.i.z',
+			# 'title':'Об исполнении бюджета Санкт-Петербурга за 2009 год',
+			# 'date':'23.06.2010',
+			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=382@cf_npa_bud',
+			# 'downloadUrl':'', # no download url
+		# },{
+			'code':'2010.0.p',
+			'title':'О бюджете Санкт-Петербурга на 2010 год и на плановый период 2011 и 2012 годов',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=308@cf_npa_bud',
+			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2010/project/pr2010-2012.zip',
+		},{
+			'code':'2010.0.z',
+			'title':'О бюджете Санкт-Петербурга на 2010 год и на плановый период 2011 и 2012 годов',
+			'date':'25.11.2009',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=332@cf_npa_bud',
+			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2010/full/bd_spb_2010-12.zip',
+		},{
+			'code':'2010.1.p',
+			'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2010 год и на плановый период 2011 и 2012 годов»',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=372@cf_npa_bud',
+			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2010/pr_izm1/pr_izm1.zip',
+		},{
+			'code':'2010.1.z',
+			'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2010 год и на плановый период 2011 и 2012 годов»',
+			'date':'26.05.2010',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=378@cf_npa_bud',
+			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2010/1izm/zakon_pr-2010-2012-1izm.zip',
+		},{
+			# 'code':'2010.i.z',
+			# 'title':'Об исполнении бюджета Санкт-Петербурга за 2010 год',
+			# 'date':'29.06.2011',
+			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=498@cf_npa_bud',
+			# 'downloadUrl':'', # no download url...
+		# },{
 			'code':'2011.0.p',
 			'title':'О бюджете Санкт-Петербурга на 2011 год и на плановый период 2012 и 2013 годов',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=413@cf_npa_bud',
