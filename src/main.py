@@ -7,6 +7,7 @@ import os.path
 import io
 import zipfile
 import subprocess
+import urllib.request
 
 import data,spreadsheet,writer
 
@@ -138,6 +139,11 @@ class Law:
 		return self.environment.rootPath+'/'+self.zipPath
 	def hasZip(self):
 		return os.path.isfile(self.zipFilename)
+	def downloadZip(self):
+		os.makedirs(os.path.dirname(self.zipFilename),exist_ok=True)
+		print('downloading',self.downloadUrl)
+		with urllib.request.urlopen(self.downloadUrl) as dl, open(self.zipFilename,'wb') as zipFile:
+			zipFile.write(dl.read())
 
 class Environment:
 	def __init__(self,data):
@@ -158,7 +164,7 @@ if __name__=='__main__':
 	env=Environment(data.data)
 	for law in env.laws:
 		if not law.hasZip():
-			raise Exception(law.zipFilename+' has to be downloaded')
+			law.downloadZip()
 		for document in law.documents:
 			try:
 				if not document.hasPdf():
