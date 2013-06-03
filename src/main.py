@@ -110,7 +110,7 @@ class Law:
 		self.year,self.version,pz=self.code.split('.')
 		if self.version=='0':
 			self.description='первоначальный'
-			if 'title' not in data:
+			if 'title' not in data: # not reliable
 				data['title']='О бюджете Санкт-Петербурга на '+self.year+' год и на плановый период '+str(int(self.year)+1)+' и '+str(int(self.year)+2)+' годов'
 		elif self.version in ('1','2','3'):
 			self.description=self.version+'-я корректировка'
