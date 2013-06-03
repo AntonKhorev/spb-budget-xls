@@ -17,10 +17,14 @@ data={
 	'rootUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/',
 	'pdfboxJar':'pdfbox-app-1.8.1.jar',
 	'laws':[
-		# TODO 2010 and earlier + исполнение за 2011
+		# TODO 2010 and earlier
+		# {
+			# 'code':'2010.0.p',
+			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=308@cf_npa_bud',
+			# 'dowloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2010/project/pr2010-2012.zip',
+		# },
 		{
 			'code':'2011.0.p',
-			'title':'О бюджете Санкт-Петербурга на 2011 год и на плановый период 2012 и 2013 годов',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=413@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2011/project/pr_2011-2013.zip',
 			'documents':[
@@ -40,7 +44,6 @@ data={
 			],
 		},{
 			'code':'2011.0.z',
-			'title':'О бюджете Санкт-Петербурга на 2011 год и на плановый период 2012 и 2013 годов',
 			'date':'17.11.2010',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=460@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2011/full/bd2011-2013.zip',
@@ -119,7 +122,6 @@ data={
 			],
 		},{
 			'code':'2012.0.p',
-			'title':'О бюджете Санкт-Петербурга на 2012 год и на плановый период 2013 и 2014 годов',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=503@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2012/project/pr_2012-2014.zip',
 			'documents':[
@@ -139,7 +141,6 @@ data={
 			],
 		},{
 			'code':'2012.0.z',
-			'title':'О бюджете Санкт-Петербурга на 2012 год и на плановый период 2013 и 2014 годов',
 			'date':'26.10.2011',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=506@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2012/full/bd2012-14.zip',
@@ -204,7 +205,6 @@ data={
 			],
 		},{
 			'code':'2013.0.p',
-			'title':'О бюджете Санкт-Петербурга на 2013 год и на плановый период 2014 и 2015 годов',
 			'date':'02.10.2012',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=569@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2013/project/pr-bd-2013-15.zip',
@@ -225,7 +225,6 @@ data={
 			],
 		},{
 			'code':'2013.0.z',
-			'title':'О бюджете Санкт-Петербурга на 2013 год и на плановый период 2014 и 2015 годов',
 			'date':'28.11.2012',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=586@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2013/full/bd2013-15.zip',
