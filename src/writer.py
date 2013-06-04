@@ -143,15 +143,17 @@ span {
 		for year,laws in sorted(yearLaws.items()):
 			w("<tbody id='"+e(year)+"'>\n");
 			w("<tr>")
-			wtdrowspan(sum(len(law.documents) for law in laws),e(year))
+			wtdrowspan(sum(max(len(law.documents),1) for law in laws),e(year))
 			wn=nonFirstWrite()
 			for law in laws:
 				wn("<tr>")
-				wtdrowspan(len(law.documents),"<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
-				wtdrowspan(len(law.documents),a(law.viewUrl,"страница")+
+				wtdrowspan(max(len(law.documents),1),"<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
+				wtdrowspan(max(len(law.documents),1),a(law.viewUrl,"страница")+
 					(" "+a(law.downloadUrl,"архив") if law.isSingleDownload else "")+
 					(" "+a(law.zipPath,"копия") if law.isSingleZip and zipCopy else "")
 				)
+				if not law.documents:
+					w("<td colspan='4'>не содержит ведомственной структуры расходов</td>\n")
 				wn2=nonFirstWrite()
 				for doc in law.documents:
 					wn2("<tr>")

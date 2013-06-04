@@ -18,7 +18,7 @@ data={
 	'rootUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/',
 	'pdfboxJar':'pdfbox-app-1.8.1.jar',
 	'laws':[
-		# TODO 2008 and earlier, laws w/o dl link
+		# TODO 2008 and earlier
 		{
 			'code':'2009.0.p',
 			'title':'О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов',
@@ -87,11 +87,12 @@ data={
 				}
 			],
 		},{
-                	# 'code':'2009.2.p',
-			# 'title':'О внесении изменения в Закон Санкт-Петербурга', # TODO fix title
-			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=300@cf_npa_bud',
+                	'code':'2009.2.p',
+			'title':'О внесении изменения в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=300@cf_npa_bud',
+			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm2/zakon2009-2011-pr_izm2.pdf',
 			# в проекте нет изменений данных, а в законе - уже есть
-		# },{
+		},{
 			# 'code':'2009.2.z',
 			# 'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
 			# 'date':'24.06.2009',
