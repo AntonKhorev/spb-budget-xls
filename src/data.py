@@ -24,12 +24,42 @@ data={
 			'title':'О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=286@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2009/project/pr2009-2011.zip',
+			'documents':[
+				{ # 24-сен-08
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2009 год',
+					'appendixNumber':3,
+					'zipContents':'pr03_2009-2011.zip/pr03_2009-2011.pdf',
+					'forYear':2009,
+					'total':'423 001 779.4',
+				},{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2010 и 2011 годов',
+					'appendixNumber':4,
+					'zipContents':'pr04_2009-2011.zip/pr04_2009-2011.pdf',
+					'forYear':(2010,2011),
+					'total':('481 414 762.2','541 554 577.2'),
+				}
+			],
 		},{
 			'code':'2009.0.z',
 			'title':'О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов',
 			'date':'19.11.2008',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=290@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2009/full/zakon2009.zip',
+			'documents':[
+				{ # 27-ноя-2008
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2009 год',
+					'appendixNumber':3,
+					'zipContents':'pr3_2009-2011.zip/pr3_2009-2011.pdf',
+					'forYear':2009,
+					'total':'397 178 072.2',
+				},{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2010 и 2011 годов',
+					'appendixNumber':4,
+					'zipContents':'pr4_2009-2011.zip/pr4_2009-2011.pdf',
+					'forYear':(2010,2011),
+					'total':('454 246 096.5','522 185 185.9'),
+				}
+			],
 		},{
 			# 'code':'2009.1.p',
 			# 'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
@@ -41,6 +71,21 @@ data={
 			'date':'01.04.2009',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=296@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2009/izm1/zakon-2009-2022-izm1.zip',
+			'documents':[
+				{ # 02-апр-2009
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2009 год',
+					'appendixNumber':3,
+					'zipContents':'pr3-2009-2011-1izm.zip/pr3-2009-2011-1izm.pdf',
+					'forYear':2009,
+					'total':'318 799 024.3',
+				},{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2010 и 2011 годов',
+					'appendixNumber':4,
+					'zipContents':'pr4-2009-2011-1izm.zip/pr4-2009-2011-1izm.pdf',
+					'forYear':(2010,2011),
+					'total':('364 369 187.6','430 894 568.1'),
+				}
+			],
 		},{
                 	# 'code':'2009.2.p',
 			# 'title':'О внесении изменения в Закон Санкт-Петербурга', # TODO fix title
@@ -74,23 +119,83 @@ data={
 			'title':'О бюджете Санкт-Петербурга на 2010 год и на плановый период 2011 и 2012 годов',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=308@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2010/project/pr2010-2012.zip',
+			'documents':[
+				{ # 12-окт-2009
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2010 год',
+					'appendixNumber':3,
+					'zipContents':'pr03_2010-2012.pdf',
+					'forYear':2010,
+					'total':'324 279 318.4',
+				},{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2011 и 2012 годов',
+					'appendixNumber':4,
+					'zipContents':'pr04_2010-2012.pdf',
+					'forYear':(2011,2012),
+					'total':('343 194 788.3','380 631 227.2'),
+				}
+			],
 		},{
 			'code':'2010.0.z',
 			'title':'О бюджете Санкт-Петербурга на 2010 год и на плановый период 2011 и 2012 годов',
 			'date':'25.11.2009',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=332@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2010/full/bd_spb_2010-12.zip',
+			'documents':[
+				{ # 02-дек-2009
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2010 год',
+					'appendixNumber':3,
+					'zipContents':'pr3_2010-2012.zip/pr3_2010-2012.pdf',
+					'forYear':2010,
+					'total':'336 701 583.2',
+				},{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2011 и 2012 годов',
+					'appendixNumber':4,
+					'zipContents':'pr4_2010-2012.zip/pr4_2010-2012.pdf',
+					'forYear':(2011,2012),
+					'total':('341 359 895.7','371 160 398.8'),
+				}
+			],
 		},{
 			'code':'2010.1.p',
 			'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2010 год и на плановый период 2011 и 2012 годов»',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=372@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2010/pr_izm1/pr_izm1.zip',
+			'documents':[
+				{ # 09-апр-2010
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2010 год',
+					'appendixNumber':3,
+					'zipContents':'pr03-2010-12-pr_izm1.zip/pr03-2010-12-pr_izm1.pdf',
+					'forYear':2010,
+					'total':'355 707 925,7',
+				},{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2011 и 2012 годов',
+					'appendixNumber':4,
+					'zipContents':'pr04-2010-12-pr_izm1.zip/pr04-2010-12-pr_izm1.pdf',
+					'forYear':(2011,2012),
+					'total':('341 152 263,9','370 932 954,9'),
+				}
+			],
 		},{
 			'code':'2010.1.z',
 			'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2010 год и на плановый период 2011 и 2012 годов»',
 			'date':'26.05.2010',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=378@cf_npa_bud',
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2010/1izm/zakon_pr-2010-2012-1izm.zip',
+			'documents':[
+				{ # 04-июн-2010
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2010 год',
+					'appendixNumber':3,
+					'zipContents':'pr3-2010-2012-1izm.zip/pr3-2010-2012-1izm.pdf',
+					'forYear':2010,
+					'total':'378 816 206.7',
+				},{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2011 и 2012 годов',
+					'appendixNumber':4,
+					'zipContents':'pr4-2010-2012-1izm.zip/pr4-2010-2012-1izm.pdf',
+					'forYear':(2011,2012),
+					'total':('341 152 263.9','370 932 954.9'),
+				}
+			],
 		},{
 			# 'code':'2010.i.z',
 			# 'title':'Об исполнении бюджета Санкт-Петербурга за 2010 год',
