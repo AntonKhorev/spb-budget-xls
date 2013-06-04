@@ -88,7 +88,7 @@ class Document:
 		return True
 	def writeCsvsAndXlss(self):
 		if self.law.version=='i':
-			header=['Утверждено по бюджету','План с учетом изменений на отчетный период','Исполнено с начала года']
+			header=['Утверждено по бюджету (тыс. руб.)','План с учетом изменений на отчетный период (тыс. руб.)','Исполнено с начала года (тыс. руб.)']
 			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,2,True)
 		else:
 			header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]

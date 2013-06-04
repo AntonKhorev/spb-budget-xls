@@ -199,7 +199,7 @@ class Spreadsheet:
 			list(itertools.chain.from_iterable([v]+[None]*self.depthLimit for v in self.amountHeader)) if stairs
 			else self.amountHeader
 		)+(
-			['Поправка на округление'] if self.allowSlack
+			['Поправка на округление (тыс. руб.)'] if self.allowSlack
 			else []
 		)
 
