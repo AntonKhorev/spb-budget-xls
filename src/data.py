@@ -197,12 +197,22 @@ data={
 				}
 			],
 		},{
-			# 'code':'2010.i.z',
-			# 'title':'Об исполнении бюджета Санкт-Петербурга за 2010 год',
-			# 'date':'29.06.2011',
-			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=498@cf_npa_bud',
-			# 'downloadUrl':'', # no download url...
-		# },{
+			'code':'2010.i.z',
+			'title':'Об исполнении бюджета Санкт-Петербурга за 2010 год',
+			'date':'29.06.2011',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=498@cf_npa_bud',
+			'downloadUrl':[
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril1-1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril1-2.zip',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril1-3.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril2.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril3.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril4.zip',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril5.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril6.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril7.pdf',
+			],
+		},{
 			'code':'2011.0.p',
 			'title':'О бюджете Санкт-Петербурга на 2011 год и на плановый период 2012 и 2013 годов',
 			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=413@cf_npa_bud',

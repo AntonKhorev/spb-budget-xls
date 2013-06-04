@@ -106,6 +106,8 @@ class Law:
 	def __init__(self,environment,data):
 		if 'documents' not in data:
 			data['documents']=[]
+		if isinstance(data['downloadUrl'],str):
+			data['downloadUrl']=[data['downloadUrl']]
 		self.environment=environment
 		self.code=data['code']
 		self.year,self.version,pz=self.code.split('.')
@@ -126,24 +128,46 @@ class Law:
 		else:
 			raise Exception('unknown law pz')
 		self.viewUrl=data['viewUrl']
-		self.downloadUrl=data['downloadUrl']
-		if not self.downloadUrl.startswith(self.environment.rootUrl):
+		self.downloadUrls=data['downloadUrl']
+		if not all(du.startswith(self.environment.rootUrl) for du in self.downloadUrls):
 			raise Exception('invalid download url')
 		self.title=data['title']
 		self.documents=[Document(self,documentData) for documentData in data['documents']]
 	@property
+	def isSingleDownload(self):
+		return len(self.downloadUrls)==1
+	@property
+	def isSingleZip(self):
+		return self.isSingleDownload and self.downloadUrls[0][-4:]=='.zip'
+	@property
+	def downloadUrl(self):
+		if not self.isSingleDownload:
+			raise Exception('law has no single download url')
+		return self.downloadUrls[0]
+	@property
 	def zipPath(self):
+		if not self.isSingleZip:
+			raise Exception('law has no single zip')
 		return 'zip/'+self.downloadUrl[len(self.environment.rootUrl):]
 	@property
+	def filePaths(self):
+		return ('zip/'+du[len(self.environment.rootUrl):] for du in self.downloadUrls)
+	@property
 	def zipFilename(self):
+		if not self.isSingleZip:
+			raise Exception('law has no single zip')
 		return self.environment.rootPath+'/'+self.zipPath
-	def hasZip(self):
-		return os.path.isfile(self.zipFilename)
-	def downloadZip(self):
-		os.makedirs(os.path.dirname(self.zipFilename),exist_ok=True)
-		print('downloading',self.downloadUrl)
-		with urllib.request.urlopen(self.downloadUrl) as dl, open(self.zipFilename,'wb') as zipFile:
-			zipFile.write(dl.read())
+	@property
+	def filenames(self):
+		return (self.environment.rootPath+'/'+fp for fp in self.filePaths)
+	def hasFiles(self):
+		return all(os.path.isfile(filename) for filename in self.filenames)
+	def downloadFiles(self):
+		for filename,downloadUrl in zip(self.filenames,self.downloadUrls):
+			os.makedirs(os.path.dirname(filename),exist_ok=True)
+			print('downloading',downloadUrl)
+			with urllib.request.urlopen(downloadUrl) as dl, open(filename,'wb') as file:
+				file.write(dl.read())
 
 class Environment:
 	def __init__(self,data):
@@ -163,8 +187,8 @@ class Environment:
 if __name__=='__main__':
 	env=Environment(data.data)
 	for law in env.laws:
-		if not law.hasZip():
-			law.downloadZip()
+		if not law.hasFiles():
+			law.downloadFiles()
 		for document in law.documents:
 			try:
 				if not document.hasPdf():
