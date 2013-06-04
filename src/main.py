@@ -26,6 +26,10 @@ class Document:
 		self.law=law
 		self.forYears=data['forYear']
 		self.code=self.law.code+'-'+','.join(self.forYears)
+		if 'zipFilename' in data:
+			self.zipFilename=self.law.environment.rootPath+'/zip/'+data['zipFilename']
+		else:
+			self.zipFilename=law.zipFilename
 		self.pdfFilename=self.law.environment.rootPath+'/pdf/'+self.code+'.pdf'
 		self.txtFilename=self.law.environment.rootPath+'/txt/'+self.code+'.txt'
 		self.zipContents=data['zipContents']
@@ -47,7 +51,7 @@ class Document:
 		bytes=None
 		for s in self.zipContents.split('/'):
 			if bytes is None:
-				zipFile=zipfile.ZipFile(law.zipFilename)
+				zipFile=zipfile.ZipFile(self.zipFilename)
 			else:
 				zipFile=zipfile.ZipFile(io.BytesIO(bytes))
 			bytes=zipFile.read(s)

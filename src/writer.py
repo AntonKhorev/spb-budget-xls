@@ -146,7 +146,10 @@ span {
 			for law in laws:
 				wn("<tr>")
 				wtdrowspan(len(law.documents),"<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
-				wtdrowspan(len(law.documents),a(law.viewUrl,"страница")+" "+a(law.downloadUrl,"архив")+(" "+a(law.zipPath,"копия") if zipCopy else ""))
+				wtdrowspan(len(law.documents),a(law.viewUrl,"страница")+
+					(" "+a(law.downloadUrl,"архив") if law.isSingleDownload else "")+
+					(" "+a(law.zipPath,"копия") if law.isSingleZip and zipCopy else "")
+				)
 				wn2=nonFirstWrite()
 				for doc in law.documents:
 					wn2("<tr>")

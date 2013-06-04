@@ -212,6 +212,16 @@ data={
 				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril6.pdf',
 				'http://www.fincom.spb.ru/files/cf/npd/budget/2010/ispolnenie/isp2010-pril7.pdf',
 			],
+			'documents':[
+				{
+					'title':'Показатели расходов бюджета Санкт-Петербурга за 2010 год по ведомственной структуре расходов бюджета Санкт-Петербурга',
+					'appendixNumber':4,
+					'zipFilename':'2010/ispolnenie/isp2010-pril4.zip',
+					'zipContents':'isp2010-pril4.pdf',
+					'forYear':2010,
+					'total':('378 816 206.7','386 042 260.7','358 567 281.7'),
+				}
+			],
 		},{
 			'code':'2011.0.p',
 			'title':'О бюджете Санкт-Петербурга на 2011 год и на плановый период 2012 и 2013 годов',
