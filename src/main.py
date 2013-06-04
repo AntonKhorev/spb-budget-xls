@@ -4,8 +4,7 @@
 
 import sys
 import os.path
-import io
-import zipfile
+import io,shutil,zipfile
 import subprocess
 import urllib.request
 
@@ -26,13 +25,16 @@ class Document:
 		self.law=law
 		self.forYears=data['forYear']
 		self.code=self.law.code+'-'+','.join(self.forYears)
-		if 'zipFilename' in data:
-			self.zipFilename=self.law.environment.rootPath+'/zip/'+data['zipFilename']
+		if 'pdfFilename' in data:
+			self.downloadedPdfFilename=self.law.environment.rootPath+'/zip/'+data['pdfFilename']
 		else:
-			self.zipFilename=law.zipFilename
+			if 'zipFilename' in data:
+				self.zipFilename=self.law.environment.rootPath+'/zip/'+data['zipFilename']
+			else:
+				self.zipFilename=law.zipFilename
+			self.zipContents=data['zipContents']
 		self.pdfFilename=self.law.environment.rootPath+'/pdf/'+self.code+'.pdf'
 		self.txtFilename=self.law.environment.rootPath+'/txt/'+self.code+'.txt'
-		self.zipContents=data['zipContents']
 		self.totals=data['total']
 		if self.law.version=='i':
 			if len(self.forYears)!=1 or len(self.totals)!=3:
@@ -47,6 +49,10 @@ class Document:
 	def hasPdf(self):
 		return os.path.isfile(self.pdfFilename)
 	def writePdf(self):
+		# just copy the file if it's not zipped
+		if hasattr(self,'downloadedPdfFilename'):
+			shutil.copyfile(self.downloadedPdfFilename,self.pdfFilename)
+			return
 		# attempt to read before opening pdfFile - otherwise might get zero-length file on error
 		bytes=None
 		for s in self.zipContents.split('/'):
@@ -133,8 +139,9 @@ class Law:
 			raise Exception('unknown law pz')
 		self.viewUrl=data['viewUrl']
 		self.downloadUrls=data['downloadUrl']
-		if not all(du.startswith(self.environment.rootUrl) for du in self.downloadUrls):
-			raise Exception('invalid download url')
+		for du in self.downloadUrls:
+			if not du.startswith(self.environment.rootUrl):
+				raise Exception('invalid download url '+du)
 		self.title=data['title']
 		self.documents=[Document(self,documentData) for documentData in data['documents']]
 	@property

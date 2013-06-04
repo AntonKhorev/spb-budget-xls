@@ -61,11 +61,43 @@ data={
 				}
 			],
 		},{
-			# 'code':'2009.1.p',
-			# 'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
-			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=293@cf_npa_bud',
-			# 'dowloadUrl':'', # no download url...
-		# },{
+			'code':'2009.1.p',
+			'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=293@cf_npa_bud',
+			'downloadUrl':[
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/zakon2009-2011-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr01-2009-11-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr01-1-2009-11-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr02-2009-11-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr02-1-2009-11-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr03-2009-11-pr_izm1.zip',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr04-2009-11-pr_izm1.zip',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr05-2009-11-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr06-2009-11-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr07-2009-11-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr08-2009-11-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr09-2009-11-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr10-2009-11-pr_izm1.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm1/pr11-2009-11-pr_izm1.pdf',
+			],
+			'documents':[
+				{ # 29-янв-2009
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2009 год',
+					'appendixNumber':3,
+					'zipFilename':'2009/pr_izm1/pr03-2009-11-pr_izm1.zip',
+					'zipContents':'pr03-2009-11-pr_izm1.pdf',
+					'forYear':2009,
+					'total':'306 728 126,7',
+				},{
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2010 и 2011 годов',
+					'appendixNumber':4,
+					'zipFilename':'2009/pr_izm1/pr04-2009-11-pr_izm1.zip',
+					'zipContents':'pr04-2009-11-pr_izm1.pdf',
+					'forYear':(2010,2011),
+					'total':('364 246 096,5','432 185 185,9'),
+				}
+			],
+		},{
                 	'code':'2009.1.z',
 			'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
 			'date':'01.04.2009',
@@ -93,12 +125,31 @@ data={
 			'downloadUrl':'http://www.fincom.spb.ru/files/cf/npd/budget/2009/pr_izm2/zakon2009-2011-pr_izm2.pdf',
 			# в проекте нет изменений данных, а в законе - уже есть
 		},{
-			# 'code':'2009.2.z',
-			# 'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
-			# 'date':'24.06.2009',
-			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=302@cf_npa_bud',
-			# 'downloadUrl':'', # no download url
-		# },{
+			'code':'2009.2.z',
+			'title':'О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
+			'date':'24.06.2009',
+			'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=302@cf_npa_bud',
+			'downloadUrl':[
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/izm2/zakon-2009-2022-izm2.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/izm2/pr01-2009-2011-2izm.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/izm2/pr01-1-2009-2011-2izm.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/izm2/pr02-2009-2011-2izm.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/izm2/pr03-2009-2011-2izm.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/izm2/pr04-2009-2011-2izm.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/izm2/pr05-2009-2011-2izm.pdf',
+				'http://www.fincom.spb.ru/files/cf/npd/budget/2009/izm2/pr06-2009-2011-2izm.pdf',
+			],
+			'documents':[
+				{ # 24-июн-2009
+					'title':'Ведомственная структура расходов бюджета Санкт-Петербурга на 2009 год',
+					'appendixNumber':2,
+					'pdfFilename':'2009/izm2/pr02-2009-2011-2izm.pdf',
+					'forYear':2009,
+					'total':'+4 730 444.7',
+					'delta':True,
+				}
+			],
+		},{
 			# 'code':'2009.3.p',
 			# 'title':'О внесении изменения в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2009 год и на плановый период 2010 и 2011 годов»',
 			# 'viewUrl':'http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=307@cf_npa_bud',
