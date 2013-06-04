@@ -178,7 +178,7 @@ span {
 """
 		)
 		for ref in refs:
-			w("<li>"+ref.body+"</li>")
+			w("<li>"+ref.body+"</li>\n")
 		w(
 """</ol>
 </body>
