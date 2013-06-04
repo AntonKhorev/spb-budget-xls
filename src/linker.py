@@ -2,7 +2,7 @@ import glob
 import html.parser,urllib.parse
 import re
 
-import data,main
+import main
 
 # reads *.htm from hosting and extracts links to files
 class Linker:
@@ -30,7 +30,7 @@ class Linker:
 		return self.fileLinks[path]
 
 if __name__=='__main__':
-	env=main.Environment(data.data)
+	env=main.Environment(main.loadData())
 	linker=Linker(env)
 	if not env.hasHtml():
 		env.writeHtml(False,linker)

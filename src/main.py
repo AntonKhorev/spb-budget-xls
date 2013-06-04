@@ -7,8 +7,9 @@ import os.path
 import io,shutil,zipfile
 import subprocess
 import urllib.request
+import yaml
 
-import data,spreadsheet,writer
+import spreadsheet,writer
 
 # приложения, которые парсим
 class Document:
@@ -195,8 +196,14 @@ class Environment:
 		hw=writer.HtmlWriter(self)
 		hw.write(self.htmlFilename,zipCopy,linker)
 
+def loadData():
+	return yaml.load(open(
+		os.path.dirname(os.path.realpath(__file__))+'/data.yml',
+		encoding='utf-8'
+	))
+
 if __name__=='__main__':
-	env=Environment(data.data)
+	env=Environment(loadData())
 	for law in env.laws:
 		if not law.hasFiles():
 			law.downloadFiles()
