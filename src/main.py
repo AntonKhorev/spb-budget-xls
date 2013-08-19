@@ -47,6 +47,10 @@ class Document:
 		self.delta=data['delta']
 		self.appendixNumber=data['appendixNumber']
 		self.title=data['title']
+		if 'quirks' in data:
+			self.quirks=set(data['quirks'])
+		else:
+			self.quirks=set()
 	def hasPdf(self):
 		return os.path.isfile(self.pdfFilename)
 	def writePdf(self):
@@ -96,10 +100,10 @@ class Document:
 	def writeCsvsAndXlss(self):
 		if self.law.version=='i':
 			header=['Утверждено по бюджету (тыс. руб.)','План с учетом изменений на отчетный период (тыс. руб.)','Исполнено с начала года (тыс. руб.)']
-			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,2,True)
+			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,2,True,quirks=self.quirks)
 		else:
 			header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
-			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols)
+			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,quirks=self.quirks)
 		sheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
 		sheet.setTableTitle(self.title)
 		sheet.setAmountHeader(header)

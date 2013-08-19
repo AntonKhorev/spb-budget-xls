@@ -131,7 +131,7 @@ class Entry:
 		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
 
 class Spreadsheet:
-	def __init__(self,filename,nCols,nPercentageCols=0,allowSlack=False):
+	def __init__(self,filename,nCols,nPercentageCols=0,allowSlack=False,quirks=set()):
 		self.nCols=nCols
 		self.allowSlack=allowSlack
 		self.amountHeader=['Сумма (тыс. руб.)']*self.nCols
@@ -144,7 +144,7 @@ class Spreadsheet:
 		f.close()
 
 		# parse
-		lr=reader.LineReader(self.nCols,nPercentageCols)
+		lr=reader.LineReader(self.nCols,nPercentageCols,quirks=quirks)
 		self.rows=[{},None]
 		for i,line in enumerate(lines):
 			nextLine=lines[i+1] if i<len(lines)-1 else None

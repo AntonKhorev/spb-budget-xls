@@ -18,7 +18,137 @@
 rootUrl: http://www.fincom.spb.ru/files/cf/npd/budget/
 pdfboxJar: pdfbox-app-1.8.1.jar
 laws:
-  # TODO 2008 and earlier
+  # TODO 2007 and earlier
+
+  # 2008
+  - code: 2008.0.p
+    title: О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=270@cf_npa_bud
+    downloadUrl:
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/title.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/zakon2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr01_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr02_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr03_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr04_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr05_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr06_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr07_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr08_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr09_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr10_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr11_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr12_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr13_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr14_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr15_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr16_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr17_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr18_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr19_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr20_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/project/pr21_2008-2010.pdf
+    documents: # 06-сен-07
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2008 год
+        appendixNumber: 3
+        pdfFilename: 2008/project/pr03_2008-2010.pdf
+        forYear: 2008
+        total: 323 653 884.8
+        quirks:
+          - undottedNumbers
+          - unmarkedTotal
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2009 и 2010 годов
+        appendixNumber: 4
+        pdfFilename: 2008/project/pr04_2008-2010.pdf
+        forYear: [2009,2010]
+        total: ['359 930 825.5','400 807 265.4']
+        quirks:
+          - undottedNumbers
+  - code: 2008.0.z
+    title: О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов
+    date: 31.10.2007
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=271@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2008/full/zakon2008.zip
+  # проекта 1-й корректировки нет
+  - code: 2008.1.z
+    title: О внесении дополнения и изменений в Закон Санкт-Петербурга "О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов
+    date: 05.03.2008
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=278@cf_npa_bud
+    downloadUrl:
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm/zakon08-izm(127-18).pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm/pr1.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm/pr2.pdf
+  - code: 2008.2.p
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов»
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=282@cf_npa_bud
+    downloadUrl:
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr-zakon08-2izm.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr1.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr1-1.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr2.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr03.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr04.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr05.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr06.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr07.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr08.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr09.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr10.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr11.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr12.pdf
+  - code: 2008.2.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов»
+    date: 11.06.2008
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=283@cf_npa_bud
+    downloadUrl:
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/zakon08-izm2(384-57).pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr01.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr01-1.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr02.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr03.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr04.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr05.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr06.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr07.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr08.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr09.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr10.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr11.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr12.pdf
+  - code: 2008.3.p
+    title: О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов»
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=287@cf_npa_bud
+    downloadUrl:
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm3/pr_izm3_2008-2010.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm3/pr01.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm3/pr02.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm3/pr03.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm3/pr04.pdf
+  - code: 2008.3.z
+    title: О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов»
+    date: 15.10.2008
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=288@cf_npa_bud
+    downloadUrl:
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm3/zakon08-izm3(611-103).pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm3/pr01.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm3/pr02.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm3/pr03.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm3/pr04.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm3/pr05.pdf
+  - code: 2008.i.z
+    title: Об исполнении бюджета Санкт-Петербурга за 2008 год
+    date: 24.06.2009
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=301@cf_npa_bud
+    downloadUrl:
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril1-1.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril1-2.zip
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril1-3.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril2.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril3.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril4.zip
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril5.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril6.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril7.pdf
 
   # 2009
   - code: 2009.0.p

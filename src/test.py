@@ -194,6 +194,43 @@ class TestLineReader(unittest.TestCase):
 			{'number':'7.','name':'ЖИЛИЩНЫЙ КОМИТЕТ','amounts':[156242293,157946108,148554824]},
 			None,
 		])
+	def testUnmarkedTotal(self):
+		lr=reader.LineReader(1,quirks={'unmarkedTotal'})
+		rows=[{}]
+		line='323 653 884.8'
+		nextLine='226 Приложение 3'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[
+			{'name':'Итого','amounts':[3236538848]},
+		])
+	def testUnmarkedTotalWithUndottedNumbersEnabled(self):
+		lr=reader.LineReader(1,quirks={'unmarkedTotal','undottedNumbers'})
+		rows=[{}]
+		line='323 653 884.8'
+		nextLine='226 Приложение 3'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[
+			{'name':'Итого','amounts':[3236538848]},
+		])
+	def testUndottedNumber(self):
+		lr=reader.LineReader(1,quirks={'undottedNumbers'})
+		rows=[None]
+		line='1 АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ- 1 501 819.1'
+		nextLine='ПЕТЕРБУРГА (801)'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'1.','name':'АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ-','amounts':[15018191]},
+		])
+	def testUndottedNumberPartOnNextLine(self):
+		lr=reader.LineReader(2,quirks={'undottedNumbers'})
+		rows=[None]
+		line='18.43. Мероприятия в области здравоохранения, 0904 5220086 455 1 494 500.0 1 499 700.0'
+		nextLine='1 спорта и физической культуры, туризма'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(line,'спорта и физической культуры, туризма')
+		self.assertEqual(rows,[None,
+			{'number':'18.43.1.','name':'Мероприятия в области здравоохранения,','section':'0904','article':'5220086','type':'455','amounts':[14945000,14997000]},
+		])
 
 if __name__=='__main__':
 	unittest.main()
