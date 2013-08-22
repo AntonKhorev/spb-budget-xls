@@ -7,15 +7,17 @@ def parseAmount(amountText):
 class LineReader:
 	def __init__(self,nCols,nPercentageCols=0,quirks=set()):
 		self.nCols=nCols
-		self.quirks=quirks
 		# compile regexes
 		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*self.nCols+'\s\d+[.,]\d\d'*nPercentageCols+'$' # amount (and percentage if needed) pattern
 		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])' # article (code) pattern
-		self.reLeadNumberLine=re.compile('^((?:\d+\.)+)\s+(.*)$')
-		self.reLeadNumberLineWithDotChopped=re.compile('^((?:\d+\.)+\d+)\s+(.*)$')
-		if 'undottedNumbers' in self.quirks:
-			self.reLeadNumberLineWithDotChopped2=re.compile('^((?:\d+\.)*\d+)\s+(.*)$')
-		self.reLineAfterLineWithDotChopped=re.compile('^\.\s+(.*)$')
+		self.reFirstRecordLine=re.compile('^((?:\d\.?)+)\s+(.*)$')
+		self.reNextRecordLine=re.compile('^(\.?(?:\d\.?)+)\s+(.*)$')
+		if 'undottedNumbers' not in quirks:
+			self.reNumber=re.compile('^(?:\d+\.){1,3}$')
+			self.dotNumber=lambda number: number
+		else:
+			self.reNumber=re.compile('^\d+(?:\.\d+){,2}$')
+			self.dotNumber=lambda number: number+'.'
 		self.reLineEndingDepth1=re.compile('^(.*?)'+amPattern)
 		self.reLineEndingDepth2=re.compile('^(.*?)'+arPattern+amPattern)
 		self.reLineEndingDepth3=re.compile('^(.*?)'+arPattern+'\s(\d{3})'+amPattern)
@@ -53,7 +55,8 @@ class LineReader:
 		def parseAmounts(group,offset):
 			return [parseAmount(group(i+offset)) for i in range(self.nCols)]
 
-		def readLeadNumberLine(number,rest):
+		def readFirstRecordLine(number,rest):
+			number=self.dotNumber(number)
 			nc=number.count('.') # depth: 1 = x. ; 2 = x.y. ; 3 = x.y.z.
 			if nc==1:
 				m=self.reLineEndingDepth1.match(rest)
@@ -85,7 +88,7 @@ class LineReader:
 						'amounts':parseAmounts(m.group,5),
 					}
 			else:
-				raise Exception('unsupported number')
+				raise Exception('unsupported number '+number)
 			return None
 
 		m=self.reTotalLine.match(line)
@@ -95,53 +98,22 @@ class LineReader:
 			root['amounts']=parseAmounts(m.group,1)
 			return nextLine
 
-		if 'undottedNumbers' not in self.quirks:
-			m=self.reLeadNumberLineWithDotChopped.match(line)
-			if m and nextLine is not None:
-				mm=self.reLineAfterLineWithDotChopped.match(nextLine)
-				if mm:
-					number=m.group(1)+'.'
-					rest=m.group(2)
-					row=readLeadNumberLine(number,rest)
+		m=self.reFirstRecordLine.match(line)
+		if m:
+			number1=m.group(1)
+			rest1=m.group(2)
+			mm=self.reNextRecordLine.match(nextLine)
+			if mm:
+				number2=mm.group(1)
+				rest2=mm.group(2)
+				number=number1+number2
+				if self.reNumber.match(number) and (not self.reNumber.match(number2) or readFirstRecordLine(number2,rest2) is None):
+					row=readFirstRecordLine(number,rest1)
 					if row is not None:
 						rows.append(row)
-						nextLine=mm.group(1)
-						return nextLine
-			m=self.reLeadNumberLine.match(line)
-			if m:
-				number=m.group(1)
-				rest=m.group(2)
-				if number.count('.')==2:
-					mm=self.reLeadNumberLine.match(nextLine)
-					if mm: # test if z. follows x.y. - which is wrong
-						nnumber=mm.group(1)
-						rrest=mm.group(2)
-						if nnumber.count('.')==1:
-							# append z. to x.y.
-							number+=nnumber
-							nextLine=rrest
-				row=readLeadNumberLine(number,rest)
-				if row is not None:
-					rows.append(row)
-					return nextLine
-		else:
-			m=self.reLeadNumberLine.match(line)
-			if m and nextLine is not None:
-				number=m.group(1)
-				rest=m.group(2)
-				mm=self.reLeadNumberLineWithDotChopped2.match(nextLine)
-				if mm:
-					number+=mm.group(1)+'.'
-					nextLine=mm.group(2)
-					row=readLeadNumberLine(number,rest)
-					if row is not None:
-						rows.append(row)
-						return nextLine
-			m=self.reLeadNumberLineWithDotChopped2.match(line)
-			if m:
-				number=m.group(1)+'.'
-				rest=m.group(2)
-				row=readLeadNumberLine(number,rest)
+						return rest2
+			if self.reNumber.match(number1):
+				row=readFirstRecordLine(number1,rest1)
 				if row is not None:
 					rows.append(row)
 					return nextLine

@@ -231,6 +231,25 @@ class TestLineReader(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'18.43.1.','name':'Мероприятия в области здравоохранения,','section':'0904','article':'5220086','type':'455','amounts':[14945000,14997000]},
 		])
+	def testUndottedSplitNumber(self):
+		lr=reader.LineReader(2,quirks={'undottedNumbers'})
+		rows=[None]
+		line='17.4.1 Осуществление расходов Российской 0401 5190010 282 173 584.8 172 367.1'
+		nextLine='1 Федерации по управлению в области занятости'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(line,'Федерации по управлению в области занятости')
+		self.assertEqual(rows,[None,
+			{'number':'17.4.11.','name':'Осуществление расходов Российской','section':'0401','article':'5190010','type':'282','amounts':[1735848,1723671]},
+		])
+	def testUndottedNonsplitNumberFollowedByDigits(self):
+		lr=reader.LineReader(1,quirks={'undottedNumbers'})
+		rows=[None]
+		line='45.2 Расходы на реализацию Федерального Закона от 0105 5190009 410.3'
+		nextLine='20.08.2004 № 113-ФЗ "О присяжных заседателях'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'45.2.','name':'Расходы на реализацию Федерального Закона от','section':'0105','article':'5190009','amounts':[4103]},
+		])
 
 if __name__=='__main__':
 	unittest.main()
