@@ -10,129 +10,11 @@ import sys,itertools
 import csv
 import xlwt3 as xlwt
 
-import record
-
-class Entry:
-	def __init__(self,iRow,row):
-		self.iRow=iRow # -1 for invisible
-		self.children={}
-		self.number=row.get('number')
-		self.name=row.get('name')
-		self.article=row.get('article')
-		self.section=row.get('section')
-		self.type=row.get('type')
-		self.amounts=row['amounts']
-
-	def isVisible(self):
-		return self.iRow>=0
-
-	def checkAmount(self,amount,key=0):
-		if amount!=self.amounts[key]:
-			raise Exception("amount doesn't match")
-
-	def addLeaf(self,entry,numberArray):
-		n=numberArray.pop(0)
-		if len(numberArray)==0:
-			if n in self.children:
-				raise Exception('duplicate entry')
-			self.children[n]=entry
-		else:
-			if n not in self.children: # missing entry of zero sum:
-				self.children[n]=Entry(-1,{'amounts':[0]*len(entry.amounts)})
-			self.children[n].addLeaf(entry,numberArray)
-
-	def scanRows(self):
-		rows=[]
-		for child in self.children.values():
-			child.scanRows()
-			if child.rowSpan is None:
-				self.rowSpan=None
-				return
-			rows.append(child.rowSpan)
-		if not rows:
-			if self.isVisible():
-				self.rowSpan=(self.iRow,self.iRow+1)
-				return
-			else:
-				self.rowSpan=None
-				return
-		rows.sort()
-		if self.isVisible() and self.iRow+1!=rows[0][0]:
-			self.rowSpan=None
-			return
-		for i in range(1,len(rows)):
-			if rows[i-1][1]!=rows[i][0]:
-				self.rowSpan=None
-				return
-		if self.isVisible():
-			self.rowSpan=(rows[0][0]-1,rows[-1][1])
-		else:
-			self.rowSpan=(rows[0][0],rows[-1][1])
-
-	def check(self,allowSlack):
-		if not self.children:
-			return
-		sumAmounts=[0]*len(self.amounts)
-		for child in self.children.values():
-			for k,v in enumerate(child.amounts):
-				sumAmounts[k]+=v
-		if allowSlack:
-			# slack in last column
-			slack=self.amounts[-1]-sumAmounts[-1]
-			if slack:
-				self.slack=slack
-				sumAmounts[-1]=self.amounts[-1]
-		if sumAmounts!=self.amounts:
-			raise Exception('sum(children)!=amount: '+str(sumAmounts)+' != '+str(self.amounts))
-		for n,entry in sorted(self.children.items()):
-			entry.check(allowSlack)
-
-	def write(self,writer,depth=0):
-		def formatAmount(amount):
-			a=str(amount)
-			return a[:-1]+','+a[-1]
-
-		if self.isVisible():
-			if writer.useSums and self.children:
-				ams=[]
-				for i,v in enumerate(self.amounts):
-					# column to sum from
-					if writer.stairs:
-						columnLetter=chr(ord('F')+depth+1+i*(writer.depthLimit+1))
-					else:
-						columnLetter=chr(ord('F')+i)
-					# formula
-					if self.rowSpan is None or not writer.stairs:
-						ams.append('='+'+'.join(
-							columnLetter+writer.strrow(entry.iRow) for n,entry in sorted(self.children.items()) if entry.isVisible()
-						))
-					else:
-						ams.append('=SUM('+columnLetter+writer.strrow(self.rowSpan[0]+1)+':'+columnLetter+writer.strrow(self.rowSpan[1]-1)+')')
-					if i==len(self.amounts)-1 and hasattr(self,'slack'):
-						if writer.stairs:
-							slackColumnLetter=chr(ord('F')+(i+1)*(writer.depthLimit+1))
-						else:
-							slackColumnLetter=chr(ord('F')+i+1)
-						ams[-1]+='+'+slackColumnLetter+writer.strrow(self.iRow)
-			else:
-				ams=[formatAmount(v) for v in self.amounts]
-			if writer.stairs:
-				amList=list(itertools.chain.from_iterable([None]*depth+[am]+[None]*(writer.depthLimit-depth) for am in ams))
-			else:
-				amList=ams
-			if hasattr(self,'slack'):
-				amList+=[formatAmount(self.slack)]
-			writer.writerow([self.number,self.name,self.section,self.article,self.type]+amList)
-
-		for n,entry in sorted(self.children.items()):
-			entry.write(writer,depth+1)
-
-	def __str__(self):
-		return 'number:'+str(self.number)+'; name:'+str(self.name)+'; amounts:'+str(self.amounts)
+import record,table
 
 class Spreadsheet:
 	def __init__(self,filename,nCols,nPercentageCols=0,allowSlack=False,quirks=set()):
-		self.nCols=nCols
+		self.nCols=nCols # this is a number of 'amount' columns in original pdf table - not in generated
 		self.allowSlack=allowSlack
 		self.amountHeader=['Сумма (тыс. руб.)']*self.nCols
 		self.documentTitle='Приложение к Закону Санкт-Петербурга о бюджете'
@@ -163,33 +45,11 @@ class Spreadsheet:
 
 	def build(self,depthLimit,amountTexts):
 		self.depthLimit=depthLimit
-
-		# make entries
-		iRow=0
-		for i,row in enumerate(self.rows):
-			if row is None:
-				continue
-			entry=Entry(iRow,row)
-			if i==0:
-				self.root=entry
-			else:
-				numberArray=[int(n) for n in row['number'].split('.') if n!='']
-				if len(numberArray)>self.depthLimit:
-					continue
-				try:
-					self.root.addLeaf(entry,numberArray)
-				except Exception as e:
-					tb=sys.exc_info()[2]
-					raise Exception(str(e)+' in entry number '+row['number']).with_traceback(tb)
-			iRow+=1
-
-		# make rowspans
-		self.root.scanRows()
-
-		# check amounts / calculate slack
-		self.root.check(self.allowSlack)
-		for i,amountText in enumerate(amountTexts):
-			self.root.checkAmount(record.parseAmount(amountText),i)
+		self.table=table.TableBuilder(
+			self.rows,
+			[record.parseAmount(amountText) for amountText in amountTexts],
+			self.depthLimit
+		)
 
 	# private
 	def getHeaderRow(self,stairs):
@@ -202,6 +62,21 @@ class Spreadsheet:
 			['Поправка на округление (тыс. руб.)'] if self.allowSlack
 			else []
 		)
+	def getColumnsMetadata(self,stairs):
+		r=[
+			'number','name','section','article','type'
+		]
+		if stairs:
+			r+=[('amounts',k,(d,)) for k in range(self.nCols) for d in range(self.depthLimit+1)]
+		else:
+			r+=[('amounts',k,tuple(range(self.depthLimit+1))) for k in range(self.nCols)]
+		if self.allowSlack:
+			r+=[('amounts',self.nCols-1,'slack')]
+		return r
+
+	def write(self,writer,stairs,useSums,rowOffset):
+		for row in self.table.rows(self.getColumnsMetadata(stairs),useSums,rowOffset):
+			writer.writerow(row)
 
 	def writeCsv(self,filename,stairs,useSums):
 		csvWriter=csv.writer(open(filename,'w',newline='',encoding='utf8'),quoting=csv.QUOTE_NONNUMERIC)
@@ -218,7 +93,7 @@ class Spreadsheet:
 			def writerow(self,cells):
 				csvWriter.writerow(cells)
 
-		self.root.write(Writer())
+		self.write(csvWriter,stairs,useSums,2)
 
 	def writeXls(self,filename,delta,stairs,useSums=True):
 		wb=xlwt.Workbook()
@@ -281,15 +156,9 @@ class Spreadsheet:
 			ws.write(nHeaderRows-1,i,cell,style)
 
 		# data
-		depthLimit=self.depthLimit
 		class Writer:
 			def __init__(self):
 				self.row=nHeaderRows # private
-				self.stairs=stairs
-				self.useSums=useSums
-				self.depthLimit=depthLimit
-			def strrow(self,row):
-				return str(row+nHeaderRows+1) # rows 1..nHeaderRows for header
 			def writerow(self,cells):
 				for i,cell in enumerate(cells):
 					if cell is None:
@@ -302,5 +171,5 @@ class Spreadsheet:
 						ws.write(self.row,i,cell)
 				self.row+=1
 
-		self.root.write(Writer())
+		self.write(Writer(),stairs,useSums,nHeaderRows+1)
 		wb.save(filename)
