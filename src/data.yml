@@ -57,6 +57,7 @@ laws:
         quirks:
           - undottedNumbers
           - unmarkedTotal
+          - slack
       - title: Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2009 и 2010 годов
         appendixNumber: 4
         pdfFilename: 2008/project/pr04_2008-2010.pdf

@@ -99,14 +99,16 @@ class Document:
 		return True
 	def writeCsvsAndXlss(self):
 		if self.law.version=='i':
-			header=['Утверждено по бюджету (тыс. руб.)','План с учетом изменений на отчетный период (тыс. руб.)','Исполнено с начала года (тыс. руб.)']
-			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,2,True,quirks=self.quirks)
+			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,nPercentageCols=2,allowSlack=True,quirks=self.quirks)
+			sheet.setAmountHeader(['Утверждено по бюджету (тыс. руб.)','План с учетом изменений на отчетный период (тыс. руб.)','Исполнено с начала года (тыс. руб.)'])
+			sheet.setSlackHeader({self.nCols-1:'Поправка на округление (тыс. руб.)'})
 		else:
-			header=[('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears]
 			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,quirks=self.quirks)
+			sheet.setAmountHeader([('Изменение суммы' if self.delta else 'Сумма')+' на '+year+' г. (тыс. руб.)' for year in self.forYears])
+			if 'slack' in self.quirks:
+				sheet.setSlackHeader({k:'Расхождение (тыс. руб.)' for k in range(self.nCols)})
 		sheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
 		sheet.setTableTitle(self.title)
-		sheet.setAmountHeader(header)
 		for depth in range(1,4):
 			sheet.build(depth,self.totals)
 			for stairs in (False,True):
