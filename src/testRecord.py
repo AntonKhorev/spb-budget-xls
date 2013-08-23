@@ -250,6 +250,15 @@ class TestRecordBuilder(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'45.2.','name':'Расходы на реализацию Федерального Закона от','section':'0105','article':'5190009','amounts':[4103]},
 		])
+	def testUndottedNonsplitNumberFollowedByPageBreak(self):
+		lr=record.RecordBuilder(1,quirks={'undottedNumbers'})
+		rows=[None]
+		line='9.9.1 Мероприятия в области жилищного хозяйства 0501 3500001 410 204 843.9'
+		nextLine='10 Приложение 3'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'9.9.1.','name':'Мероприятия в области жилищного хозяйства','section':'0501','article':'3500001','type':'410','amounts':[2048439]},
+		])
 
 if __name__=='__main__':
 	unittest.main()

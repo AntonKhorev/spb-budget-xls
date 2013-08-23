@@ -103,7 +103,7 @@ class RecordBuilder:
 			number1=m.group(1)
 			rest1=m.group(2)
 			mm=self.reNextRecordLine.match(nextLine)
-			if mm:
+			if mm and not self.reNewPageLine.match(nextLine):
 				number2=mm.group(1)
 				rest2=mm.group(2)
 				number=number1+number2
