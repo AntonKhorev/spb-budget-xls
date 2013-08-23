@@ -4,7 +4,7 @@ def parseAmount(amountText):
 	amount=re.sub('\s|\.|,','',amountText)
 	return int(amount)
 
-class LineReader:
+class RecordBuilder:
 	def __init__(self,nCols,nPercentageCols=0,quirks=set()):
 		self.nCols=nCols
 		# compile regexes

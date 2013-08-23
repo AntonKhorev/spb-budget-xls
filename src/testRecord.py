@@ -1,8 +1,8 @@
 import unittest
 
-import reader
+import record
 
-class TestLineReader(unittest.TestCase):
+class TestRecordBuilder(unittest.TestCase):
 	def setUp(self):
 		self.text1=[
 			"1. АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ- 2 114 774,1",
@@ -12,8 +12,8 @@ class TestLineReader(unittest.TestCase):
 			"1.1.1. Выполнение функций государственными органами 0102 0010008 012 2 026,0",
 			"1.2. Содержание исполнительного органа 0114 0010009 984 695,5",
 		]
-		self.lr1=reader.LineReader(1)
-		self.lr2=reader.LineReader(2)
+		self.lr1=record.RecordBuilder(1)
+		self.lr2=record.RecordBuilder(2)
 
 	def doTestName(self,lr,lines,name):
 		rows=[None]
@@ -160,7 +160,7 @@ class TestLineReader(unittest.TestCase):
 			'функций по сопров-ю сделок по приобрет-ю ',
 		],'Субсидия ОАО "Фонд имущества Санкт-Петербурга" на возмещ-е затрат,связан.с осущ-ем')
 	def testIspolnenieEntry(self):
-		lr=reader.LineReader(3,2)
+		lr=record.RecordBuilder(3,2)
 		rows=[None]
 		line='1. АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ- 2 112 960.4 2 143 756.6 2 062 085.8 97.59 96.19'
 		nextLine='ПЕТЕРБУРГА'
@@ -169,7 +169,7 @@ class TestLineReader(unittest.TestCase):
 			{'number':'1.','name':'АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ-','amounts':[21129604,21437566,20620858]},
 		])
 	def testIspolnenieTotal(self):
-		lr=reader.LineReader(3,2)
+		lr=record.RecordBuilder(3,2)
 		rows=[{}]
 		line=' Итого: 431 939 763.4 442 067 920.3 404 032 373.1 93.54 91.40'
 		nextLine='                                                                                                                                                                                                                                         '
@@ -178,7 +178,7 @@ class TestLineReader(unittest.TestCase):
 			{'name':'Итого','amounts':[4319397634,4420679203,4040323731]},
 		])
 	def testIspolneniePageBreak(self):
-		lr=reader.LineReader(3,2)
+		lr=record.RecordBuilder(3,2)
 		rows=[None]
 		line='7. ЖИЛИЩНЫЙ КОМИТЕТ 15 624 229.3 15 794 610.8 14 855 482.4 95.08 94.05'
 		nextLine='Показатели расходов бюджета Санкт-Петербурга за 2011 год'
@@ -195,7 +195,7 @@ class TestLineReader(unittest.TestCase):
 			None,
 		])
 	def testUnmarkedTotal(self):
-		lr=reader.LineReader(1,quirks={'unmarkedTotal'})
+		lr=record.RecordBuilder(1,quirks={'unmarkedTotal'})
 		rows=[{}]
 		line='323 653 884.8'
 		nextLine='226 Приложение 3'
@@ -204,7 +204,7 @@ class TestLineReader(unittest.TestCase):
 			{'name':'Итого','amounts':[3236538848]},
 		])
 	def testUnmarkedTotalWithUndottedNumbersEnabled(self):
-		lr=reader.LineReader(1,quirks={'unmarkedTotal','undottedNumbers'})
+		lr=record.RecordBuilder(1,quirks={'unmarkedTotal','undottedNumbers'})
 		rows=[{}]
 		line='323 653 884.8'
 		nextLine='226 Приложение 3'
@@ -213,7 +213,7 @@ class TestLineReader(unittest.TestCase):
 			{'name':'Итого','amounts':[3236538848]},
 		])
 	def testUndottedNumber(self):
-		lr=reader.LineReader(1,quirks={'undottedNumbers'})
+		lr=record.RecordBuilder(1,quirks={'undottedNumbers'})
 		rows=[None]
 		line='1 АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ- 1 501 819.1'
 		nextLine='ПЕТЕРБУРГА (801)'
@@ -222,7 +222,7 @@ class TestLineReader(unittest.TestCase):
 			{'number':'1.','name':'АДМИНИСТРАЦИЯ ГУБЕРНАТОРА САНКТ-','amounts':[15018191]},
 		])
 	def testUndottedNumberPartOnNextLine(self):
-		lr=reader.LineReader(2,quirks={'undottedNumbers'})
+		lr=record.RecordBuilder(2,quirks={'undottedNumbers'})
 		rows=[None]
 		line='18.43. Мероприятия в области здравоохранения, 0904 5220086 455 1 494 500.0 1 499 700.0'
 		nextLine='1 спорта и физической культуры, туризма'
@@ -232,7 +232,7 @@ class TestLineReader(unittest.TestCase):
 			{'number':'18.43.1.','name':'Мероприятия в области здравоохранения,','section':'0904','article':'5220086','type':'455','amounts':[14945000,14997000]},
 		])
 	def testUndottedSplitNumber(self):
-		lr=reader.LineReader(2,quirks={'undottedNumbers'})
+		lr=record.RecordBuilder(2,quirks={'undottedNumbers'})
 		rows=[None]
 		line='17.4.1 Осуществление расходов Российской 0401 5190010 282 173 584.8 172 367.1'
 		nextLine='1 Федерации по управлению в области занятости'
@@ -242,7 +242,7 @@ class TestLineReader(unittest.TestCase):
 			{'number':'17.4.11.','name':'Осуществление расходов Российской','section':'0401','article':'5190010','type':'282','amounts':[1735848,1723671]},
 		])
 	def testUndottedNonsplitNumberFollowedByDigits(self):
-		lr=reader.LineReader(1,quirks={'undottedNumbers'})
+		lr=record.RecordBuilder(1,quirks={'undottedNumbers'})
 		rows=[None]
 		line='45.2 Расходы на реализацию Федерального Закона от 0105 5190009 410.3'
 		nextLine='20.08.2004 № 113-ФЗ "О присяжных заседателях'

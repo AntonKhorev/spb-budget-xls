@@ -10,7 +10,7 @@ import sys,itertools
 import csv
 import xlwt3 as xlwt
 
-import reader
+import record
 
 class Entry:
 	def __init__(self,iRow,row):
@@ -144,11 +144,11 @@ class Spreadsheet:
 		f.close()
 
 		# parse
-		lr=reader.LineReader(self.nCols,nPercentageCols,quirks=quirks)
+		rb=record.RecordBuilder(self.nCols,nPercentageCols,quirks=quirks)
 		self.rows=[{},None]
 		for i,line in enumerate(lines):
 			nextLine=lines[i+1] if i<len(lines)-1 else None
-			nextLine=lr.read(self.rows,line,nextLine)
+			nextLine=rb.read(self.rows,line,nextLine)
 			if i<len(lines)-1:
 				lines[i+1]=nextLine
 
@@ -189,7 +189,7 @@ class Spreadsheet:
 		# check amounts / calculate slack
 		self.root.check(self.allowSlack)
 		for i,amountText in enumerate(amountTexts):
-			self.root.checkAmount(reader.parseAmount(amountText),i)
+			self.root.checkAmount(record.parseAmount(amountText),i)
 
 	# private
 	def getHeaderRow(self,stairs):
