@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # basic types
 # filenames are always absolute/ready to be read
 # paths are relative to root
