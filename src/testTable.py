@@ -149,6 +149,25 @@ class TestTableBuilder(unittest.TestCase):
 			['2.1.',	'Two One',	'2',	'21',	None,	None,			None,			'=SUM(I10:I10)+J9',	None,	None],	# 9
 			['2.1.1.',	'Two One One',	'2',	'21',	'211',	None,			None,			None,			'49,8',	None],	# 10
 		])
+	def testEconCode(self):
+		data=[
+			{'name':'Total','amounts':[100]},
+			{'number':'1.','name':'One','amounts':[100]},
+			{'number':'1.1.','name':'One One','section':'1','article':'11','amounts':[100]},
+			{'number':'1.1.1.','name':'One One One','section':'1','article':'11','type':'111','econ':'999','amounts':[100]},
+		]
+		total=[100]
+		tb=table.TableBuilder(data,total,3)
+		rows=list(tb.rows(
+			['number','name','section','article','type','econ',('amounts',0,(0,1,2,3))],
+			useSums=False
+		))
+		self.assertEqual(rows,[
+			[None,		'Total',	None,	None,	None,	None,	'10,0'],
+			['1.',		'One',		None,	None,	None,	None,	'10,0'],
+			['1.1.',	'One One',	'1',	'11',	None,	None,	'10,0'],
+			['1.1.1.',	'One One One',	'1',	'11',	'111',	'999',	'10,0'],
+		])
 
 if __name__=='__main__':
 	unittest.main()

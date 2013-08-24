@@ -14,6 +14,8 @@ class RecordBuilder:
 		atPattern='\s(?P<type>\d{3})' # type pattern
 		if 'OSGUcode' in quirks:
 			atPattern+='\s(?P<OSGU>\d{3})'
+		if 'econcode' in quirks:
+			atPattern+='\s(?P<econ>\d{3})'
 		self.reFirstRecordLine=re.compile('^((?:\d\.?)+)\s+(.*)$')
 		self.reNextRecordLine=re.compile('^(\.(?:\d\.?)*|(?:\d\.?)+)(?:\s+(.*))?$')
 		if 'undottedNumbers' not in quirks:

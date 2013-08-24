@@ -72,6 +72,9 @@ class Spreadsheet:
 		if 'OSGUcode' in self.quirks: metadata+=[
 			{'text':'Код ОСГУ',		'subtext':None,'span':1,'id':'OSGU'},
 		]
+		if 'econcode' in self.quirks: metadata+=[
+			{'text':'Код экон. статьи',	'subtext':None,'span':1,'id':'econ'},
+		]
 		for k in range(self.nCols):
 			if stairs:
 				metadata+=[{
@@ -145,6 +148,7 @@ class Spreadsheet:
 			'article':	{'width':8,	'style':styleThinHeader},
 			'type':		{'width':4,	'style':styleVeryThinHeader},
 			'OSGU':		{'width':4,	'style':styleVeryThinHeader},
+			'econ':		{'width':4,	'style':styleVeryThinHeader},
 		}
 		amountType=		{'width':15,	'style':styleHeader}
 		skip=0

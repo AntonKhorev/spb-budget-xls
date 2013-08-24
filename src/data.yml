@@ -45,7 +45,7 @@ laws:
         total: 261 762 281.4
         quirks:
           - undottedNumbers
-          - OSGUcode
+          - econcode
           - depth4
   - code: 2007.1.z
     title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2007 год»

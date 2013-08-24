@@ -92,6 +92,8 @@ class TableBuilder:
 					return entry.type
 				elif column=='OSGU':
 					return entry.OSGU
+				elif column=='econ':
+					return entry.econ
 				elif type(column) is tuple:
 					name,key,depths=column
 					if name!='amounts':
@@ -129,6 +131,7 @@ class Entry:
 		self.section=row.get('section')
 		self.type=row.get('type')
 		self.OSGU=row.get('OSGU')
+		self.econ=row.get('econ')
 		self.amounts=row['amounts']
 
 	def isVisible(self):

@@ -291,25 +291,25 @@ class TestRecordBuilder(unittest.TestCase):
 			{'number':'10.11.1.1.','name':'Безвозмездные перечисления','section':'0409','article':'3510444','type':'006','OSGU':'241','amounts':[11128010,11128010,11128010]},
 		])
 	def testQuadDepthWithOnlyDotOnNextLine(self):
-		lr=record.RecordBuilder(3,2,quirks={'OSGUcode','depth4'})
+		lr=record.RecordBuilder(3,2,quirks={'econcode','depth4'})
 		rows=[None]
 		line='10.10.1.1 Работы, услуги по содержанию имущества 0409 3510205 012 225 5 302 000.0 5 524 316.2 5 404 167.3 101.93 97.83'
 		nextLine='.'
 		line=lr.read(rows,line,nextLine)
 		self.assertEqual(rows,[None,
-			{'number':'10.10.1.1.','name':'Работы, услуги по содержанию имущества','section':'0409','article':'3510205','type':'012','OSGU':'225','amounts':[53020000,55243162,54041673]},
+			{'number':'10.10.1.1.','name':'Работы, услуги по содержанию имущества','section':'0409','article':'3510205','type':'012','econ':'225','amounts':[53020000,55243162,54041673]},
 		])
 	def testCantTellIfNumberOnNextLine(self):
-		lr=record.RecordBuilder(1,quirks={'undottedNumbers','OSGUcode','depth4'})
+		lr=record.RecordBuilder(1,quirks={'undottedNumbers','econcode','depth4'})
 		nsc=number.NumberSequenceChecker(3,4)
 		rows=[None,
-			{'number':'49.38.1.1.','name':'Услуги по содержанию имущества','section':'0501','article':'3500682','type':'410','OSGU':'225','amounts':[755550]},
+			{'number':'49.38.1.1.','name':'Услуги по содержанию имущества','section':'0501','article':'3500682','type':'410','econ':'225','amounts':[755550]},
 		]
 		line='49.39 Расходы на благоустройство кварталов 16, 16а, 0501 3500683 2 500.0'
 		nextLine='55 Гражданки Калининского района'
 		line=lr.read(rows,line,nextLine,nsc)
 		self.assertEqual(rows,[None,
-			{'number':'49.38.1.1.','name':'Услуги по содержанию имущества','section':'0501','article':'3500682','type':'410','OSGU':'225','amounts':[755550]},
+			{'number':'49.38.1.1.','name':'Услуги по содержанию имущества','section':'0501','article':'3500682','type':'410','econ':'225','amounts':[755550]},
 			{'number':'49.39.','name':'Расходы на благоустройство кварталов 16, 16а,','section':'0501','article':'3500683','amounts':[25000]},
 		])
 
