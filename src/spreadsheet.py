@@ -9,7 +9,7 @@
 import csv
 import xlwt3 as xlwt
 
-import record,table
+import number,record,table
 
 class Spreadsheet:
 	def __init__(self,filename,nCols,nPercentageCols=0,quirks=set()):
@@ -32,6 +32,12 @@ class Spreadsheet:
 			nextLine=rb.read(self.rows,line,nextLine)
 			if i<len(lines)-1:
 				lines[i+1]=nextLine
+
+		# check number sequence
+		nsc=number.NumberSequenceChecker(4 if 'depth4' in quirks else 3)
+		nscError=nsc.findError(row['number'] for row in self.rows[1:] if row is not None)
+		if nscError is not None:
+			raise Exception('error in number sequence after '+str(nscError))
 
 	def setAmountHeader(self,header):
 		self.amountHeader=header

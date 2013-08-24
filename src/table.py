@@ -1,5 +1,7 @@
 import sys
 
+import number
+
 class TableBuilder:
 	def __init__(self,data,totalAmounts,depthLimit):
 		# need to know depth limit here to assign row numbers
@@ -13,7 +15,7 @@ class TableBuilder:
 			if i==0:
 				self.root=entry
 			else:
-				numberArray=[int(n) for n in row['number'].split('.') if n!='']
+				numberArray=number.toArray(row['number'])
 				if len(numberArray)>depthLimit:
 					continue
 				try:
