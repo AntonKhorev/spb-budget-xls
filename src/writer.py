@@ -168,6 +168,7 @@ span {
 							af(path(1,False),"1.")+"<br />"+
 							af(path(2,False),"1.2.")+"   "+af(path(2,True),"1.2.")+"<br />"+
 							af(path(3,False),"1.2.3.")+"      "+af(path(3,True),"1.2.3.")+
+							("<br /> "+af(path(4,False),"...4.")+"       "+af(path(4,True),"...4.") if doc.maxDepth>=4 else "")+
 						"</code></pre></td>")
 					matrix(lambda l,s: doc.getCsvPath(l,s,False))
 					matrix(lambda l,s: doc.getCsvPath(l,s,True))

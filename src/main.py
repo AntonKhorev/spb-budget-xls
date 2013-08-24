@@ -53,6 +53,9 @@ class Document:
 			self.quirks=set(data['quirks'])
 		else:
 			self.quirks=set()
+	@property
+	def maxDepth(self):
+		return 4 if 'depth4' in self.quirks else 3
 	def hasPdf(self):
 		return os.path.isfile(self.pdfFilename)
 	def writePdf(self):
@@ -91,7 +94,7 @@ class Document:
 	def getXlsFilename(self,depth,stairs):
 		return self.law.environment.rootPath+'/'+self.getXlsPath(depth,stairs)
 	def hasCsvsAndXlss(self):
-		for depth in range(1,4):
+		for depth in range(1,self.maxDepth+1):
 			for stairs in (False,True):
 				for sums in (False,True):
 					if not os.path.isfile(self.getCsvFilename(depth,stairs,sums)):
@@ -111,7 +114,7 @@ class Document:
 				sheet.setSlackHeader({k:'Расхождение (тыс. руб.)' for k in range(self.nCols)})
 		sheet.setDocumentTitle('Приложение '+str(self.appendixNumber)+' к Закону Санкт-Петербурга «'+self.law.title+'»')
 		sheet.setTableTitle(self.title)
-		for depth in range(1,4):
+		for depth in range(1,self.maxDepth+1):
 			sheet.build(depth,self.totals)
 			for stairs in (False,True):
 				for sums in (False,True):
