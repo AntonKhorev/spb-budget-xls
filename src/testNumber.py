@@ -35,6 +35,12 @@ class TestNumberSequenceChecker(unittest.TestCase):
 	def test123(self):
 		e=self.nsc34.findError(['1.','1.1.','1.1.1.','1.2.','1.2.1.','1.2.2.','1.2.2.1.','1.2.2.2.','1.2.3.','1.2.4.'])
 		self.assertIsNone(e)
+	def testPairOk(self):
+		e=self.nsc34.checkPair('49.38.1.1.','49.39.')
+		self.assertTrue(e)
+	def testPairNotOk(self):
+		e=self.nsc34.checkPair('49.38.1.1.','49.3955.')
+		self.assertFalse(e)
 
 if __name__=='__main__':
 	unittest.main()

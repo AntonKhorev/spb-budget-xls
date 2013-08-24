@@ -162,7 +162,10 @@ span {
 					(" "+a(law.zipPath,"копия") if law.isSingleZip and zipCopy else "")
 				)
 				if not law.documents:
-					w("<td colspan='4'>"+e(law.availabilityNote)+"</td>\n")
+					if law.originalXlsUrl is not None:
+						w("<td colspan='4'>"+a(law.originalXlsUrl,e(law.availabilityNote))+"</td>\n")
+					else:
+						w("<td colspan='4'>"+e(law.availabilityNote)+"</td>\n")
 				wn2=nonFirstWrite()
 				for doc in law.documents:
 					wn2("<tr>")

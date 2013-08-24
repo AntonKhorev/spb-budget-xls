@@ -151,6 +151,7 @@ class Law:
 			raise Exception('unknown law pz')
 		self.viewUrl=data['viewUrl']
 		self.downloadUrls=data['downloadUrl']
+		self.originalXlsUrl=data.get('originalXlsUrl')
 		for du in self.downloadUrls:
 			if not du.startswith(self.environment.rootUrl):
 				raise Exception('invalid download url '+du)
@@ -158,6 +159,8 @@ class Law:
 		self.documents=[Document(self,documentData) for documentData in data['documents']]
 		if 'availabilityNote' in data:
 			self.availabilityNote=data['availabilityNote']
+		elif self.originalXlsUrl is not None:
+			self.availabilityNote="доступен на сайте Комитета финансов в формате xls"
 		elif not self.documents:
 			self.availabilityNote="не содержит ведомственной структуры расходов"
 		else:

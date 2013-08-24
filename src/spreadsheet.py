@@ -26,16 +26,16 @@ class Spreadsheet:
 		f.close()
 
 		# parse
+		nsc=number.NumberSequenceChecker(3,4 if 'depth4' in quirks else 3)
 		rb=record.RecordBuilder(self.nCols,nPercentageCols,quirks=quirks)
 		self.rows=[{},None]
 		for i,line in enumerate(lines):
 			nextLine=lines[i+1] if i<len(lines)-1 else None
-			nextLine=rb.read(self.rows,line,nextLine)
+			nextLine=rb.read(self.rows,line,nextLine,nsc)
 			if i<len(lines)-1:
 				lines[i+1]=nextLine
 
 		# check number sequence
-		nsc=number.NumberSequenceChecker(3,4 if 'depth4' in quirks else 3)
 		nscError=nsc.findError(row['number'] for row in self.rows[1:] if row is not None)
 		if nscError is not None:
 			raise Exception('error in number sequence after '+str(nscError))

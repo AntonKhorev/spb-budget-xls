@@ -42,7 +42,7 @@ class RecordBuilder:
 	# nextLine is needed to see parts of number
 	#	None if reached eof
 	# complete number is needed to scan the rest of line
-	def read(self,rows,line,nextLine):
+	def read(self,rows,line,nextLine,nsc=None):
 
 		def appendName(name1,name2):
 			name2=name2.strip()
@@ -93,7 +93,11 @@ class RecordBuilder:
 				number2=mm.group(1)
 				rest2=mm.group(2)
 				number=number1+number2
-				if self.reNumber.match(number) and (not self.reNumber.match(number2) or readFirstRecordLine(number2,rest2) is None):
+				if (
+					self.reNumber.match(number) and
+					(not (nsc and rows[-1] and 'number' in rows[-1]) or nsc.checkPair(rows[-1]['number'],number)) and
+					(not self.reNumber.match(number2) or readFirstRecordLine(number2,rest2) is None)
+				):
 					row=readFirstRecordLine(number,rest1)
 					if row is not None:
 						rows.append(row)

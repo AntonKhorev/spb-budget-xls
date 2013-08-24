@@ -18,7 +18,61 @@
 rootUrl: http://www.fincom.spb.ru/files/cf/npd/budget/
 pdfboxJar: pdfbox-app-1.8.1.jar
 laws:
-  # TODO 2007 and earlier
+  # TODO 2006 and earlier
+
+  # 2007
+  # на 1 год вперёд
+  - code: 2007.0.p
+    title: О бюджете Санкт-Петербурга на 2007 год
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=222@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2007/project/pr_bd_2007.zip
+    originalXlsUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2007/project/pr03.zip
+  - code: 2007.0.z
+    title: О бюджете Санкт-Петербурга на 2007 год
+    date: 27.11.2006
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=233@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2007/full/bd2007.zip
+    originalXlsUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2007/full/pr03.zip
+  - code: 2007.1.p
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2007 год»
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=247@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2007/pr_izm1/pr_izm1-07.zip
+    documents:
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2007 год
+        appendixNumber: 3
+        zipContents: pril03.pdf
+        forYear: 2007
+        total: 261 762 281.4
+        quirks:
+          - undottedNumbers
+          - OSGUcode
+          - depth4
+  - code: 2007.1.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2007 год»
+    date: 20.06.2007
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=268@cf_npa_bud
+    downloadUrl:
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/izm1/TOC-Zakon07-1.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/izm1/pr01.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/izm1/pr02.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/izm1/pr03.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/izm1/pr04.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/izm1/pr05.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/izm1/pr06.pdf
+  - code: 2007.i.z
+    title: Об исполнении бюджета Санкт-Петербурга за 2007 год
+    date: 02.07.2008
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=285@cf_npa_bud
+    downloadUrl:
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril1-1.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril1-2.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril1-3.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril2.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril3.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril4.zip
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril5.zip
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril6.pdf
+      - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril7.pdf
 
   # 2008
   - code: 2008.0.p
