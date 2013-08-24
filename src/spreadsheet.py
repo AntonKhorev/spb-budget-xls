@@ -14,6 +14,7 @@ import number,record,table
 class Spreadsheet:
 	def __init__(self,filename,nCols,nPercentageCols=0,quirks=set()):
 		self.nCols=nCols # this is a number of 'amount' columns in original pdf table - not in generated
+		self.quirks=quirks
 		self.amountHeader=['Сумма (тыс. руб.)']*self.nCols
 		self.documentTitle='Приложение к Закону Санкт-Петербурга о бюджете'
 		self.tableTitle='Ведомственная структура расходов бюджета Санкт-Петербурга'
@@ -67,6 +68,9 @@ class Spreadsheet:
 			{'text':'Код раздела',		'subtext':None,'span':1,'id':'section'},
 			{'text':'Код целевой статьи',	'subtext':None,'span':1,'id':'article'},
 			{'text':'Код вида расходов',	'subtext':None,'span':1,'id':'type'},
+		]
+		if 'OSGUcode' in self.quirks: metadata+=[
+			{'text':'Код ОСГУ',		'subtext':None,'span':1,'id':'OSGU'},
 		]
 		for k in range(self.nCols):
 			if stairs:
@@ -140,6 +144,7 @@ class Spreadsheet:
 			'section':	{'width':5,	'style':styleThinHeader},
 			'article':	{'width':8,	'style':styleThinHeader},
 			'type':		{'width':4,	'style':styleVeryThinHeader},
+			'OSGU':		{'width':4,	'style':styleVeryThinHeader},
 		}
 		amountType=		{'width':15,	'style':styleHeader}
 		skip=0
