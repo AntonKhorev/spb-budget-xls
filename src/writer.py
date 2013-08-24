@@ -140,6 +140,11 @@ span {
 			"Для правильной работы формул файл необходимо читать с первой строки."
 		).ref+"</th><th>xls</th></tr>\n")
 		w("</thead>\n")
+		refUnknownSlack=refs.makeRef("Указанные суммы могут расходиться с реальными суммами подпунктов на 100—200 руб. по неизвестным причинам")
+		refRoundoffSlack=refs.makeRef(
+			"Указанные суммы в графе «Исполнено» могут расходиться с реальными суммами подпунктов из-за округления:"+
+			" выплаты производятся с точностью до копейки, а в данном приложении значения указываются с точностью до 100 руб."
+		)
 		for year,laws in sorted(yearLaws.items()):
 			w("<tbody id='"+e(year)+"'>\n");
 			w("<tr>")
@@ -147,7 +152,10 @@ span {
 			wn=nonFirstWrite()
 			for law in laws:
 				wn("<tr>")
-				wtdrowspan(max(len(law.documents),1),"<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
+				wtdrowspan(max(len(law.documents),1),"<span title='"+e(law.title)+"'>"+e(law.description)+"</span>"+
+					(refUnknownSlack.ref if any('slack' in doc.quirks for doc in law.documents) else "")+
+					(refRoundoffSlack.ref if law.version=='i' else "")
+				)
 				wtdrowspan(max(len(law.documents),1),a(law.viewUrl,"страница")+
 					(" "+a(law.downloadUrl,"архив") if law.isSingleDownload else "")+
 					(" "+a(law.zipPath,"копия") if law.isSingleZip and zipCopy else "")
