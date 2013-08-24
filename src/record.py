@@ -8,19 +8,27 @@ class RecordBuilder:
 	def __init__(self,nCols,nPercentageCols=0,quirks=set()):
 		self.nCols=nCols
 		# compile regexes
+		nmPattern='^(?P<name>.*?)'
 		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*self.nCols+'\s\d+[.,]\d\d'*nPercentageCols+'$' # amount (and percentage if needed) pattern
-		arPattern='\s(\d{4})\s(\d{6}[0-9а-я])' # article (code) pattern
+		arPattern='\s(?P<section>\d{4})\s(?P<article>\d{6}[0-9а-я])' # article (code) pattern
+		atPattern='\s(?P<type>\d{3})' # type pattern
+		if 'OSGUcode' in quirks:
+			atPattern+='\s(?P<OSGU>\d{3})'
 		self.reFirstRecordLine=re.compile('^((?:\d\.?)+)\s+(.*)$')
 		self.reNextRecordLine=re.compile('^(\.?(?:\d\.?)+)\s+(.*)$')
 		if 'undottedNumbers' not in quirks:
-			self.reNumber=re.compile('^(?:\d+\.){1,3}$')
+			self.reNumber=re.compile('^(?:\d+\.){1,'+str(4 if 'depth4' in quirks else 3)+'}$')
 			self.dotNumber=lambda number: number
 		else:
-			self.reNumber=re.compile('^\d+(?:\.\d+){,2}$')
+			self.reNumber=re.compile('^\d+(?:\.\d+){,'+str(3 if 'depth4' in quirks else 2)+'}$')
 			self.dotNumber=lambda number: number+'.'
-		self.reLineEndingDepth1=re.compile('^(.*?)'+amPattern)
-		self.reLineEndingDepth2=re.compile('^(.*?)'+arPattern+amPattern)
-		self.reLineEndingDepth3=re.compile('^(.*?)'+arPattern+'\s(\d{3})'+amPattern)
+		self.reLineEndingForDepth={
+			1:re.compile(nmPattern+amPattern),
+			2:re.compile(nmPattern+arPattern+amPattern),
+			3:re.compile(nmPattern+arPattern+atPattern+amPattern),
+		}
+		if 'depth4' in quirks:
+			self.reLineEndingForDepth[4]=self.reLineEndingForDepth[3]
 		if 'unmarkedTotal' in quirks:
 			self.reTotalLine=re.compile('^(\d\d\d \d\d\d \d\d\d.\d)$')
 		else:
@@ -58,37 +66,15 @@ class RecordBuilder:
 		def readFirstRecordLine(number,rest):
 			number=self.dotNumber(number)
 			nc=number.count('.') # depth: 1 = x. ; 2 = x.y. ; 3 = x.y.z.
-			if nc==1:
-				m=self.reLineEndingDepth1.match(rest)
-				if m:
-					return {
-						'number':number,
-						'name':makeName(m.group(1)),
-						'amounts':parseAmounts(m.group,2),
-					}
-			elif nc==2:
-				m=self.reLineEndingDepth2.match(rest)
-				if m:
-					return {
-						'number':number,
-						'name':makeName(m.group(1)),
-						'section':m.group(2),
-						'article':m.group(3),
-						'amounts':parseAmounts(m.group,4),
-					}
-			elif nc==3:
-				m=self.reLineEndingDepth3.match(rest)
-				if m:
-					return {
-						'number':number,
-						'name':makeName(m.group(1)),
-						'section':m.group(2),
-						'article':m.group(3),
-						'type':m.group(4),
-						'amounts':parseAmounts(m.group,5),
-					}
-			else:
+			if nc not in self.reLineEndingForDepth:
 				raise Exception('unsupported number '+number)
+			m=self.reLineEndingForDepth[nc].match(rest)
+			if m:
+				row=m.groupdict()
+				row['name']=makeName(row['name'])
+				row['number']=number
+				row['amounts']=parseAmounts(m.group,len(row))
+				return row
 			return None
 
 		m=self.reTotalLine.match(line)

@@ -101,7 +101,7 @@ class Document:
 		return True
 	def writeCsvsAndXlss(self):
 		if self.law.version=='i':
-			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,nPercentageCols=2,allowSlack=True,quirks=self.quirks)
+			sheet=spreadsheet.Spreadsheet(self.txtFilename,self.nCols,nPercentageCols=2,quirks=self.quirks)
 			sheet.setAmountHeader(['Утверждено по бюджету (тыс. руб.)','План с учетом изменений на отчетный период (тыс. руб.)','Исполнено с начала года (тыс. руб.)'])
 			sheet.setSlackHeader({self.nCols-1:'Поправка на округление (тыс. руб.)'})
 		else:

@@ -6,7 +6,6 @@
 #		http://www.python-excel.org/
 #		https://pypi.python.org/pypi/xlwt3
 
-import sys,itertools
 import csv
 import xlwt3 as xlwt
 

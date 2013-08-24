@@ -1,3 +1,5 @@
+import sys
+
 class TableBuilder:
 	def __init__(self,data,totalAmounts,depthLimit):
 		# need to know depth limit here to assign row numbers
@@ -135,7 +137,7 @@ class Entry:
 		n=numberArray.pop(0)
 		if len(numberArray)==0:
 			if n in self.children:
-				raise Exception('duplicate entry')
+				raise Exception('duplicate entry '+str(entry.number))
 			self.children[n]=entry
 		else:
 			if n not in self.children: # missing entry of zero sum:

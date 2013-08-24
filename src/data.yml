@@ -65,11 +65,27 @@ laws:
         total: ['359 930 825.5','400 807 265.4']
         quirks:
           - undottedNumbers
+          - slack
   - code: 2008.0.z
     title: О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов
     date: 31.10.2007
     viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=271@cf_npa_bud
     downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2008/full/zakon2008.zip
+    documents:
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2008 год
+        appendixNumber: 3
+        zipContents: pr03_2008-2010.pdf
+        forYear: 2008
+        total: 342 115 637.5
+        quirks:
+          - undottedNumbers
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2009 и 2010 годов
+        appendixNumber: 4
+        zipContents: pr04_2008-2010.pdf
+        forYear: [2009,2010]
+        total: ['361 966 944.5','403 341 695.2']
+        quirks:
+          - undottedNumbers
   # проекта 1-й корректировки нет
   - code: 2008.1.z
     title: О внесении дополнения и изменений в Закон Санкт-Петербурга "О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов
@@ -79,6 +95,7 @@ laws:
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm/zakon08-izm(127-18).pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm/pr1.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm/pr2.pdf
+    # изменения очень короткие и в другом формате
   - code: 2008.2.p
     title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов»
     viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=282@cf_npa_bud
@@ -97,6 +114,12 @@ laws:
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr10.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr11.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm1/pr12.pdf
+    documents: # 22-апр-08
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2008 год
+        appendixNumber: 2
+        pdfFilename: 2008/pr_izm1/pr2.pdf
+        forYear: 2008
+        total: 362 662 964.6
   - code: 2008.2.z
     title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов»
     date: 11.06.2008
@@ -116,6 +139,12 @@ laws:
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr10.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr11.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm2/pr12.pdf
+    documents:
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2008 год
+        appendixNumber: 2
+        pdfFilename: 2008/izm2/pr02.pdf
+        forYear: 2008
+        total: 364 310 474.0
   - code: 2008.3.p
     title: О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов»
     viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=287@cf_npa_bud
@@ -125,6 +154,14 @@ laws:
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm3/pr02.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm3/pr03.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/pr_izm3/pr04.pdf
+    # documents:
+      # - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2008 год
+        # appendixNumber: 2
+        # pdfFilename: 2008/pr_izm3/pr02.pdf
+        # forYear: 2008
+        # total: +2 700 000.0
+        # delta: True
+    # pdfbox подавился файлом, ну и он очень короткий
   - code: 2008.3.z
     title: О внесении изменений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2008 год и на плановый период 2009 и 2010 годов»
     date: 15.10.2008
@@ -136,6 +173,14 @@ laws:
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm3/pr03.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm3/pr04.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/izm3/pr05.pdf
+    # documents:
+      # - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2008 год
+        # appendixNumber: 2
+        # pdfFilename: 2008/izm3/pr02.pdf
+        # forYear: 2008
+        # total: +2 700 000.0
+        # delta: True
+    # pdfbox подавился файлом, он подлиннее
   - code: 2008.i.z
     title: Об исполнении бюджета Санкт-Петербурга за 2008 год
     date: 24.06.2009
@@ -150,6 +195,16 @@ laws:
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril5.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril6.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2008/ispolnenie/isp08_pril7.pdf
+    documents: # 19-фев-09
+      - title: Показатели расходов бюджета Санкт-Петербурга за 2008 год по ведомственной структуре расходов бюджета
+        appendixNumber: 4
+        zipFilename: 2008/ispolnenie/isp08_pril4.zip
+        zipContents: isp08_pril4.pdf
+        forYear: 2008
+        total: ['367 010 474.0','378 629 420.3','355 844 119.6']
+        quirks:
+          - OSGUcode
+          - depth4
 
   # 2009
   - code: 2009.0.p

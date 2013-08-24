@@ -261,6 +261,26 @@ class TestRecordBuilder(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'9.9.1.','name':'Мероприятия в области жилищного хозяйства','section':'0501','article':'3500001','type':'410','amounts':[2048439]},
 		])
+	def testTwoCodesQuadrupleDepth(self):
+		lr=record.RecordBuilder(3,2,quirks={'OSGUcode','depth4'})
+		rows=[None]
+		line='1.1.1. Оплата труда и начисления на выплаты по 0102 0010008 012 210 1 721.0 1 721.0 1 459.1 84.78 84.78'
+		nextLine='оплате труда'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'1.1.1.','name':'Оплата труда и начисления на выплаты по','section':'0102','article':'0010008','type':'012','OSGU':'210','amounts':[17210,17210,14591]},
+		])
+		nextLine='1.1.1.1. Заработная плата 0102 0010008 012 211 1 434.2 1 434.2 1 434.2 100.00 100.00'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'1.1.1.','name':'Оплата труда и начисления на выплаты по оплате труда','section':'0102','article':'0010008','type':'012','OSGU':'210','amounts':[17210,17210,14591]},
+		])
+		nextLine='1.1.1.2. Начисления на выплаты по оплате труда 0102 0010008 012 213 286.8 286.8 24.9 8.68 8.68'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'1.1.1.','name':'Оплата труда и начисления на выплаты по оплате труда','section':'0102','article':'0010008','type':'012','OSGU':'210','amounts':[17210,17210,14591]},
+			{'number':'1.1.1.1.','name':'Заработная плата','section':'0102','article':'0010008','type':'012','OSGU':'211','amounts':[14342,14342,14342]},
+		])
 
 if __name__=='__main__':
 	unittest.main()
