@@ -281,6 +281,24 @@ class TestRecordBuilder(unittest.TestCase):
 			{'number':'1.1.1.','name':'Оплата труда и начисления на выплаты по оплате труда','section':'0102','article':'0010008','type':'012','OSGU':'210','amounts':[17210,17210,14591]},
 			{'number':'1.1.1.1.','name':'Заработная плата','section':'0102','article':'0010008','type':'012','OSGU':'211','amounts':[14342,14342,14342]},
 		])
+	def testQuadDepthWithDotOnNextLine(self):
+		lr=record.RecordBuilder(3,2,quirks={'OSGUcode','depth4'})
+		rows=[None]
+		line='10.11.1.1 Безвозмездные перечисления 0409 3510444 006 241 1 112 801.0 1 112 801.0 1 112 801.0 100.00 100.00'
+		nextLine='. государственным и муниципальным 		'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'10.11.1.1.','name':'Безвозмездные перечисления','section':'0409','article':'3510444','type':'006','OSGU':'241','amounts':[11128010,11128010,11128010]},
+		])
+	def testQuadDepthWithOnlyDotOnNextLine(self):
+		lr=record.RecordBuilder(3,2,quirks={'OSGUcode','depth4'})
+		rows=[None]
+		line='10.10.1.1 Работы, услуги по содержанию имущества 0409 3510205 012 225 5 302 000.0 5 524 316.2 5 404 167.3 101.93 97.83'
+		nextLine='.'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'10.10.1.1.','name':'Работы, услуги по содержанию имущества','section':'0409','article':'3510205','type':'012','OSGU':'225','amounts':[53020000,55243162,54041673]},
+		])
 
 if __name__=='__main__':
 	unittest.main()

@@ -15,7 +15,7 @@ class RecordBuilder:
 		if 'OSGUcode' in quirks:
 			atPattern+='\s(?P<OSGU>\d{3})'
 		self.reFirstRecordLine=re.compile('^((?:\d\.?)+)\s+(.*)$')
-		self.reNextRecordLine=re.compile('^(\.?(?:\d\.?)+)\s+(.*)$')
+		self.reNextRecordLine=re.compile('^(\.(?:\d\.?)*|(?:\d\.?)+)(?:\s+(.*))?$')
 		if 'undottedNumbers' not in quirks:
 			self.reNumber=re.compile('^(?:\d+\.){1,'+str(4 if 'depth4' in quirks else 3)+'}$')
 			self.dotNumber=lambda number: number
