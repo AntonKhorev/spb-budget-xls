@@ -161,7 +161,7 @@ span {
 					(" "+a(law.zipPath,"копия") if law.isSingleZip and zipCopy else "")
 				)
 				if not law.documents:
-					w("<td colspan='4'>не содержит ведомственной структуры расходов</td>\n")
+					w("<td colspan='4'>"+e(law.availabilityNote)+"</td>\n")
 				wn2=nonFirstWrite()
 				for doc in law.documents:
 					wn2("<tr>")

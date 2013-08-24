@@ -156,6 +156,12 @@ class Law:
 				raise Exception('invalid download url '+du)
 		self.title=data['title']
 		self.documents=[Document(self,documentData) for documentData in data['documents']]
+		if 'availabilityNote' in data:
+			self.availabilityNote=data['availabilityNote']
+		elif not self.documents:
+			self.availabilityNote="не содержит ведомственной структуры расходов"
+		else:
+			self.availabilityNote=None
 	@property
 	def isSingleDownload(self):
 		return len(self.downloadUrls)==1
