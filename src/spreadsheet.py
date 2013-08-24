@@ -34,7 +34,7 @@ class Spreadsheet:
 				lines[i+1]=nextLine
 
 		# check number sequence
-		nsc=number.NumberSequenceChecker(4 if 'depth4' in quirks else 3)
+		nsc=number.NumberSequenceChecker(3,4 if 'depth4' in quirks else 3)
 		nscError=nsc.findError(row['number'] for row in self.rows[1:] if row is not None)
 		if nscError is not None:
 			raise Exception('error in number sequence after '+str(nscError))

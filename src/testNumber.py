@@ -7,6 +7,7 @@ import number
 class TestNumberSequenceChecker(unittest.TestCase):
 	def setUp(self):
 		self.nsc3=number.NumberSequenceChecker(3)
+		self.nsc34=number.NumberSequenceChecker(3,4)
 	def testOk(self):
 		e=self.nsc3.findError(['1.','1.1.','1.1.1.','1.2.','1.2.1.','2.','2.1.','2.1.1.'])
 		self.assertIsNone(e)
@@ -25,6 +26,15 @@ class TestNumberSequenceChecker(unittest.TestCase):
 	def testWrongStart(self):
 		e=self.nsc3.findError(['2.','2.1.','2.1.1.'])
 		self.assertEqual(e,number.START)
+	def testMinDepthEnd(self):
+		e=self.nsc34.findError(['1.','1.1.','1.1.1.'])
+		self.assertIsNone(e)
+	def testMaxDepthEnd(self):
+		e=self.nsc34.findError(['1.','1.1.','1.1.1.','1.1.1.1.'])
+		self.assertIsNone(e)
+	def test123(self):
+		e=self.nsc34.findError(['1.','1.1.','1.1.1.','1.2.','1.2.1.','1.2.2.','1.2.2.1.','1.2.2.2.','1.2.3.','1.2.4.'])
+		self.assertIsNone(e)
 
 if __name__=='__main__':
 	unittest.main()
