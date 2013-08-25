@@ -16,7 +16,7 @@
 # delta: True = в формате +/-
 
 rootUrl: http://www.fincom.spb.ru/files/cf/npd/budget/
-pdfboxJar: pdfbox-app-1.8.1.jar
+pdfboxJar: pdfbox-app-1.8.2.jar
 laws:
   # TODO 2006 and earlier
 
@@ -59,6 +59,17 @@ laws:
       - http://www.fincom.spb.ru/files/cf/npd/budget/2007/izm1/pr04.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2007/izm1/pr05.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2007/izm1/pr06.pdf
+    documents:
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2007 год
+        appendixNumber: 3
+        pdfFilename: 2007/izm1/pr03.pdf
+        forYear: 2007
+        total: 266 271 871.9
+        quirks:
+          - undottedNumbers
+          - econcode
+          - depth4
+        # don't have permissions
   - code: 2007.i.z
     title: Об исполнении бюджета Санкт-Петербурга за 2007 год
     date: 02.07.2008
