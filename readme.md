@@ -57,14 +57,14 @@
 1. Скачать исходный код `pdfbox`.
 2. В файл `pdfbox/src/main/java/org/apache/pdfbox/pdmodel/encryption/AccessPermission.java` внести изменение:
 
-    private boolean isPermissionBitOn( int bit )
-    {
-        //return (bytes & (1 << (bit-1))) != 0;
-	return true;
-    }
+		private boolean isPermissionBitOn( int bit )
+		{
+			//return (bytes & (1 << (bit-1))) != 0;
+			return true;
+		}
 
 3. Собрать jar-файл с помощью `maven`:
 
-    mvn clean package
+		mvn clean package
 
 4. Заменить pdfbox на получившийся файл `app/target/pdfbox-app-x.y.z.jar`.
