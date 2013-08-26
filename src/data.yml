@@ -21,12 +21,25 @@ laws:
   # TODO 2002 and earlier
 
   # 2000
-  # проекта нет
-  # - code: 2000.0.z
-    # title: О бюджете Санкт-Петербурга на 2001 год
-    # date: 06.12.2000
-    # viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=55@cf_npa_bud
-    # downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2001/full/bd_2001.zip
+  - code: 2000.0.z
+    title: О бюджете Санкт-Петербурга на 2000 год
+    date: 22.12.1999
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=257@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2000/rospis1/rospis00-1.zip
+    originalXlsUrl: true
+  - code: 2000.1.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга "О бюджете Санкт-Петербурга на 2000 год"
+    date: 28.06.2000
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=259@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2000/rospis2/rospis00-2.zip
+  - code: 2000.2.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга "О бюджете Санкт-Петербурга на 2000 год"
+    date: 04.10.2000
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=177@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2000/svod/bd2000.zip
+    originalXlsUrl: true
+
+  # выше росписи лежат только отдельно от законов и проектов/исполнений нет
 
   # 2001
   - code: 2001.0.p
