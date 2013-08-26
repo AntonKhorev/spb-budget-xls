@@ -100,9 +100,10 @@ span {
 """
 		)
 
-		w("<p>Данные извлечены автоматически"+refs.makeRef(
-			a("https://github.com/AntonKhorev/BudgetSpb","Исходный код программы для извлечения")+"."
-		).ref+" из тесктов законов, опубликованных на сайте "+a("http://www.fincom.spb.ru/","Комитета финансов Санкт-Петербурга")+".</p>\n")
+		abbrXls="<abbr title='Excel Binary File Format, бинарный формат файлов Excel'>xls</abbr>"
+		abbrPdf="<abbr title='Portable Document Format'>pdf</abbr>"
+		abbrCsv="<abbr title='comma-separated values, значения, разделённые запятыми'>csv</abbr>"
+		abbrUtf8="<abbr title='Unicode Transformation Format, 8-bit'>utf-8</abbr>"
 
 		w("<p>Последнее обновление: 24.08.2013."+refs.makeRef(
 			"<dl>"
@@ -126,6 +127,7 @@ span {
 		w(".</p>\n")
 
 		w("<h2>Данные, для которых извлечение не производилось</h2>\n")
+		w("<p>До 2007 года "+a("http://www.fincom.spb.ru/","Комитет финансов Санкт-Петербурга")+" публиковал таблицы из приложений к бюджету в формате "+abbrXls+".</p>\n")
 		w("<table>\n")
 		w("<thead>\n")
 		w("<tr><th>год</th><th>закон</th><th>исходные документы</th><th>данные в машиночитаемом виде</th></tr>\n")
@@ -153,6 +155,9 @@ span {
 		w("</table>\n")
 
 		w("<h2>Извлечённые данные</h2>\n")
+		w("<p>С 2007 года приложения к законам о бюджете публикуются в формате "+abbrPdf+". Работать с таблицами в этом формате может быть неудобно. Ниже приводятся данные, автоматически"+refs.makeRef(
+			a("https://github.com/AntonKhorev/BudgetSpb","Исходный код программы для извлечения")+"."
+		).ref+" извлечённые из приложений.</p>\n")
 		refData=refs.makeRef(
 			"<pre><code>"
 			"1.                  \<br />"
@@ -162,15 +167,15 @@ span {
 			"«столбиком»   «лесенкой» — в этом варианте проще формулы для суммирования"
 			"</code></pre>"
 		)
-		refCsv=refs.makeRef("В кодировке utf-8. Числа с десятичной запятой, потому что в таком формате их читают русские версии электронных таблиц.")
+		refCsv=refs.makeRef("В кодировке "+abbrUtf8+". Числа с десятичной запятой, потому что в таком формате их читают русские версии электронных таблиц.")
 		w("<table>\n")
 		w("<thead>\n")
 		w("<tr><th rowspan='2'>год</th><th rowspan='2'>закон</th><th rowspan='2'>исходные документы"+refs.makeRef(
 			"Наличие ссылок на архивы для скачивания зависит от их доступности на сайте Комитета финансов."
 		).ref+"</th><th rowspan='2'>приложение</th><th colspan='3'>данные в машиночитаемом виде"+refData.ref+"</th></tr>\n")
-		w("<tr><th>csv"+refCsv.ref+" без формул</th><th>csv"+refCsv.ref+" с формулами"+refs.makeRef(
+		w("<tr><th>"+abbrCsv+refCsv.ref+" без формул</th><th>"+abbrCsv+refCsv.ref+" с формулами"+refs.makeRef(
 			"Для правильной работы формул файл необходимо читать с первой строки."
-		).ref+"</th><th>xls</th></tr>\n")
+		).ref+"</th><th>"+abbrXls+"</th></tr>\n")
 		w("</thead>\n")
 		refUnknownSlack=refs.makeRef("Указанные суммы могут расходиться с реальными суммами подпунктов на 100—200 руб. по неизвестным причинам.")
 		refRoundoffSlack=refs.makeRef(

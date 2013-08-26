@@ -162,7 +162,7 @@ class Law:
 		if 'availabilityNote' in data:
 			self.availabilityNote=data['availabilityNote']
 		elif self.originalXlsUrl is not None:
-			self.availabilityNote="доступен на сайте Комитета финансов в формате xls"
+			self.availabilityNote="данные доступны на сайте Комитета финансов в формате xls"
 		elif not self.documents:
 			self.availabilityNote="не содержит ведомственной структуры расходов"
 		else:
