@@ -20,6 +20,64 @@ pdfboxJar: pdfbox-app-1.8.2.jar
 laws:
   # TODO 2002 and earlier
 
+  # 2000
+  # проекта нет
+  # - code: 2000.0.z
+    # title: О бюджете Санкт-Петербурга на 2001 год
+    # date: 06.12.2000
+    # viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=55@cf_npa_bud
+    # downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2001/full/bd_2001.zip
+
+  # 2001
+  - code: 2001.0.p
+    title: О бюджете Санкт-Петербурга на 2001 год
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=186@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2001/project/pr_2001b.zip
+    originalXlsUrl: true
+  - code: 2001.0.z
+    title: О бюджете Санкт-Петербурга на 2001 год
+    date: 06.12.2000
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=55@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2001/full/bd_2001.zip
+    originalXlsUrl: true
+  - code: 2001.1.p
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга "О бюджете Санкт-Петербурга на 2001 год"
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=51@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2001/pr_izm/pr_2001izm.zip
+    originalXlsUrl: true
+  - code: 2001.1.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга "О бюджете Санкт-Петербурга на 2001 год"
+    date: 03.10.2001
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=50@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2001/izm/2001_izm.zip
+    originalXlsUrl: true
+  # исполнения нет
+
+  # 2002
+  - code: 2002.0.p
+    title: О бюджете на 2002 год
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=183@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2002/project/pr2002.zip
+    originalXlsUrl: true
+  - code: 2002.0.z
+    title: О бюджете Санкт-Петербурга на 2002 год
+    date: 21.11.2001
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=54@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2002/full/bd2002.zip
+    originalXlsUrl: true
+  - code: 2002.1.p
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2002 год»
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=256@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2002/pr_izm/pr_bd2002izm.zip
+    originalXlsUrl: true
+  - code: 2002.1.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга "О бюджете Санкт-Петербурга на 2002 год"
+    date: 26.06.2002
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=47@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2002/izm/budg02izm.zip
+    originalXlsUrl: true
+  # исполнения нет
+
   # 2003
   - code: 2003.0.p
     title: О бюджете Санкт-Петербурга на 2003 год
