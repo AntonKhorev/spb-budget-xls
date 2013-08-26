@@ -18,42 +18,125 @@
 rootUrl: http://www.fincom.spb.ru/files/cf/npd/budget/
 pdfboxJar: pdfbox-app-1.8.2.jar
 laws:
-  # TODO 2005 and earlier
+  # TODO 2002 and earlier
+
+  # 2003
+  - code: 2003.0.p
+    title: О бюджете Санкт-Петербурга на 2003 год
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=184@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2003/project/pr-bd2003.zip
+    originalXlsUrl: true
+  - code: 2003.0.z
+    title: О бюджете Санкт-Петербурга на 2003 год
+    date: 30.10.2002
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=45@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2003/full/bd2003.zip
+    originalXlsUrl: true
+  # проекта нет
+  - code: 2003.1.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2003 год»
+    date: 10.06.2004
+    # ??? как может быть такая дата?
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=43@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2003/izm/bd2003-izm.zip
+    availabilityNote: таблица очень короткая; пока не обработана
+  # исполнения нет
+
+  # 2004
+  - code: 2004.0.p
+    title: О бюджете Санкт-Петербурга на 2004 год
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=41@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2004/project/pr_bd2004.zip
+    originalXlsUrl: true
+  - code: 2004.0.z
+    title: О бюджете Санкт-Петербурга на 2004 год
+    date: 19.11.2003
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=40@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2004/full/bd2004.zip
+    originalXlsUrl: true
+  # проекта нет
+  - code: 2004.1.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга "О бюджете Санкт-Петербурга на 2004 год"
+    date: 30.06.2004
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=38@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2004/izm1/bd2004izm.zip
+    originalXlsUrl: true
+  # проекта нет
+  - code: 2004.2.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2004 год» в связи с необходимостью досрочного осуществления ежемесячной денежной выплаты отдельным категориям граждан в Санкт-Петербурге
+    date: 14.12.2004
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=37@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2004/izm2/bd2004izm2.zip
+    originalXlsUrl: true
+  # исполнения нет
+
+  # 2005
+  - code: 2005.0.p
+    title: О бюджете Санкт-Петербурга на 2005 год
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=35@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2005/project/pr_bd_2005.zip
+    originalXlsUrl: true
+  - code: 2005.0.z
+    title: О бюджете Санкт-Петербурга на 2005 год
+    date: 17.11.2004
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=185@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2005/full/bd_2005.zip
+    originalXlsUrl: true
+  - code: 2005.1.p
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга "О бюджете Санкт-Петербурга на 2005 год"
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=33@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2005/pr_izm/pr_bd_2005izm.zip
+    originalXlsUrl: true
+  - code: 2005.1.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга "О бюджете Санкт-Петербурга на 2005 год"
+    date: 29.06.2005
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=32@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2005/izm1/bd_2005_izm.zip
+    originalXlsUrl: true
+  # проекта нет
+  - code: 2005.2.z
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2005 год»
+    date: 07.12.2005
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=189@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2005/izm2/bd2005_izm2.zip
+    originalXlsUrl: true
+  # исполнения нет
 
   # 2006
   - code: 2006.0.p
     title: О бюджете Санкт-Петербурга на 2006 год
     viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=191@cf_npa_bud
     downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/project/pr_bud2006.zip
-    originalXlsUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/project/pr_bud2006.zip
+    originalXlsUrl: true
   - code: 2006.0.z
     title: О бюджете Санкт-Петербурга на 2006 год
     date: 16.11.2005
     viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=192@cf_npa_bud
     downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/full/bd2006.zip
-    originalXlsUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/full/bd2006.zip
+    originalXlsUrl: true
   - code: 2006.1.p
     title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2006 год»
     viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=205@cf_npa_bud
     downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/pr_izm1/pr2006izm.zip
-    originalXlsUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/pr_izm1/pr2006izm.zip
+    originalXlsUrl: true
   - code: 2006.1.z
     title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2006 год»
     date: 12.04.2006
     viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=210@cf_npa_bud
     downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/izm1/bud2006izm.zip
-    originalXlsUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/izm1/bud2006izm.zip
+    originalXlsUrl: true
   - code: 2006.2.p
     title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2006 год»
     viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=221@cf_npa_bud
     downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/pr_izm2/pr2006izm2.zip
-    originalXlsUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/pr_izm2/pr2006izm2.zip
+    originalXlsUrl: true
   - code: 2006.2.z
     title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2006 год»
     date: 13.10.2006
     viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=230@cf_npa_bud
     downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/izm2/bud2006izm2.zip
-    originalXlsUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2006/izm2/bud2006izm2.zip
+    originalXlsUrl: true
+  # исполнения нет
 
   # 2007
   # на 1 год вперёд

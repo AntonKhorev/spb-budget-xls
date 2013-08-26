@@ -152,6 +152,8 @@ class Law:
 		self.viewUrl=data['viewUrl']
 		self.downloadUrls=data['downloadUrl']
 		self.originalXlsUrl=data.get('originalXlsUrl')
+		if self.originalXlsUrl==True:
+			self.originalXlsUrl=self.downloadUrls[0]
 		for du in self.downloadUrls:
 			if not du.startswith(self.environment.rootUrl):
 				raise Exception('invalid download url '+du)
