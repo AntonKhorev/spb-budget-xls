@@ -108,13 +108,16 @@ span {
 			"<dl>"
 			"<dt>31.05.2013</dt><dd>Добавлен закон 1-й корректировки бюджета 2013 г. и закон об исполнении бюджета 2011 г.</dd>"
 			"<dt>04.06.2013</dt><dd>Добавлены законы 2009—2010 гг.</dd>"
-			"<dt>24.08.2013</dt><dd>Добавлены законы 2008 гг., кроме небольших корректировок расходов.</dd>"
+			"<dt>24.08.2013</dt><dd>Добавлены законы 2008 г., кроме небольших корректировок расходов.</dd>"
 			"</dl>"
 		).ref+"</p>\n")
 
 		yearLaws=collections.defaultdict(list)
+		yearExtracted=collections.defaultdict(bool)
 		for law in self.env.laws:
 			yearLaws[law.year].append(law)
+			if law.documents:
+				yearExtracted[law.year]=True
 		w("<p>Документы для годов: ")
 		wn=nonFirstWrite()
 		for year in sorted(yearLaws):
@@ -122,6 +125,34 @@ span {
 			w(a("#"+year,e(year)))
 		w(".</p>\n")
 
+		w("<h2>Данные, для которых извлечение не производилось</h2>\n")
+		w("<table>\n")
+		w("<thead>\n")
+		w("<tr><th>год</th><th>закон</th><th>исходные документы</th><th>данные в машиночитаемом виде</th></tr>\n")
+		w("</thead>\n")
+		for year,laws in sorted(yearLaws.items()):
+			if yearExtracted[year]:
+				continue
+			w("<tbody id='"+e(year)+"'>\n");
+			w("<tr>")
+			wtdrowspan(sum(max(len(law.documents),1) for law in laws),e(year))
+			wn=nonFirstWrite()
+			for law in laws:
+				wn("<tr>")
+				wtd("<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
+				wtd(a(law.viewUrl,"страница")+
+					(" "+a(law.downloadUrl,"архив") if law.isSingleDownload else "")+
+					(" "+a(law.zipPath,"копия") if law.isSingleZip and zipCopy else "")
+				)
+				if law.originalXlsUrl is not None:
+					wtd(a(law.originalXlsUrl,e(law.availabilityNote)))
+				else:
+					wtd(e(law.availabilityNote))
+				w("</tr>\n")
+			w("</tbody>\n");
+		w("</table>\n")
+
+		w("<h2>Извлечённые данные</h2>\n")
 		refData=refs.makeRef(
 			"<pre><code>"
 			"1.                  \<br />"
@@ -136,7 +167,7 @@ span {
 		w("<thead>\n")
 		w("<tr><th rowspan='2'>год</th><th rowspan='2'>закон</th><th rowspan='2'>исходные документы"+refs.makeRef(
 			"Наличие ссылок на архивы для скачивания зависит от их доступности на сайте Комитета финансов."
-		).ref+"</th><th rowspan='2'>приложение</th><th colspan='3'>данные в машиночитаемом виде"+refData.ref+"</th>")
+		).ref+"</th><th rowspan='2'>приложение</th><th colspan='3'>данные в машиночитаемом виде"+refData.ref+"</th></tr>\n")
 		w("<tr><th>csv"+refCsv.ref+" без формул</th><th>csv"+refCsv.ref+" с формулами"+refs.makeRef(
 			"Для правильной работы формул файл необходимо читать с первой строки."
 		).ref+"</th><th>xls</th></tr>\n")
@@ -147,6 +178,8 @@ span {
 			" выплаты производятся с точностью до копейки, а в данном приложении значения указываются с точностью до 100 руб."
 		)
 		for year,laws in sorted(yearLaws.items()):
+			if not yearExtracted[year]:
+				continue
 			w("<tbody id='"+e(year)+"'>\n");
 			w("<tr>")
 			wtdrowspan(sum(max(len(law.documents),1) for law in laws),e(year))
@@ -163,9 +196,10 @@ span {
 				)
 				if not law.documents:
 					if law.originalXlsUrl is not None:
-						w("<td colspan='4'>"+a(law.originalXlsUrl,e(law.availabilityNote))+"</td>\n")
+						w("<td colspan='4'>"+a(law.originalXlsUrl,e(law.availabilityNote))+"</td>")
 					else:
-						w("<td colspan='4'>"+e(law.availabilityNote)+"</td>\n")
+						w("<td colspan='4'>"+e(law.availabilityNote)+"</td>")
+					w("</tr>\n")
 				wn2=nonFirstWrite()
 				for doc in law.documents:
 					wn2("<tr>")
