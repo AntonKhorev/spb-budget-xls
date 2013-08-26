@@ -312,6 +312,15 @@ class TestRecordBuilder(unittest.TestCase):
 			{'number':'49.38.1.1.','name':'Услуги по содержанию имущества','section':'0501','article':'3500682','type':'410','econ':'225','amounts':[755550]},
 			{'number':'49.39.','name':'Расходы на благоустройство кварталов 16, 16а,','section':'0501','article':'3500683','amounts':[25000]},
 		])
+	def testNegativeExecution(self):
+		lr=record.RecordBuilder(3,2,quirks={'econcode','depth4'})
+		rows=[None]
+		line='12.7.3. Прочие расходы 0115 0010009 005 290 0.0 2.0 -0.4 0.00 -20.00'
+		nextLine='12.7.4. Увеличение стоимости основных средств 0115 0010009 005 310 300.0 320.0 319.4 106.47 99.81		'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'12.7.3.','name':'Прочие расходы','section':'0115','article':'0010009','type':'005','econ':'290','amounts':[0,20,-4]},
+		])
 
 if __name__=='__main__':
 	unittest.main()

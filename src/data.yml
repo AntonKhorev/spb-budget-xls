@@ -84,6 +84,16 @@ laws:
       - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril5.zip
       - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril6.pdf
       - http://www.fincom.spb.ru/files/cf/npd/budget/2007/ispolnenie/pril7.pdf
+    documents: # 07-мар-08
+      - title: Показатели расходов бюджета Санкт-Петербурга за 2007 год по ведомственной структуре расходов бюджета
+        appendixNumber: 4
+        zipFilename: 2007/ispolnenie/pril4.zip
+        zipContents: pril4.pdf
+        forYear: 2007
+        total: ['266 271 871.9','271 418 967.9','259 301 795.3']
+        quirks:
+          - econcode
+          - depth4
 
   # 2008
   - code: 2008.0.p

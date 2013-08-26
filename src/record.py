@@ -9,7 +9,7 @@ class RecordBuilder:
 		self.nCols=nCols
 		# compile regexes
 		nmPattern='^(?P<name>.*?)'
-		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*self.nCols+'\s\d+[.,]\d\d'*nPercentageCols+'$' # amount (and percentage if needed) pattern
+		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*self.nCols+'\s-?\d+[.,]\d\d'*nPercentageCols+'$' # amount (and percentage if needed) pattern
 		arPattern='\s(?P<section>\d{4})\s(?P<article>\d{6}[0-9а-я])' # article (code) pattern
 		atPattern='\s(?P<type>\d{3})' # type pattern
 		if 'OSGUcode' in quirks:
