@@ -321,6 +321,15 @@ class TestRecordBuilder(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'12.7.3.','name':'Прочие расходы','section':'0115','article':'0010009','type':'005','econ':'290','amounts':[0,20,-4]},
 		])
+	def testSplitSection(self):
+		lr=record.RecordBuilder(1,quirks={'splitSection'})
+		rows=[None]
+		line='1.1. Расходы на содержание главы Правительства 01      02 0010008 2 862.8'
+		nextLine='Санкт-Петербурга'
+		nextLine=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'1.1.','name':'Расходы на содержание главы Правительства','section':'0102','article':'0010008','amounts':[28628]},
+		])
 
 if __name__=='__main__':
 	unittest.main()

@@ -10,7 +10,10 @@ class RecordBuilder:
 		# compile regexes
 		nmPattern='^(?P<name>.*?)'
 		amPattern='\s([+-]?[0-9 ]+[.,]\d)'*self.nCols+'\s-?\d+[.,]\d\d'*nPercentageCols+'$' # amount (and percentage if needed) pattern
-		arPattern='\s(?P<section>\d{4})\s(?P<article>\d{6}[0-9а-я])' # article (code) pattern
+		if 'splitSection' in quirks:
+			arPattern='\s(?P<section>\d\d\s+\d\d)\s(?P<article>\d{6}[0-9а-я])' # article (code) pattern
+		else:
+			arPattern='\s(?P<section>\d{4})\s(?P<article>\d{6}[0-9а-я])' # article (code) pattern
 		atPattern='\s(?P<type>\d{3})' # type pattern
 		if 'OSGUcode' in quirks:
 			atPattern+='\s(?P<OSGU>\d{3})'
@@ -73,6 +76,8 @@ class RecordBuilder:
 			m=self.reLineEndingForDepth[nc].match(rest)
 			if m:
 				row=m.groupdict()
+				if 'section' in row:
+					row['section']=row['section'][:2]+row['section'][-2:]
 				row['name']=makeName(row['name'])
 				row['number']=number
 				row['amounts']=parseAmounts(m.group,len(row))

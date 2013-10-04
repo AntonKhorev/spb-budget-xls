@@ -18,8 +18,6 @@
 rootUrl: http://www.fincom.spb.ru/files/cf/npd/budget/
 pdfboxJar: pdfbox-app-1.8.2.jar
 laws:
-  # TODO 2002 and earlier
-
   # 2000
   - code: 2000.0.z
     title: О бюджете Санкт-Петербурга на 2000 год
@@ -924,3 +922,18 @@ laws:
         forYear: [2014,2015]
         total: ['-2 969 518.5','-973 581.1']
         delta: True
+
+  # 2014
+  - code: 2014.0.p
+    title: О бюджете Санкт-Петербурга на 2014 год и на плановый период 2015 и 2016 годов
+    date: 02.10.2013
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=670@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2014/project/pr_bd-2014-16.zip
+    documents:
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2014 год
+        appendixNumber: 3
+        zipContents: pr03-2014-16.pdf
+        forYear: 2014
+        total: 443 493 093.4
+        quirks:
+          - splitSection
