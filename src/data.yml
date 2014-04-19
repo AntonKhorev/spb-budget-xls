@@ -944,3 +944,23 @@ laws:
         total: ['453 768 770.6','498 750 420.8']
         quirks:
           - splitSection
+  - code: 2014.0.z
+    title: О бюджете Санкт-Петербурга на 2014 год и на плановый период 2015 и 2016 годов
+    date: 27.11.2013
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=674@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2014/full/zakon-full_bd2014-16.zip
+    documents:
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2014 год
+        appendixNumber: 3
+        zipContents: pr03_bd2014-16.pdf
+        forYear: 2014
+        total: 456 902 995.2
+        quirks:
+          - splitSection
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2015 и 2016 годов
+        appendixNumber: 4
+        zipContents: pr04_bd2014-16.pdf
+        forYear: [2015,2016]
+        total: ['451 866 199.7','493 504 571.8']
+        quirks:
+          - splitSection
