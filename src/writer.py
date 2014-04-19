@@ -54,7 +54,7 @@ class HtmlWriter:
 """<!DOCTYPE HTML>
 <html>
 <head>
-<meta charset='utf-8'>
+<meta charset='utf-8' />
 <title>Ведомственная структура расходов бюджета Санкт-Петербурга в csv и xls</title>
 <style>
 :target {
@@ -105,7 +105,7 @@ span {
 		abbrCsv="<abbr title='comma-separated values, значения, разделённые запятыми'>csv</abbr>"
 		abbrUtf8="<abbr title='Unicode Transformation Format, 8-bit'>utf-8</abbr>"
 
-		w("<p>Последнее обновление: 11.10.2013."+refs.makeRef(
+		w("<p>Последнее обновление: 20.12.2013."+refs.makeRef(
 			"<dl>"
 			"<dt>31.05.2013</dt><dd>Добавлен закон 1-й корректировки бюджета 2013 г. и закон об исполнении бюджета 2011 г.</dd>"
 			"<dt>04.06.2013</dt><dd>Добавлены законы 2009—2010 гг.</dd>"
@@ -132,7 +132,7 @@ span {
 		w(
 			"<p>До 2007 года "+a("http://www.fincom.spb.ru/","Комитет финансов Санкт-Петербурга")+" публиковал таблицы из приложений к бюджету в формате "+abbrXls+". "
 			"Таблицы можно найти на сайте комитета в разделе "+a("http://www.fincom.spb.ru/comfin/budjet/laws.htm","«Законы о бюджете»")+". "
-			"Позже в этом формате в разделе "+a("http://www.fincom.spb.ru/comfin/budjet/budget_for_people.htm","«Бюджет для граждан»")+" был опубликован проект бюджета на 2014 год.</p>\n"
+			"Позже в этом формате в разделе "+a("http://www.fincom.spb.ru/comfin/budjet/budget_for_people.htm","«Бюджет для граждан»")+" был опубликован проект закона и закон о бюджете на 2014 год.</p>\n"
 		)
 		w("<table>\n")
 		w("<thead>\n")

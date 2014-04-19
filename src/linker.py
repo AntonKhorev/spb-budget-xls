@@ -8,7 +8,7 @@ import main
 
 # reads *.htm from hosting and extracts links to files
 class Linker:
-	def __init__(self,env):
+	def __init__(self,dir,suffixes,dirPrefix=None):
 		self.fileLinks=fileLinks={}
 		class Parser(html.parser.HTMLParser):
 			def handle_starttag(self,tag,attrs):
@@ -19,11 +19,16 @@ class Linker:
 					if a!='href':
 						continue
 					u=urllib.parse.unquote(v)
-					m=re.search(r'(?:csv|xls)/.+\.(?:csv|xls)$',u)
+					s='|'.join(suffixes)
+					if dirPrefix is None:
+						d=s
+					else:
+						d=dirPrefix
+					m=re.search(r'(?:'+d+')/.+\.(?:'+s+')$',u)
 					if m:
 						v=v.replace('https://www.dropbox.com/','https://dl.dropbox.com/',1) # dropbox special
 						fileLinks[m.group(0)]=v
-		for filename in glob.glob(env.rootPath+'/htm/*.htm'):
+		for filename in glob.glob(dir+'/*.htm'):
 			with open(filename,encoding='utf-8') as f:
 				Parser().feed(f.read())
 	def getLink(self,path):
@@ -33,6 +38,7 @@ class Linker:
 
 if __name__=='__main__':
 	env=main.Environment(main.loadData())
-	linker=Linker(env)
+	dir=env.rootPath+'/htm'
+	linker=Linker(dir,['csv','xls'])
 	if not env.hasHtml():
 		env.writeHtml(False,linker)
