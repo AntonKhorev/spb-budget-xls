@@ -330,6 +330,15 @@ class TestRecordBuilder(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'1.1.','name':'Расходы на содержание главы Правительства','section':'0102','article':'0010008','amounts':[28628]},
 		])
+	def testLetterArticle(self):
+		lr=record.RecordBuilder(1,quirks={'splitSection'})
+		rows=[None]
+		line='29.7. Расходы на реализацию мероприятий 04      09 24Б2060 500 000.0'
+		nextLine='подпрограммы " Автомобильные дороги"  '
+		nextLine=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'29.7.','name':'Расходы на реализацию мероприятий','section':'0409','article':'24Б2060','amounts':[5000000]},
+		])
 
 if __name__=='__main__':
 	unittest.main()

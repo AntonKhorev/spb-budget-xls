@@ -964,3 +964,16 @@ laws:
         total: ['451 866 199.7','493 504 571.8']
         quirks:
           - splitSection
+  - code: 2014.1.p
+    title: О внесении изменений и дополнений в Закон Санкт-Петербурга «О бюджете Санкт-Петербурга на 2014 год и на плановый период 2015 и 2016 годов»
+    date: 11.04.2014
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=705@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2014/pr-1izm/pr-1kor_bd2014-16.zip
+    documents:
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2014 год
+        appendixNumber: 2
+        zipContents: pr02_1kor_bd2014-16.pdf
+        forYear: 2014
+        total: 465 098 455.1
+        quirks:
+          - splitSection
