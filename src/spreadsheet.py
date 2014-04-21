@@ -40,6 +40,11 @@ class Spreadsheet:
 		if nscError is not None:
 			raise Exception('error in number sequence after '+str(nscError))
 
+		if 'missingCommitteeCode875' in quirks:
+			for row in self.rows:
+				if row is not None and row['name']=='КОМИТЕТ ПО МЕЖНАЦИОНАЛЬНЫМ ОТНОШЕНИЯМ И РЕАЛИЗАЦИИ МИГРАЦИОННОЙ ПОЛИТИКИ В САНКТ-ПЕТЕРБУРГЕ':
+					row['name']='КОМИТЕТ ПО МЕЖНАЦИОНАЛЬНЫМ ОТНОШЕНИЯМ И РЕАЛИЗАЦИИ МИГРАЦИОННОЙ ПОЛИТИКИ В САНКТ-ПЕТЕРБУРГЕ (875)'
+
 	def setAmountHeader(self,header):
 		self.amountHeader=header
 

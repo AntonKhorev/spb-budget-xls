@@ -977,6 +977,7 @@ laws:
         total: 465 098 455.1
         quirks:
           - splitSection
+          - missingCommitteeCode875
       - title: Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2015 и 2016 годов
         appendixNumber: 14
         zipContents: pr14_1kor_bd2014-16.pdf
@@ -985,3 +986,4 @@ laws:
         delta: True
         quirks:
           - splitSection
+          - missingCommitteeCode875
