@@ -57,6 +57,24 @@ class HtmlWriter:
 <meta charset='utf-8' />
 <title>Ведомственная структура расходов бюджета Санкт-Петербурга в csv и xls</title>
 <style>
+nav {
+	background: #246;
+}
+nav ul {
+	margin: 0;
+	padding: 0;
+}
+nav li {
+	display: inline-block;
+	list-style: none;
+	margin: 1em 0 1em 2em;
+}
+nav :link, nav :visited {
+	color: #DDD;
+}
+nav :link:hover, nav :visited:hover {
+	color: #FFF;
+}
 :target {
 	background: #FFC;
 }
@@ -96,7 +114,18 @@ span {
 </style>
 </head>
 <body>
-<h1>Ведомственная структура расходов бюджета Санкт-Петербурга</h1>
+"""
+		)
+		w("<nav><ul>")
+		for link,text in (
+			('index.html','Главная'),
+			('db.html','БД'),
+		):
+			w("<li>"+a(link,text)+"</li>")
+		w("</ul></nav>\n")
+
+		w(
+"""<h1>Ведомственная структура расходов бюджета Санкт-Петербурга</h1>
 """
 		)
 
