@@ -14,7 +14,7 @@ class RecordBuilder:
 			arPattern='\s(?P<section>\d\d\s+\d\d)'
 		else:
 			arPattern='\s(?P<section>\d{4})'
-		arPattern+='\s(?P<article>\d\d[0-9а-яА-Я]\d\d\d[0-9а-яА-Я])' # article (code) pattern
+		arPattern+='\s(?P<article>\d\d[0-9а-яА-Я]\d\d[0-9а-яА-Я][0-9а-яА-Я])' # article (code) pattern
 		atPattern='\s(?P<type>\d{3})' # type pattern
 		if 'OSGUcode' in quirks:
 			atPattern+='\s(?P<OSGU>\d{3})'

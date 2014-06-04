@@ -339,6 +339,15 @@ class TestRecordBuilder(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'29.7.','name':'Расходы на реализацию мероприятий','section':'0409','article':'24Б2060','amounts':[5000000]},
 		])
+	def testLetterArticle2(self):
+		lr=record.RecordBuilder(1,quirks={'splitSection'})
+		rows=[None]
+		line='16.43. Расходы на осуществление полномочий в сфере 09      09 33159Б0 4 168.1'
+		nextLine='охраны здоровья граждан за счет единой 		'
+		nextLine=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[None,
+			{'number':'16.43.','name':'Расходы на осуществление полномочий в сфере','section':'0909','article':'33159Б0','amounts':[41681]},
+		])
 	# quirk accounted for in spreadsheet.py
 	# def testInternationalCommittee(self):
 		# lr=record.RecordBuilder(1,quirks={'splitSection','missingCommitteeCode875'})
