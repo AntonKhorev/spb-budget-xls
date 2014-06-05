@@ -32,7 +32,10 @@ class HtmlWriter:
 		file=open(filename,'w',encoding='utf-8')
 		w=file.write
 		e=lambda x: html.escape(str(x))
-		a=lambda link,text: "<a href='"+e(link)+"'>"+text+"</a>"
+		def a(link,text):
+			if self.isExternal and link=='index.html':
+				link='.'
+			return "<a href='"+e(link)+"'>"+text+"</a>"
 		if self.linker is None:
 			af=a
 		else:

@@ -7,6 +7,9 @@ class IndexHtmlWriter(writer.HtmlWriter):
 		super().__init__(linker)
 		self.env=env
 
+	def getLink(self):
+		return 'index.html'
+
 	def getTitle(self):
 		return "Ведомственная структура расходов бюджета Санкт-Петербурга в csv и xls"
 

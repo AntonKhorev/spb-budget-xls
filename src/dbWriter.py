@@ -5,6 +5,9 @@ import writer
 from linker import Linker
 
 class DbHtmlWriter(writer.HtmlWriter):
+	def getLink(self):
+		return 'db.html'
+
 	def getTitle(self):
 		return "Структура расходов бюджета Санкт-Петербурга за 2014 год в одной таблице"
 
