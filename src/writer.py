@@ -64,15 +64,19 @@ class HtmlWriter:
 """<style>
 nav {
 	background: #246;
+	color: #DDD;
 }
 nav ul {
 	margin: 0;
-	padding: 0;
+	padding: 1em;
 }
 nav li {
 	display: inline-block;
 	list-style: none;
-	margin: 1em 0 1em 2em;
+	padding: 0 1em;
+}
+nav li.active {
+	background: #48C;
 }
 nav :link, nav :visited {
 	color: #DDD;
@@ -126,7 +130,10 @@ span {
 			('index.html','Главная'),
 			('db.html','БД'),
 		):
-			w("<li>"+a(link,text)+"</li>")
+			if link==self.getLink():
+				w("<li class='active'>"+text+"</li>")
+			else:
+				w("<li>"+a(link,text)+"</li>")
 		w("</ul></nav>\n")
 
 		ctx=locals()
