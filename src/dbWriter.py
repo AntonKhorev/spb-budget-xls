@@ -5,6 +5,9 @@ import writer
 from linker import Linker
 
 class DbHtmlWriter(writer.HtmlWriter):
+	def getTitle(self):
+		return "Структура расходов бюджета Санкт-Петербурга за 2014 год в одной таблице"
+
 	def writeContents(self,makeFns):
 		files=[
 			('departments.xlsx','Ведомственная структура расходов бюджета Санкт-Петербурга (до проекта 1-й корректировки включительно)'),
@@ -15,7 +18,7 @@ class DbHtmlWriter(writer.HtmlWriter):
 			('pr-bd-2014-16.old.sql','База данных (без 1-й корректировки бюджета)'),
 		]
 		w,e,a=makeFns('w,e,a')
-		w("<h1>Данные о расходах по ведомствам, разделам, видам и целевым статьям за 2014 год, собранные в одну таблицу</h1>\n")
+		w("<h1>Структура расходов бюджета Санкт-Петербурга за 2014 год в одной таблице</h1>\n")
 		w('<ul>\n')
 		for filename,description in files:
 			w('<li>'+a(linker.getLink('db/'+filename),filename)+' — '+description+'</li>\n')

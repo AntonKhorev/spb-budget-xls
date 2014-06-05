@@ -54,8 +54,11 @@ class HtmlWriter:
 <html>
 <head>
 <meta charset='utf-8' />
-<title>Ведомственная структура расходов бюджета Санкт-Петербурга в csv и xls</title>
-<style>
+"""
+		)
+		w("<title>"+self.getTitle()+"</title>\n")
+		w(
+"""<style>
 nav {
 	background: #246;
 }

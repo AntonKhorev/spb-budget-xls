@@ -7,6 +7,9 @@ class IndexHtmlWriter(writer.HtmlWriter):
 		super().__init__(linker)
 		self.env=env
 
+	def getTitle(self):
+		return "Ведомственная структура расходов бюджета Санкт-Петербурга в csv и xls"
+
 	def writeContents(self,makeFns):
 		w,nonFirstWrite,wtd,wtdrowspan,e,a,af=makeFns('w,nonFirstWrite,wtd,wtdrowspan,e,a,af')
 
