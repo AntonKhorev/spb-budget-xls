@@ -11,7 +11,7 @@ import subprocess
 import urllib.request
 import yaml
 
-import spreadsheet,writer
+import spreadsheet,indexWriter
 
 # приложения, которые парсим
 class Document:
@@ -214,9 +214,9 @@ class Environment:
 		self.htmlFilename=self.rootPath+'/index.html'
 	def hasHtml(self):
 		return os.path.isfile(self.htmlFilename)
-	def writeHtml(self,zipCopy,linker=None):
-		hw=writer.HtmlWriter(self)
-		hw.write(self.htmlFilename,zipCopy,linker)
+	def writeHtml(self,linker=None):
+		hw=indexWriter.IndexHtmlWriter(linker,self)
+		hw.write(self.htmlFilename)
 
 def loadData():
 	return yaml.load(open(
@@ -241,4 +241,4 @@ if __name__=='__main__':
 				tb=sys.exc_info()[2]
 				raise Exception(str(e)+' in document '+document.code).with_traceback(tb)
 	if not env.hasHtml():
-		env.writeHtml(True)
+		env.writeHtml()

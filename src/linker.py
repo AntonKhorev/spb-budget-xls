@@ -41,4 +41,4 @@ if __name__=='__main__':
 	dir=env.rootPath+'/htm'
 	linker=Linker(dir,['csv','xls'])
 	if not env.hasHtml():
-		env.writeHtml(False,linker)
+		env.writeHtml(linker)
