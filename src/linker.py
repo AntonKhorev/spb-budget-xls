@@ -26,7 +26,7 @@ class Linker:
 						d=dirPrefix
 					m=re.search(r'(?:'+d+')/.+\.(?:'+s+')$',u)
 					if m:
-						v=v.replace('https://www.dropbox.com/','https://dl.dropbox.com/',1) # dropbox special
+						v=v.replace('https://www.dropbox.com/','https://dl.dropboxusercontent.com/',1) # dropbox special
 						fileLinks[m.group(0)]=v
 		for filename in glob.glob(dir+'/*.htm'):
 			with open(filename,encoding='utf-8') as f:
