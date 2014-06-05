@@ -123,7 +123,12 @@ span {
 			w("<li>"+a(link,text)+"</li>")
 		w("</ul></nav>\n")
 
-		self.writeContents(w,nonFirstWrite,wtd,wtdrowspan,e,a,af)
+		ctx=locals()
+		def makeFns(fnStr):
+			"function to make w(), a(), e() and likes"
+			return tuple(ctx[fn] for fn in fnStr.split(','))
+
+		self.writeContents(makeFns)
 
 		w(
 """</body>

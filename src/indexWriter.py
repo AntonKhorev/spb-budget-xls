@@ -7,7 +7,9 @@ class IndexHtmlWriter(writer.HtmlWriter):
 		super().__init__(linker)
 		self.env=env
 
-	def writeContents(self,w,nonFirstWrite,wtd,wtdrowspan,e,a,af):
+	def writeContents(self,makeFns):
+		w,nonFirstWrite,wtd,wtdrowspan,e,a,af=makeFns('w,nonFirstWrite,wtd,wtdrowspan,e,a,af')
+
 		refs=writer.HtmlWriter.Refs()
 		w("<h1>Ведомственная структура расходов бюджета Санкт-Петербурга</h1>\n")
 
