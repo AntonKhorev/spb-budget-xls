@@ -127,8 +127,9 @@ span {
 		)
 		w("<nav><ul>")
 		for link,text in (
-			('index.html','Главная'),
-			('db.html','БД'),
+			('index.html','Ведомственная структура'),
+			('db.html','Расходы в одной таблице'),
+			('fincom.html','Что есть на сайте Комитета'),
 		):
 			if link==self.getLink():
 				w("<li class='active'>"+text+"</li>")
