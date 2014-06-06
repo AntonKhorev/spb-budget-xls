@@ -32,15 +32,20 @@ class HtmlWriter:
 		file=open(filename,'w',encoding='utf-8')
 		w=file.write
 		e=lambda x: html.escape(str(x))
-		def a(link,text):
+		def a(link,text,title=None):
 			if self.isExternal and link=='index.html':
 				link='.'
-			return "<a href='"+e(link)+"'>"+text+"</a>"
+			r="<a href='"+e(link)+"'"
+			if title is not None:
+				r+=" title='"+e(title)+"'"
+			r+=">"+text+"</a>"
+			return r
 		if self.linker is None:
 			af=a
 		else:
 			af=lambda link,text: a(self.linker.getLink(link),text)
-		wtd=lambda x: w("<td>"+x+"</td>")
+		def wtd(text=''):
+			w("<td>"+text+"</td>")
 		wtdrowspan=lambda n,x: w("<td rowspan='"+e(n)+"'>"+x+"</td>")
 		def nonFirstWrite():
 			first=True
