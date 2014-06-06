@@ -1,10 +1,6 @@
-#!/usr/bin/env python3
-
 import glob
 import html.parser,urllib.parse
 import re
-
-import main
 
 # reads *.htm from hosting and extracts links to files
 class Linker:
@@ -35,10 +31,3 @@ class Linker:
 		if path not in self.fileLinks:
 			raise Exception(path+' not hosted')
 		return self.fileLinks[path]
-
-if __name__=='__main__':
-	env=main.Environment(main.loadData())
-	dir=env.rootPath+'/htm'
-	linker=Linker(dir,['csv','xls'])
-	if not env.hasHtml():
-		env.writeHtml(linker)
