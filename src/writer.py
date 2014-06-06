@@ -82,6 +82,7 @@ nav li {
 }
 nav li.active {
 	background: #48C;
+	color: #FFF;
 }
 nav :link, nav :visited {
 	color: #DDD;
