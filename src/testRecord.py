@@ -112,7 +112,7 @@ class TestRecordBuilder(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'1.3.','name':'Расходы на материальное обеспечение деятельности членов Совета Федерации и их','section':'0103','article':'0011201','amounts':[1490]},
 		])
-	def testPrirodopolzovanie(self):
+	def testYPrirodopolzovanie(self):
 		rows=[None]
 		line='24. КОМИТЕТ ПО 1 963 666.1 1 467 692.3'
 		nextLine='ПРИРОДОПОЛЬЗОВАНИЮ, ОХРАНЕ '
@@ -139,7 +139,7 @@ class TestRecordBuilder(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'24.','name':'КОМИТЕТ ПО ПРИРОДОПОЛЬЗОВАНИЮ, ОХРАНЕ ОКРУЖАЮЩЕЙ СРЕДЫ И ОБЕСПЕЧЕНИЮ ЭКОЛОГИЧЕСКОЙ','amounts':[19636661,14676923]},
 		])
-	def testArkhivnyi(self):
+	def testYArkhivnyi(self):
 		rows=[None]
 		line='2. АРХИВНЫ Й КОМИТЕТ САНКТ-ПЕТЕРБУРГА 335 899.9'
 		nextLine='(803)'
@@ -148,6 +148,13 @@ class TestRecordBuilder(unittest.TestCase):
 		self.assertEqual(rows,[None,
 			{'number':'2.','name':'АРХИВНЫЙ КОМИТЕТ САНКТ-ПЕТЕРБУРГА','amounts':[3358999]},
 		])
+	def testYStroitelnyNadzor(self):
+		self.doTestName(self.lr1,[
+			'43. СЛУЖБА ГОСУДАРСТВЕННОГО 160 509.6',
+			'СТРОИТЕЛЬНОГО НАДЗОРА И ',
+			'ЭКСПЕРТИЗЫ САНКТ-ПЕТЕРБУРГА (839)',
+			'43.1. Содержание исполнительного органа 01      13 0010009 129 469.9',
+		],'СЛУЖБА ГОСУДАРСТВЕННОГО СТРОИТЕЛЬНОГО НАДЗОРА И ЭКСПЕРТИЗЫ САНКТ-ПЕТЕРБУРГА (839)')
 	def testZnaniye(self):
 		self.doTestName(self.lr1,[
 			'19.39. Субсидия Межрегиональной общественной 0801 4400210 200.0',
