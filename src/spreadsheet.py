@@ -26,7 +26,10 @@ class Spreadsheet:
 		f.close()
 
 		# parse
-		nsc=number.NumberSequenceChecker(3,4 if 'depth4' in quirks else 3)
+		if 'brokenNumberSequence' not in quirks:
+			nsc=number.NumberSequenceChecker(3,4 if 'depth4' in quirks else 3)
+		else:
+			nsc=None
 		rb=record.RecordBuilder(self.nCols,nPercentageCols,quirks=quirks)
 		self.rows=[{},None]
 		for i,line in enumerate(lines):
@@ -36,9 +39,10 @@ class Spreadsheet:
 				lines[i+1]=nextLine
 
 		# check number sequence
-		nscError=nsc.findError(row['number'] for row in self.rows[1:] if row is not None)
-		if nscError is not None:
-			raise Exception('error in number sequence after '+str(nscError))
+		if 'brokenNumberSequence' not in quirks:
+			nscError=nsc.findError(row['number'] for row in self.rows[1:] if row is not None)
+			if nscError is not None:
+				raise Exception('error in number sequence after '+str(nscError))
 
 		if 'missingCommitteeCode875' in quirks:
 			for row in self.rows:

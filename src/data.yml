@@ -854,6 +854,8 @@ laws:
         forYear: [2013,2014]
         total: ['+0.0','+0.0']
         delta: True
+        quirks:
+          - brokenNumberSequence
 
   # 2013
   - code: 2013.0.p
