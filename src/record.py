@@ -59,9 +59,12 @@ class RecordBuilder:
 			if name1 is None:
 				return name2
 			else:
-				if len(name1)>=2 and (name1[-1]!='-' or name1[-2]==' '):
-					name1+=' '
-				return name1+name2
+				dash1=(len(name1)>=2 and name1[-1]=='-' and name1[-2]!=' ')
+				dash2=(len(name2)>=2 and name2[0]=='-' and name1[1]!=' ')
+				if dash1 or dash2:
+					return name1+name2
+				else:
+					return name1+' '+name2
 
 		def makeName(name):
 			return appendName(None,name)
