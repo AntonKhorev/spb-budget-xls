@@ -10,6 +10,6 @@ if __name__=='__main__':
 		'xls':['xls'],
 		'db':['sql','xlsx'],
 	})
-	env.writeHtml(linker) # index.html
+	env.writeHtml(linker) # xls.html
 	dbWriter.DbHtmlWriter(linker).write(env.rootPath+'/db.html') # db.html
 	fincomWriter.FincomHtmlWriter(linker).write(env.rootPath+'/fincom.html') # fincom.html

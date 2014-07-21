@@ -11,7 +11,7 @@ import subprocess
 import urllib.request
 import yaml
 
-import spreadsheet,indexWriter
+import spreadsheet,xlsWriter
 
 # приложения, которые парсим
 class Document:
@@ -211,11 +211,11 @@ class Environment:
 		self.rootUrl=data['rootUrl']
 		self.pdfboxFilename=self.rootPath+'/bin/'+data['pdfboxJar']
 		self.laws=[Law(self,lawData) for lawData in data['laws']]
-		self.htmlFilename=self.rootPath+'/index.html'
+		self.htmlFilename=self.rootPath+'/xls.html'
 	def hasHtml(self):
 		return os.path.isfile(self.htmlFilename)
 	def writeHtml(self,linker=None):
-		hw=indexWriter.IndexHtmlWriter(linker,self)
+		hw=xlsWriter.XlsHtmlWriter(linker,self)
 		hw.write(self.htmlFilename)
 
 def loadData():

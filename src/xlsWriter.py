@@ -2,13 +2,13 @@ import collections
 
 import writer
 
-class IndexHtmlWriter(writer.HtmlWriter):
+class XlsHtmlWriter(writer.HtmlWriter):
 	def __init__(self,linker,env):
 		super().__init__(linker)
 		self.env=env
 
 	def getLink(self):
-		return 'index.html'
+		return 'xls.html'
 
 	def getTitle(self):
 		return "Ведомственная структура расходов бюджета Санкт-Петербурга в csv и xls"
