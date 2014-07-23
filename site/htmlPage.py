@@ -1,37 +1,29 @@
+#
+# function names:
+# w = write
+# e = escape
+# a = link
+# af = link to external file (requires linker)
+#
+# arg names:
+# t = raw text
+# x = html text
+#
+
 import html
 
-class HtmlWriter:
-	class Refs:
-		class Ref:
-			def __init__(self,number,html):
-				self.number=number
-				self.html=html
-			@property
-			def id(self):
-				return "ref-"+str(self.number)
-			@property
-			def ref(self):
-				return "<sup><a href='#"+self.id+"'>["+str(self.number)+"]</a></sup>"
-			@property
-			def body(self):
-				return "<div id='"+self.id+"'>"+self.html+"</div>"
-		def __init__(self):
-			self.refs=[]
-		def __iter__(self):
-			return self.refs.__iter__()
-		def makeRef(self,html):
-			ref=self.__class__.Ref(len(self.refs)+1,html)
-			self.refs.append(ref)
-			return ref
-
-	def __init__(self,linker=None):
+class HtmlPage:
+	def __init__(self,link,title,content,linker=None):
+		self.link=link
+		self.title=title
+		self.content=content
 		self.linker=linker
 		self.isExternal=bool(linker)
 
 	def write(self,filename):
 		file=open(filename,'w',encoding='utf-8')
 		w=file.write
-		e=lambda x: html.escape(str(x))
+		e=lambda t: html.escape(str(t))
 		def a(link,text,title=None):
 			if self.isExternal and link=='index.html':
 				link='.'
@@ -40,21 +32,20 @@ class HtmlWriter:
 				r+=" title='"+e(title)+"'"
 			r+=">"+text+"</a>"
 			return r
-		if self.linker is None:
-			af=a
-		else:
+		af=a
+		if self.linker:
 			af=lambda link,text: a(self.linker.getLink(link),text)
-		def wtd(text=''):
-			w("<td>"+text+"</td>")
+		def wtd(x=''):
+			w("<td>"+x+"</td>")
 		wtdrowspan=lambda n,x: w("<td rowspan='"+e(n)+"'>"+x+"</td>")
 		def nonFirstWrite():
 			first=True
-			def wn(s):
+			def wn(x):
 				nonlocal first
 				if first:
 					first=False
 					return
-				w(s)
+				w(x)
 			return wn
 
 		w(
@@ -64,7 +55,7 @@ class HtmlWriter:
 <meta charset='utf-8' />
 """
 		)
-		w("<title>"+self.getTitle()+"</title>\n")
+		w("<title>"+self.title+"</title>\n")
 		w(
 """<style>
 nav {
@@ -138,7 +129,7 @@ span {
 			('db.html','БД расходов из разных источников'),
 			('fincom.html','Что есть на сайте Комитета'),
 		):
-			if link==self.getLink():
+			if link==self.link:
 				w("<li class='active'>"+text+"</li>")
 			else:
 				w("<li>"+a(link,text)+"</li>")
@@ -149,7 +140,7 @@ span {
 			"function to make w(), a(), e() and likes"
 			return tuple(ctx[fn] for fn in fnStr.split(','))
 
-		self.writeContents(makeFns)
+		self.content(makeFns)
 
 		w(
 """</body>
@@ -158,3 +149,18 @@ span {
 		)
 
 		file.close()
+
+def importContent(filename):
+	def content(makeFns):
+		w,=makeFns('w')
+		with open(filename,encoding='utf-8') as file:
+			inside=0
+			for line in file:
+				if line=='<body>\n':
+					inside+=1
+				elif line=='</body>\n':
+					inside-=1
+				if inside>0:
+					# TODO translate links
+					w(line)
+	return content

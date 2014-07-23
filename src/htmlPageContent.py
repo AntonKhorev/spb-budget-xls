@@ -1,22 +1,37 @@
 import collections
 
-import writer
+class Refs:
+	class Ref:
+		def __init__(self,number,html):
+			self.number=number
+			self.html=html
+		@property
+		def id(self):
+			return "ref-"+str(self.number)
+		@property
+		def ref(self):
+			return "<sup><a href='#"+self.id+"'>["+str(self.number)+"]</a></sup>"
+		@property
+		def body(self):
+			return "<div id='"+self.id+"'>"+self.html+"</div>"
+	def __init__(self):
+		self.refs=[]
+	def __iter__(self):
+		return self.refs.__iter__()
+	def makeRef(self,html):
+		ref=self.__class__.Ref(len(self.refs)+1,html)
+		self.refs.append(ref)
+		return ref
 
-class XlsHtmlWriter(writer.HtmlWriter):
-	def __init__(self,linker,env):
-		super().__init__(linker)
-		self.env=env
+def makeContent(env=None,linksToDocumentCopies=False):
+	if env is None:
+		import main
+		env=main.Environment(main.loadData())
 
-	def getLink(self):
-		return 'xls.html'
-
-	def getTitle(self):
-		return "Ведомственная структура расходов бюджета Санкт-Петербурга в csv и xls"
-
-	def writeContents(self,makeFns):
+	def content(makeFns):
 		w,nonFirstWrite,wtd,wtdrowspan,e,a,af=makeFns('w,nonFirstWrite,wtd,wtdrowspan,e,a,af')
 
-		refs=writer.HtmlWriter.Refs()
+		refs=Refs()
 		w("<h1>Ведомственная структура расходов бюджета Санкт-Петербурга</h1>\n")
 
 		abbrXls="<abbr title='Excel Binary File Format, бинарный формат файлов Excel'>xls</abbr>"
@@ -40,7 +55,7 @@ class XlsHtmlWriter(writer.HtmlWriter):
 
 		yearLaws=collections.defaultdict(list)
 		yearExtracted=collections.defaultdict(bool)
-		for law in self.env.laws:
+		for law in env.laws:
 			yearLaws[law.year].append(law)
 			if law.documents:
 				yearExtracted[law.year]=True
@@ -75,7 +90,7 @@ class XlsHtmlWriter(writer.HtmlWriter):
 				wtd("<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
 				wtd(a(law.viewUrl,"страница")+
 					(" "+a(law.downloadUrl,"архив") if law.isSingleDownload else "")+
-					(" "+a(law.zipPath,"копия") if law.isSingleZip and not self.isExternal else "")
+					(" "+a(law.zipPath,"копия") if law.isSingleZip and linksToDocumentCopies else "")
 				)
 				if law.originalXlsUrl is not None:
 					wtd(a(law.originalXlsUrl,e(law.availabilityNote)))
@@ -128,7 +143,7 @@ class XlsHtmlWriter(writer.HtmlWriter):
 				)
 				wtdrowspan(max(len(law.documents),1),a(law.viewUrl,"страница")+
 					(" "+a(law.downloadUrl,"архив") if law.isSingleDownload else "")+
-					(" "+a(law.zipPath,"копия") if law.isSingleZip and not self.isExternal else "")
+					(" "+a(law.zipPath,"копия") if law.isSingleZip and linksToDocumentCopies else "")
 				)
 				if not law.documents:
 					if law.originalXlsUrl is not None:
@@ -163,3 +178,5 @@ class XlsHtmlWriter(writer.HtmlWriter):
 		for ref in refs:
 			w("<li>"+ref.body+"</li>\n")
 		w("</ol>\n")
+
+	return content
