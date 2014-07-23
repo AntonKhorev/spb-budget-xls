@@ -8,13 +8,18 @@ class HtmlPage:
 		file=open(filename,'w',encoding='utf-8')
 		w=file.write
 		e=lambda t: html.escape(str(t))
-		def a(link,text,title=None):
+		def a(link,text,title=None,cls=None):
 			r="<a href='"+e(link)+"'"
+			if cls is not None:
+				r+=" class='"+e(cls)+"'"
 			if title is not None:
 				r+=" title='"+e(title)+"'"
 			r+=">"+text+"</a>"
 			return r
-		af=a
+		def af(link,text,title=None):
+			return a(link,text,title,'file')
+		def ae(link,text,title=None):
+			return a(link,text,title,'external')
 		def wtd(x=''):
 			w("<td>"+x+"</td>")
 		wtdrowspan=lambda n,x: w("<td rowspan='"+e(n)+"'>"+x+"</td>")

@@ -22,19 +22,25 @@ class HtmlPage:
 
 	def write(self,filename):
 		file=open(filename,'w',encoding='utf-8')
-		w=file.write
+		def w(x):
+			file.write(self.linker.findAndProcessLinks(x))
 		e=lambda t: html.escape(str(t))
-		def a(link,text,title=None):
+		def a(link,text,title=None,cls=None):
+			# { temporary difference
 			if self.isExternal and link=='index.html':
 				link='.'
+			# } temporary difference
 			r="<a href='"+e(link)+"'"
+			if cls is not None:
+				r+=" class='"+e(cls)+"'"
 			if title is not None:
 				r+=" title='"+e(title)+"'"
 			r+=">"+text+"</a>"
 			return r
-		af=a
-		if self.linker:
-			af=lambda link,text: a(self.linker.getLink(link),text)
+		def af(link,text,title=None):
+			return a(link,text,title,'file')
+		def ae(link,text,title=None):
+			return a(link,text,title,'external')
 		def wtd(x=''):
 			w("<td>"+x+"</td>")
 		wtdrowspan=lambda n,x: w("<td rowspan='"+e(n)+"'>"+x+"</td>")

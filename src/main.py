@@ -217,7 +217,8 @@ class Environment:
 	def writeHtml(self):
 		from htmlPage import HtmlPage
 		from htmlPageContent import makeContent
-		HtmlPage(makeContent(self,True)).write(self.htmlFilename)
+		# HtmlPage(makeContent(self,True)).write(self.htmlFilename)
+		HtmlPage(makeContent(self)).write(self.htmlFilename)
 
 def loadData():
 	return yaml.load(open(

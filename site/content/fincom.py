@@ -1,15 +1,15 @@
 def content(makeFns):
-	w,wtd,e,a=makeFns('w,wtd,e,a')
+	w,wtd,e,ae=makeFns('w,wtd,e,ae')
 	w("<h1>Что можно найти на сайте Комитета финансов</h1>\n")
-	w("<p>Информация о бюджете находится в нескольких разделах "+a("http://www.fincom.spb.ru/","сайта")+". Так получилось, что однотипная информация за разные периоды времени может быть в разных разделах.</p>\n")
+	w("<p>Информация о бюджете находится в нескольких разделах "+ae("http://www.fincom.spb.ru/","сайта")+". Так получилось, что однотипная информация за разные периоды времени может быть в разных разделах.</p>\n")
 	def aXlsx(link):
-		return a(link,'[xlsx]',title='электронная таблица xlsx')
+		return ae(link,'[xlsx]',title='электронная таблица xlsx')
 	def aPdf(link):
-		return a(link,'[pdf]',title='pdf-документ')
+		return ae(link,'[pdf]',title='pdf-документ')
 	def aZipPdf(link):
-		return a(link,'[zip/pdf]',title='zip-архив с pdf-документом')
+		return ae(link,'[zip/pdf]',title='zip-архив с pdf-документом')
 	def aHtmlDropdownNav(link):
-		return a(link,'[html]',title='несколько html-страниц с навигацией в виде выпадающего списка')
+		return ae(link,'[html]',title='несколько html-страниц с навигацией в виде выпадающего списка')
 	w("<table>\n")
 	w("<thead><tr>")
 	w("<th>год</th>")

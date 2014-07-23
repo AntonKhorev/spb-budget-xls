@@ -29,7 +29,7 @@ def makeContent(env=None,linksToDocumentCopies=False):
 		env=main.Environment(main.loadData())
 
 	def content(makeFns):
-		w,nonFirstWrite,wtd,wtdrowspan,e,a,af=makeFns('w,nonFirstWrite,wtd,wtdrowspan,e,a,af')
+		w,nonFirstWrite,wtd,wtdrowspan,e,a,af,ae=makeFns('w,nonFirstWrite,wtd,wtdrowspan,e,a,af,ae')
 
 		refs=Refs()
 		w("<h1>Ведомственная структура расходов бюджета Санкт-Петербурга</h1>\n")
@@ -70,9 +70,9 @@ def makeContent(env=None,linksToDocumentCopies=False):
 
 		w("<h2>Данные, для которых извлечение не производилось</h2>\n")
 		w(
-			"<p>До 2007 года "+a("http://www.fincom.spb.ru/","Комитет финансов Санкт-Петербурга")+" публиковал таблицы из приложений к бюджету в формате "+abbrXls+". "
-			"Таблицы можно найти на сайте комитета в разделе "+a("http://www.fincom.spb.ru/comfin/budjet/laws.htm","«Законы о бюджете»")+". "
-			"Позже в этом формате в разделе "+a("http://www.fincom.spb.ru/comfin/budjet/budget_for_people.htm","«Бюджет для граждан»")+" был опубликован проект закона, закон и 1-е изменения к закону о бюджете 2014 года (но не был опубликован проект 1-х изменений).</p>\n"
+			"<p>До 2007 года "+ae("http://www.fincom.spb.ru/","Комитет финансов Санкт-Петербурга")+" публиковал таблицы из приложений к бюджету в формате "+abbrXls+". "
+			"Таблицы можно найти на сайте комитета в разделе "+ae("http://www.fincom.spb.ru/comfin/budjet/laws.htm","«Законы о бюджете»")+". "
+			"Позже в этом формате в разделе "+ae("http://www.fincom.spb.ru/comfin/budjet/budget_for_people.htm","«Бюджет для граждан»")+" был опубликован проект закона, закон и 1-е изменения к закону о бюджете 2014 года (но не был опубликован проект 1-х изменений).</p>\n"
 		)
 		w("<table>\n")
 		w("<thead>\n")
@@ -88,12 +88,12 @@ def makeContent(env=None,linksToDocumentCopies=False):
 			for law in laws:
 				wn("<tr>")
 				wtd("<span title='"+e(law.title)+"'>"+e(law.description)+"</span>")
-				wtd(a(law.viewUrl,"страница")+
-					(" "+a(law.downloadUrl,"архив") if law.isSingleDownload else "")+
-					(" "+a(law.zipPath,"копия") if law.isSingleZip and linksToDocumentCopies else "")
+				wtd(ae(law.viewUrl,"страница")+
+					(" "+ae(law.downloadUrl,"архив") if law.isSingleDownload else "")+
+					(" "+af(law.zipPath,"копия") if law.isSingleZip and linksToDocumentCopies else "")
 				)
 				if law.originalXlsUrl is not None:
-					wtd(a(law.originalXlsUrl,e(law.availabilityNote)))
+					wtd(ae(law.originalXlsUrl,e(law.availabilityNote)))
 				else:
 					wtd(e(law.availabilityNote))
 				w("</tr>\n")
@@ -102,7 +102,7 @@ def makeContent(env=None,linksToDocumentCopies=False):
 
 		w("<h2>Извлечённые данные</h2>\n")
 		w("<p>С 2007 года приложения к законам о бюджете публикуются в формате "+abbrPdf+". Работать с таблицами в этом формате может быть неудобно. Ниже приводятся данные, автоматически"+refs.makeRef(
-			a("https://github.com/AntonKhorev/BudgetSpb","Исходный код программы для извлечения")+"."
+			ae("https://github.com/AntonKhorev/BudgetSpb","Исходный код программы для извлечения")+"."
 		).ref+" извлечённые из приложений.</p>\n")
 		refData=refs.makeRef(
 			"<pre><code>"
@@ -141,13 +141,13 @@ def makeContent(env=None,linksToDocumentCopies=False):
 					(refUnknownSlack.ref if any('slack' in doc.quirks for doc in law.documents) else "")+
 					(refRoundoffSlack.ref if law.version=='i' else "")
 				)
-				wtdrowspan(max(len(law.documents),1),a(law.viewUrl,"страница")+
-					(" "+a(law.downloadUrl,"архив") if law.isSingleDownload else "")+
-					(" "+a(law.zipPath,"копия") if law.isSingleZip and linksToDocumentCopies else "")
+				wtdrowspan(max(len(law.documents),1),ae(law.viewUrl,"страница")+
+					(" "+ae(law.downloadUrl,"архив") if law.isSingleDownload else "")+
+					(" "+af(law.zipPath,"копия") if law.isSingleZip and linksToDocumentCopies else "")
 				)
 				if not law.documents:
 					if law.originalXlsUrl is not None:
-						w("<td colspan='4'>"+a(law.originalXlsUrl,e(law.availabilityNote))+"</td>")
+						w("<td colspan='4'>"+ae(law.originalXlsUrl,e(law.availabilityNote))+"</td>")
 					else:
 						w("<td colspan='4'>"+e(law.availabilityNote)+"</td>")
 					w("</tr>\n")

@@ -1,5 +1,5 @@
 import glob
-import html.parser,urllib.parse
+import html,html.parser,urllib.parse
 import re
 
 # reads *.htm from hosting and extracts links to files
@@ -28,3 +28,9 @@ class Linker:
 		if path not in self.fileLinks:
 			raise Exception(path+' not hosted')
 		return self.fileLinks[path]
+	def findAndProcessLinks(self,x):
+		return re.sub(
+			"<a href='(?P<path>[^']*)' class='file'",
+			lambda m: "<a href='"+html.escape(self.getLink(m.group('path')))+"' class='file'",
+			x
+		)
