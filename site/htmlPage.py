@@ -13,12 +13,11 @@
 import html
 
 class HtmlPage:
-	def __init__(self,link,title,content,linker=None):
+	def __init__(self,link,title,content,linker):
 		self.link=link
 		self.title=title
 		self.content=content
 		self.linker=linker
-		self.isExternal=bool(linker)
 
 	def write(self,filename):
 		file=open(filename,'w',encoding='utf-8')
@@ -26,10 +25,6 @@ class HtmlPage:
 			file.write(self.linker.findAndProcessLinks(x))
 		e=lambda t: html.escape(str(t))
 		def a(link,text,title=None,cls=None):
-			# { temporary difference
-			if self.isExternal and link=='index.html':
-				link='.'
-			# } temporary difference
 			r="<a href='"+e(link)+"'"
 			if cls is not None:
 				r+=" class='"+e(cls)+"'"

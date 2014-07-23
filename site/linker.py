@@ -29,8 +29,14 @@ class Linker:
 			raise Exception(path+' not hosted')
 		return self.fileLinks[path]
 	def findAndProcessLinks(self,x):
-		return re.sub(
+		x=re.sub(
 			"<a href='(?P<path>[^']*)' class='file'",
 			lambda m: "<a href='"+html.escape(self.getLink(m.group('path')))+"' class='file'",
 			x
 		)
+		x=re.sub(
+			r"<a href='index.html([#'])",
+			r"<a href='.\1",
+			x
+		)
+		return x
