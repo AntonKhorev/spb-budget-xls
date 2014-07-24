@@ -39,7 +39,7 @@ def makeContent(env=None,linksToDocumentCopies=False):
 		abbrCsv="<abbr title='comma-separated values, значения, разделённые запятыми'>csv</abbr>"
 		abbrUtf8="<abbr title='Unicode Transformation Format, 8-bit'>utf-8</abbr>"
 
-		w("<p>Последнее обновление: 16.07.2014."+refs.makeRef(
+		w("<p>Последнее обновление: 24.07.2014."+refs.makeRef(
 			"<dl>"
 			"<dt>31.05.2013</dt><dd>Добавлен закон 1-й корректировки бюджета 2013 г. и закон об исполнении бюджета 2011 г.</dd>"
 			"<dt>04.06.2013</dt><dd>Добавлены законы 2009—2010 гг.</dd>"
@@ -50,6 +50,7 @@ def makeContent(env=None,linksToDocumentCopies=False):
 			"<dt>21.04.2014</dt><dd>В проекте 1-й корректировки 2014 г. добавлен код Комитета по межнациональным отношениям.</dd>"
 			"<dt>04.06.2014</dt><dd>Добавлен закон 1-й корректировки бюджета 2014 г.</dd>"
 			"<dt>16.07.2014</dt><dd>Исправлены некоторые опечатки в файлах.</dd>"
+			"<dt>24.07.2014</dt><dd>Обновлена ссылка на исходный код.</dd>"
 			"</dl>"
 		).ref+"</p>\n")
 
@@ -102,7 +103,7 @@ def makeContent(env=None,linksToDocumentCopies=False):
 
 		w("<h2>Извлечённые данные</h2>\n")
 		w("<p>С 2007 года приложения к законам о бюджете публикуются в формате "+abbrPdf+". Работать с таблицами в этом формате может быть неудобно. Ниже приводятся данные, автоматически"+refs.makeRef(
-			ae("https://github.com/AntonKhorev/BudgetSpb","Исходный код программы для извлечения")+"."
+			ae("https://github.com/AntonKhorev/spb-budget-xls","Исходный код программы для извлечения")+"."
 		).ref+" извлечённые из приложений.</p>\n")
 		refData=refs.makeRef(
 			"<pre><code>"
