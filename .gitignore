@@ -1,9 +1,8 @@
-*.html
+index.html
 bin/*.jar
 zip/20??
 pdf/*.pdf
 txt/*.txt
 csv/*.csv
 xls/*.xls
-htm/*.htm
 src/__pycache__
