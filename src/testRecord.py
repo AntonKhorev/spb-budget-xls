@@ -339,7 +339,7 @@ class TestRecordBuilder(unittest.TestCase):
 		rows=[None]
 		line='1.1. Расходы на содержание главы Правительства 01      02 0010008 2 862.8'
 		nextLine='Санкт-Петербурга'
-		nextLine=lr.read(rows,line,nextLine)
+		line=lr.read(rows,line,nextLine)
 		self.assertEqual(rows,[None,
 			{'number':'1.1.','name':'Расходы на содержание главы Правительства','section':'0102','article':'0010008','amounts':[28628]},
 		])
@@ -348,7 +348,7 @@ class TestRecordBuilder(unittest.TestCase):
 		rows=[None]
 		line='29.7. Расходы на реализацию мероприятий 04      09 24Б2060 500 000.0'
 		nextLine='подпрограммы " Автомобильные дороги"  '
-		nextLine=lr.read(rows,line,nextLine)
+		line=lr.read(rows,line,nextLine)
 		self.assertEqual(rows,[None,
 			{'number':'29.7.','name':'Расходы на реализацию мероприятий','section':'0409','article':'24Б2060','amounts':[5000000]},
 		])
@@ -357,9 +357,26 @@ class TestRecordBuilder(unittest.TestCase):
 		rows=[None]
 		line='16.43. Расходы на осуществление полномочий в сфере 09      09 33159Б0 4 168.1'
 		nextLine='охраны здоровья граждан за счет единой 		'
-		nextLine=lr.read(rows,line,nextLine)
+		line=lr.read(rows,line,nextLine)
 		self.assertEqual(rows,[None,
 			{'number':'16.43.','name':'Расходы на осуществление полномочий в сфере','section':'0909','article':'33159Б0','amounts':[41681]},
+		])
+	def testPageBreak(self):
+		lr=record.RecordBuilder(2,quirks={'splitSection'})
+		rows=[None]
+		line='1.3.3. Иные бюджетные ассигнования 01    13 1519612 800 3 672.6 931.6'
+		nextLine='2Приложение 4'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[
+			None,
+			{'number':'1.3.3.','name':'Иные бюджетные ассигнования','section':'0113','article':'1519612','type':'800','amounts':[36726,9316]},
+		])
+		nextLine='к Закону Санкт-Петербурга "О бюджете'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[
+			None,
+			{'number':'1.3.3.','name':'Иные бюджетные ассигнования','section':'0113','article':'1519612','type':'800','amounts':[36726,9316]},
+			None,
 		])
 	# quirk accounted for in spreadsheet.py
 	# def testInternationalCommittee(self):

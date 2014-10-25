@@ -39,7 +39,7 @@ class RecordBuilder:
 			self.reTotalLine=re.compile('^(\d\d\d \d\d\d \d\d\d.\d)$')
 		else:
 			self.reTotalLine=re.compile('^\s?Итого:'+amPattern)
-		self.reNewPageLine=re.compile('^\d+\s+Приложение|^Показатели расходов бюджета Санкт-Петербурга за')
+		self.reNewPageLine=re.compile('^\d+\s*Приложение|^Показатели расходов бюджета Санкт-Петербурга за')
 
 	# rows:
 	#	dictionary with row data
