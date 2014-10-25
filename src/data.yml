@@ -1010,3 +1010,23 @@ laws:
         delta: True
         quirks:
           - splitSection
+  - code: 2015.0.p
+    title: О бюджете Санкт-Петербурга на 2015 год и на плановый период 2016 и 2017 годов
+    date: 06.10.2014
+    viewUrl: http://www.fincom.spb.ru/comfin/budjet/laws/doc.htm?id=735@cf_npa_bud
+    downloadUrl: http://www.fincom.spb.ru/files/cf/npd/budget/2015/project/vnesenie/pr-bd-2015-2017.zip
+    documents:
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на 2015 год
+        appendixNumber: 3
+        zipContents: pr03_pr-bd-2015.pdf
+        forYear: 2015
+        total: 458 054 947.6
+        quirks:
+          - splitSection
+      - title: Ведомственная структура расходов бюджета Санкт-Петербурга на плановый период 2016 и 2017 годов
+        appendixNumber: 4
+        zipContents: pr04_pr-bd-2016-2017.pdf
+        forYear: [2016,2017]
+        total: ['481 709 227.4','510 308 589.1']
+        quirks:
+          - splitSection
