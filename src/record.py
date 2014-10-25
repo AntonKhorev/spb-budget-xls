@@ -39,7 +39,10 @@ class RecordBuilder:
 			self.reTotalLine=re.compile('^(\d\d\d \d\d\d \d\d\d.\d)$')
 		else:
 			self.reTotalLine=re.compile('^\s?Итого:'+amPattern)
-		self.reNewPageLine=re.compile('^\d+\s*Приложение|^Показатели расходов бюджета Санкт-Петербурга за')
+		if 'brokenNewLine' in quirks:
+			self.reNewPageLine=re.compile('^\d+$|^\d+\s*Приложение|^Показатели расходов бюджета Санкт-Петербурга за')
+		else:
+			self.reNewPageLine=re.compile('^\d+\s*Приложение|^Показатели расходов бюджета Санкт-Петербурга за')
 
 	# rows:
 	#	dictionary with row data

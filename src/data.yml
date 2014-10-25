@@ -1030,3 +1030,4 @@ laws:
         total: ['481 709 227.4','510 308 589.1']
         quirks:
           - splitSection
+          - brokenNewLine

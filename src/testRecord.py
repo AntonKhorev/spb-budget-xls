@@ -378,6 +378,23 @@ class TestRecordBuilder(unittest.TestCase):
 			{'number':'1.3.3.','name':'Иные бюджетные ассигнования','section':'0113','article':'1519612','type':'800','amounts':[36726,9316]},
 			None,
 		])
+	def testPageBreakBroken(self):
+		lr=record.RecordBuilder(2,quirks={'splitSection','brokenNewLine'})
+		rows=[None]
+		line='4.1. Содержание исполнительного 01    13 9910009 238 419.3 252 577.5'
+		nextLine='органа государственной  власти '
+		line=lr.read(rows,line,nextLine)
+		nextLine='Санкт-Петербурга'
+		line=lr.read(rows,line,nextLine)
+		nextLine='10'
+		line=lr.read(rows,line,nextLine)
+		nextLine='Приложение 4'
+		line=lr.read(rows,line,nextLine)
+		self.assertEqual(rows,[
+			None,
+			{'number':'4.1.','name':'Содержание исполнительного органа государственной власти Санкт-Петербурга','section':'0113','article':'9910009','amounts':[2384193,2525775]},
+			None,
+		])
 	# quirk accounted for in spreadsheet.py
 	# def testInternationalCommittee(self):
 		# lr=record.RecordBuilder(1,quirks={'splitSection','missingCommitteeCode875'})
